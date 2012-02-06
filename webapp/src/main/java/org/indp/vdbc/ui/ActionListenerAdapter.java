@@ -2,11 +2,12 @@ package org.indp.vdbc.ui;
 
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+
 import java.awt.event.ActionListener;
 
 /**
  *
- * @author pi
+ *
  */
 public class ActionListenerAdapter implements ClickListener {
 

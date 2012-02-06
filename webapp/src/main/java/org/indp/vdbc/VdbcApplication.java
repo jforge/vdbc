@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  *
- * @author pi
+ *
  */
 public class VdbcApplication extends Application implements ConnectionListener {
 

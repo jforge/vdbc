@@ -1,21 +1,13 @@
 package org.indp.vdbc;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.sql.*;
 
 /**
  * FIXME actually not a test :)
- * @author pi
  */
 public class DatabaseSessionManagerTest {
 

@@ -1,17 +1,18 @@
 package org.indp.vdbc;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import javax.xml.bind.JAXB;
 import org.indp.vdbc.model.config.Configuration;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.bind.JAXB;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+
 /**
- * 
- * @author pi
+ *
+ *
  */
 public class SettingsManager {
 

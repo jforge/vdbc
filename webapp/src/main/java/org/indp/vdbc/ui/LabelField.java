@@ -7,7 +7,7 @@ import com.vaadin.ui.Label;
 
 /**
  *
- * @author pi
+ *
  */
 public class LabelField extends CustomComponent implements Property {
 

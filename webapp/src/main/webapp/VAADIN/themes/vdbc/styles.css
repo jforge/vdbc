@@ -1,7 +1,7 @@
 @import "../reindeer/styles.css";
 
 textarea.v-textarea-monospace {
-    font-family: 'Courier New',Courier,monospace;
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .v-customcomponent-toolbar {

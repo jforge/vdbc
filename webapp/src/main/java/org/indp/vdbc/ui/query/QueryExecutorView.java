@@ -2,31 +2,28 @@ package org.indp.vdbc.ui.query;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.SplitPanel;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 /**
  *
- * @author pi
+ *
  */
 public class QueryExecutorView extends CustomComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorView.class);
-//    private DatabaseSessionManager manager;
+    //    private DatabaseSessionManager manager;
     private Connection connection;
     //
     private SplitPanel splitPanel;

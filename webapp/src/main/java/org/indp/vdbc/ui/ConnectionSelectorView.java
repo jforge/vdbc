@@ -2,18 +2,9 @@ package org.indp.vdbc.ui;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window.Notification;
-import java.util.List;
 import org.indp.vdbc.ConnectionListener;
 import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.SettingsManager;
@@ -21,9 +12,11 @@ import org.indp.vdbc.model.config.ConnectionProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  *
- * @author pi
+ *
  */
 public class ConnectionSelectorView extends VerticalLayout {
 

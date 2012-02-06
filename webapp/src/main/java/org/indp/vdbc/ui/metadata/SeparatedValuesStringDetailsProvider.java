@@ -7,7 +7,7 @@ import com.vaadin.ui.Table;
 
 /**
  *
- * @author pi
+ *
  */
 public abstract class SeparatedValuesStringDetailsProvider implements DetailsProvider {
 

@@ -4,7 +4,7 @@ import com.vaadin.ui.Component;
 
 /**
  *
- * @author pi
+ *
  */
 public interface DetailsListener {
 

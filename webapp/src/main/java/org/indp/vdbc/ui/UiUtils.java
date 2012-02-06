@@ -6,7 +6,7 @@ import com.vaadin.ui.Label;
 
 /**
  *
- * @author pi
+ *
  */
 public final class UiUtils {
 

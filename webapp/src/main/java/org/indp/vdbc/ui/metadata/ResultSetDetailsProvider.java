@@ -2,12 +2,13 @@ package org.indp.vdbc.ui.metadata;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
-import java.sql.ResultSet;
 import org.indp.vdbc.ui.ResultSetTable;
+
+import java.sql.ResultSet;
 
 /**
  *
- * @author pi
+ *
  */
 public abstract class ResultSetDetailsProvider implements DetailsProvider {
 

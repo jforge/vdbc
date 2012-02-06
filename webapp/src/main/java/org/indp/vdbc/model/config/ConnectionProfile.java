@@ -6,7 +6,7 @@ import javax.xml.bind.annotation.XmlAttribute;
 
 /**
  *
- * @author pi
+ *
  */
 @XmlAccessorType(XmlAccessType.NONE)
 public class ConnectionProfile {

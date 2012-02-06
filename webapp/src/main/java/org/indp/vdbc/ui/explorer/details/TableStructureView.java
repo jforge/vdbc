@@ -2,16 +2,17 @@ package org.indp.vdbc.ui.explorer.details;
 
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.Arrays;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.util.JdbcUtils;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Arrays;
+
 /**
  *
- * @author pi
+ *
  */
 public class TableStructureView extends CustomComponent {
 

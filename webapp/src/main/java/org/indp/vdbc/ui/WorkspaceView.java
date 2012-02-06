@@ -1,14 +1,8 @@
 package org.indp.vdbc.ui;
 
-import com.vaadin.ui.TabSheet.Tab;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TabSheet;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.ConnectionListener;
@@ -20,10 +14,10 @@ import org.indp.vdbc.ui.query.QueryExecutorView;
 
 /**
  *
- * @author pi
+ *
  */
 public class WorkspaceView extends VerticalLayout {
-    
+
     private TabSheet tabSheet;
 
     public WorkspaceView(final DatabaseSessionManager manager, final ConnectionListener connectionListener) {

@@ -1,15 +1,11 @@
 package org.indp.vdbc.ui;
 
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.themes.BaseTheme;
 
 /**
  *
- * @author pi
+ *
  */
 public class Toolbar extends CustomComponent {
 

@@ -7,7 +7,7 @@ import org.indp.vdbc.DatabaseSessionManager;
 
 /**
  *
- * @author pi
+ *
  */
 public class TablesView extends CustomComponent {
 

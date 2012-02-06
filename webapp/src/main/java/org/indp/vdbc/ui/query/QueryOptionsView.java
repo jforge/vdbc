@@ -1,24 +1,21 @@
 package org.indp.vdbc.ui.query;
 
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Window.Notification;
-import java.awt.event.ActionListener;
-import java.util.Arrays;
 import org.indp.vdbc.ui.ActionListenerAdapter;
 import org.indp.vdbc.ui.UiUtils;
 
+import java.awt.event.ActionListener;
+import java.util.Arrays;
+
 /**
  *
- * @author pi
+ *
  */
 public class QueryOptionsView extends HorizontalLayout {
 
-//    private ActionListener formatSqlAction;
+    //    private ActionListener formatSqlAction;
     private ActionListenerAdapter executeActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter commitActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter rollbackActionListener = new ActionListenerAdapter();

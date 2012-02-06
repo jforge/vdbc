@@ -1,5 +1,7 @@
 package org.indp.vdbc.util;
 
+import org.indp.vdbc.model.jdbc.JdbcTable;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -7,10 +9,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.indp.vdbc.model.jdbc.JdbcTable;
-
 /**
- * @author pi
+ *
  */
 public class MetadataRetriever {
 

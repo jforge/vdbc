@@ -2,7 +2,7 @@ package org.indp.vdbc.model.jdbc;
 
 /**
  *
- * @author pi
+ *
  */
 public class JdbcTable {
 

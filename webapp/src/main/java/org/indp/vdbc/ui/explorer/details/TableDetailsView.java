@@ -3,12 +3,13 @@ package org.indp.vdbc.ui.explorer.details;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.themes.Reindeer;
-import java.sql.Connection;
 import org.indp.vdbc.model.jdbc.JdbcTable;
+
+import java.sql.Connection;
 
 /**
  *
- * @author pi
+ *
  */
 public class TableDetailsView extends CustomComponent {
 

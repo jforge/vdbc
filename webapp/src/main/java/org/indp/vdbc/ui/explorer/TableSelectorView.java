@@ -1,38 +1,33 @@
 package org.indp.vdbc.ui.explorer;
 
-import org.indp.vdbc.ui.explorer.details.TableDetailsView;
 import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.List;
-
 import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.model.jdbc.JdbcTable;
+import org.indp.vdbc.ui.explorer.details.TableDetailsView;
 import org.indp.vdbc.util.JdbcUtils;
 import org.indp.vdbc.util.MetadataRetriever;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.List;
+
 /**
- * @author pi
+ *
  */
 public class TableSelectorView extends VerticalLayout {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableSelectorView.class);
     private static final String VALUE_PROPERTY = "value";
-//    private DatabaseSessionManager sessionManager;
+    //    private DatabaseSessionManager sessionManager;
     private Connection connection;
     private MetadataRetriever metadataRetriever;
     private IndexedContainer tableListContainer;

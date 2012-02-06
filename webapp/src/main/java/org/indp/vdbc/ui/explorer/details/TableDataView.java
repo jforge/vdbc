@@ -1,13 +1,8 @@
 package org.indp.vdbc.ui.explorer.details;
 
 import com.vaadin.data.Property;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.ui.Toolbar;
@@ -16,15 +11,11 @@ import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Arrays;
 
 /**
- * @author pi
+ *
  */
 public class TableDataView extends CustomComponent {
 

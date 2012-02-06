@@ -1,19 +1,16 @@
 package org.indp.vdbc.ui.metadata;
 
-import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.SplitPanel;
-import com.vaadin.ui.VerticalLayout;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
+import com.vaadin.ui.*;
 import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.util.JdbcUtils;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+
 /**
  *
- * @author pi
+ *
  */
 public class DatabaseMetadataView extends CustomComponent {
 

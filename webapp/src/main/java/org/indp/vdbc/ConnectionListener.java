@@ -4,7 +4,7 @@ import org.indp.vdbc.model.config.ConnectionProfile;
 
 /**
  *
- * @author pi
+ *
  */
 public interface ConnectionListener {
 

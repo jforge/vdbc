@@ -1,17 +1,17 @@
 package org.indp.vdbc;
 
-import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.SQLException;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  * session scoped
- * @author pi
  */
 public class DatabaseSessionManager implements Serializable {
 
@@ -19,7 +19,7 @@ public class DatabaseSessionManager implements Serializable {
     private ConnectionProfile connectionProfile;
     private BasicDataSource dataSource;
 
-//    @PreDestroy
+    //    @PreDestroy
     public void destroy() {
         disconnect();
     }

@@ -7,7 +7,7 @@ import com.vaadin.ui.themes.BaseTheme;
 
 /**
  *
- * @author pi
+ *
  */
 public class MetadataInfoSection extends CustomComponent {
 
