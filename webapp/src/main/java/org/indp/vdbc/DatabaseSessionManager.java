@@ -1,5 +1,6 @@
 package org.indp.vdbc;
 
+import com.google.common.base.Strings;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.util.JdbcUtils;
@@ -38,6 +39,10 @@ public class DatabaseSessionManager implements Serializable {
         dataSource.setUrl(profile.getUrl());
         dataSource.setUsername(profile.getUser());
         dataSource.setPassword(profile.getPassword());
+
+        if (!Strings.isNullOrEmpty(profile.getValidationQuery())) {
+            dataSource.setValidationQuery(profile.getValidationQuery());
+        }
 
         dataSource.setMaxActive(32);
         dataSource.setMaxIdle(4);

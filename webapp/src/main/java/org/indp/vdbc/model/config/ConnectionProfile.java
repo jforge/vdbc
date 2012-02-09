@@ -13,14 +13,21 @@ public class ConnectionProfile {
 
     @XmlAttribute
     private String name;
+
     @XmlAttribute
     private String driver;
+
     @XmlAttribute
     private String url;
+
     @XmlAttribute
     private String user;
+
     @XmlAttribute
     private String password;
+
+    @XmlAttribute
+    private String validationQuery;
 
     public ConnectionProfile() {
     }
@@ -39,34 +46,32 @@ public class ConnectionProfile {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null)
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ConnectionProfile that = (ConnectionProfile) o;
+
+        if (driver != null ? !driver.equals(that.driver) : that.driver != null) return false;
+        if (name != null ? !name.equals(that.name) : that.name != null) return false;
+        if (password != null ? !password.equals(that.password) : that.password != null) return false;
+        if (url != null ? !url.equals(that.url) : that.url != null) return false;
+        if (user != null ? !user.equals(that.user) : that.user != null) return false;
+        if (validationQuery != null ? !validationQuery.equals(that.validationQuery) : that.validationQuery != null)
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        final ConnectionProfile other = (ConnectionProfile) obj;
-        if ((this.name == null) ? (other.name != null) : !this.name.equals(other.name))
-            return false;
-        if ((this.driver == null) ? (other.driver != null) : !this.driver.equals(other.driver))
-            return false;
-        if ((this.url == null) ? (other.url != null) : !this.url.equals(other.url))
-            return false;
-        if ((this.user == null) ? (other.user != null) : !this.user.equals(other.user))
-            return false;
-        if ((this.password == null) ? (other.password != null) : !this.password.equals(other.password))
-            return false;
+
         return true;
     }
 
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 23 * hash + (this.name != null ? this.name.hashCode() : 0);
-        hash = 23 * hash + (this.driver != null ? this.driver.hashCode() : 0);
-        hash = 23 * hash + (this.url != null ? this.url.hashCode() : 0);
-        hash = 23 * hash + (this.user != null ? this.user.hashCode() : 0);
-        hash = 23 * hash + (this.password != null ? this.password.hashCode() : 0);
-        return hash;
+        int result = name != null ? name.hashCode() : 0;
+        result = 31 * result + (driver != null ? driver.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (validationQuery != null ? validationQuery.hashCode() : 0);
+        return result;
     }
 
     public String getDriver() {
@@ -107,5 +112,13 @@ public class ConnectionProfile {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public String getValidationQuery() {
+        return validationQuery;
+    }
+
+    public void setValidationQuery(String validationQuery) {
+        this.validationQuery = validationQuery;
     }
 }

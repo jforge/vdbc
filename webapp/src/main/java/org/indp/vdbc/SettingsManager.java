@@ -17,11 +17,18 @@ import java.io.OutputStream;
 public class SettingsManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(SettingsManager.class);
-    protected static final String FILE_NAME = ".config/vdbc/vdbc-settings.xml";
-    protected static final File SETTINGS_FILE = new File(System.getProperty("user.home") + File.separator + FILE_NAME);
+    private static final String FILE_NAME = ".config/vdbc/vdbc-settings.xml";
+    private static final File SETTINGS_FILE = new File(System.getProperty("user.home") + File.separator + FILE_NAME);
+
     private Configuration configuration;
 
-    public Configuration getConfiguration() {
+    private static final SettingsManager INSTANCE = new SettingsManager();
+
+    public static SettingsManager get() {
+        return INSTANCE;
+    }
+
+    public synchronized Configuration getConfiguration() {
         if (null == configuration) {
             if (!SETTINGS_FILE.exists())
                 // TODO create and persist
@@ -32,15 +39,6 @@ public class SettingsManager {
         return configuration;
     }
 
-    protected Configuration createDefaultConfiguration() {
-        Configuration conf = new Configuration();
-//        conf.addProfile(new ConnectionProfile("edump", "org.h2.Driver", "jdbc:h2:tcp://localhost/edump", "sa", ""));
-//        conf.addProfile(new ConnectionProfile("derby sample db", "org.apache.derby.jdbc.ClientDriver", "jdbc:derby://localhost:1527/sample", "app", ""));
-        conf.addProfile(new ConnectionProfile("H2 in memory", "org.h2.Driver", "jdbc:h2:mem:db", "sa", ""));
-//        conf.addProfile(new ConnectionProfile("H2 in memory 2", "org.h2.Driver", "jdbc:h2:mem:db2", "sa", ""));
-        return conf;
-    }
-
     public synchronized void persistConfiguration() {
         try {
             OutputStream out = new FileOutputStream(SETTINGS_FILE);
@@ -49,5 +47,14 @@ public class SettingsManager {
         } catch (Exception ex) {
             LOG.warn("failed to create settings file", ex);
         }
+    }
+
+    private Configuration createDefaultConfiguration() {
+        Configuration conf = new Configuration();
+        conf.addProfile(new ConnectionProfile("H2 in memory", "org.h2.Driver", "jdbc:h2:mem:db", "sa", ""));
+        return conf;
+    }
+
+    private SettingsManager() {
     }
 }

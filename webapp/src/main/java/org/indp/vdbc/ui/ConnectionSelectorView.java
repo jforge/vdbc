@@ -9,6 +9,7 @@ import org.indp.vdbc.ConnectionListener;
 import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
+import org.indp.vdbc.ui.settings.SettingsManagerView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,8 +33,6 @@ public class ConnectionSelectorView extends VerticalLayout {
     @Override
     public void attach() {
         setSizeFull();
-//        vl.setSpacing(true);
-//        vl.setMargin(true);
 
         Panel panel = new Panel("DB Console");
         panel.setWidth(300, UNITS_PIXELS);
@@ -44,16 +43,14 @@ public class ConnectionSelectorView extends VerticalLayout {
         panel.addComponent(l);
         l.setSizeFull();
         l.setSpacing(true);
-//        l.setMargin(false);
         l.setMargin(false, false, true, false);
 
         final LabelField driver = new LabelField();
         final LabelField url = new LabelField();
         final TextField userName = new TextField();
-        final TextField password = new TextField();
-        password.setSecret(true);
+        final PasswordField password = new PasswordField();
 
-        List<ConnectionProfile> profilesList = new SettingsManager().getConfiguration().getProfiles();
+        List<ConnectionProfile> profilesList = SettingsManager.get().getConfiguration().getProfiles();
         final ComboBox profiles = new ComboBox(null, profilesList);
         profiles.addListener(new ValueChangeListener() {
 
@@ -71,8 +68,9 @@ public class ConnectionSelectorView extends VerticalLayout {
         profiles.setNewItemsAllowed(false);
         profiles.setNullSelectionAllowed(false);
 
-        if (!profilesList.isEmpty())
+        if (!profilesList.isEmpty()) {
             profiles.select(profilesList.get(0));
+        }
 
         addToForm(l, "Profile:", profiles);
         addToForm(l, "Driver:", driver);
@@ -114,7 +112,9 @@ public class ConnectionSelectorView extends VerticalLayout {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                getApplication().getMainWindow().showNotification("Not implemented yet.");
+                SettingsManagerView settingsManagerView = new SettingsManagerView();
+                getWindow().addWindow(settingsManagerView);
+                getWindow().showNotification("Stay tuned: settings management is work in progress", Notification.TYPE_WARNING_MESSAGE);
             }
         });
 
@@ -133,12 +133,8 @@ public class ConnectionSelectorView extends VerticalLayout {
     }
 
     private void addToForm(FormLayout grid, String title, Component component) {
-//        Label label = new Label(title);
         component.setWidth("100%");
-//        component.setWidth(200, UNITS_PIXELS);
-//        grid.addComponent(label);
         component.setCaption(title);
         grid.addComponent(component);
-//        grid.setComponentAlignment(label, Alignment.MIDDLE_RIGHT);
     }
 }
