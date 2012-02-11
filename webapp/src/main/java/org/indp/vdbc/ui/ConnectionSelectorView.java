@@ -2,6 +2,7 @@ package org.indp.vdbc.ui;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window.Notification;
@@ -50,13 +51,19 @@ public class ConnectionSelectorView extends VerticalLayout {
         final TextField userName = new TextField();
         final PasswordField password = new PasswordField();
 
-        List<ConnectionProfile> profilesList = SettingsManager.get().getConfiguration().getProfiles();
-        final ComboBox profiles = new ComboBox(null, profilesList);
+        List<ConnectionProfile> profileList = SettingsManager.get().getConfiguration().getProfiles();
+        final ComboBox profiles = new ComboBox(null, new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, SettingsManager.get().getConfiguration().getProfiles()));
+        profiles.setImmediate(true);
+        profiles.setNewItemsAllowed(false);
+        profiles.setNullSelectionAllowed(false);
         profiles.addListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
                 ConnectionProfile cp = (ConnectionProfile) profiles.getValue();
+                if (cp == null) {
+                    return;
+                }
                 driver.setValue(cp.getDriver());
                 url.setValue(cp.getUrl());
                 url.setDescription(cp.getUrl());
@@ -64,12 +71,8 @@ public class ConnectionSelectorView extends VerticalLayout {
             }
         });
 
-        profiles.setImmediate(true);
-        profiles.setNewItemsAllowed(false);
-        profiles.setNullSelectionAllowed(false);
-
-        if (!profilesList.isEmpty()) {
-            profiles.select(profilesList.get(0));
+        if (!profileList.isEmpty()) {
+            profiles.select(profileList.get(0));
         }
 
         addToForm(l, "Profile:", profiles);
@@ -113,8 +116,17 @@ public class ConnectionSelectorView extends VerticalLayout {
             @Override
             public void buttonClick(ClickEvent event) {
                 SettingsManagerView settingsManagerView = new SettingsManagerView();
+                settingsManagerView.addListener(new Window.CloseListener() {
+                    @Override
+                    public void windowClose(Window.CloseEvent e) {
+                        List<ConnectionProfile> list = SettingsManager.get().getConfiguration().getProfiles();
+                        profiles.setContainerDataSource(new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, list));
+                        if (!list.isEmpty()) {
+                            profiles.select(list.get(0));
+                        }
+                    }
+                });
                 getWindow().addWindow(settingsManagerView);
-                getWindow().showNotification("Stay tuned: settings management is work in progress", Notification.TYPE_WARNING_MESSAGE);
             }
         });
 

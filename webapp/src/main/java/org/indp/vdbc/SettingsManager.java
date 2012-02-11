@@ -1,5 +1,6 @@
 package org.indp.vdbc;
 
+import com.google.common.io.Files;
 import org.indp.vdbc.model.config.Configuration;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.slf4j.Logger;
@@ -17,8 +18,9 @@ import java.io.OutputStream;
 public class SettingsManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(SettingsManager.class);
-    private static final String FILE_NAME = ".config/vdbc/vdbc-settings.xml";
-    private static final File SETTINGS_FILE = new File(System.getProperty("user.home") + File.separator + FILE_NAME);
+    private static final String FILE_PATH = ".config" + File.separator + "vdbc";
+    private static final File SETTINGS_DIR = new File(System.getProperty("user.home") + File.separator + FILE_PATH);
+    private static final File SETTINGS_FILE = new File(SETTINGS_DIR, "vdbc-settings.xml");
 
     private Configuration configuration;
 
@@ -41,6 +43,7 @@ public class SettingsManager {
 
     public synchronized void persistConfiguration() {
         try {
+            Files.createParentDirs(SETTINGS_FILE);
             OutputStream out = new FileOutputStream(SETTINGS_FILE);
             JAXB.marshal(configuration, out);
             out.close();

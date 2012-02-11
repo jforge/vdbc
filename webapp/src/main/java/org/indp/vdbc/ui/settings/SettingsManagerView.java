@@ -1,6 +1,12 @@
 package org.indp.vdbc.ui.settings;
 
+import com.vaadin.data.Property;
+import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
+import org.indp.vdbc.SettingsManager;
+import org.indp.vdbc.model.config.ConnectionProfile;
+
+import java.util.List;
 
 /**
  *
@@ -9,12 +15,14 @@ public class SettingsManagerView extends Window {
 
     private ListSelect list;
     private Panel panel;
+    private DetailsPanel details;
 
     public SettingsManagerView() {
         setModal(true);
+        setResizable(false);
         setCaption("Settings");
         setWidth("600px");
-        setHeight("400px");
+        setHeight("420px");
 
         GridLayout layout = createMainLayout();
         setContent(layout);
@@ -23,6 +31,25 @@ public class SettingsManagerView extends Window {
         layout.addComponent(bottom, 0, 1);
         layout.setComponentAlignment(bottom, Alignment.MIDDLE_RIGHT);
         layout.setRowExpandRatio(0, 1);
+
+        refreshDetails();
+    }
+
+    private void refreshDetails() {
+        panel.removeAllComponents();
+
+        ConnectionProfile profile = (ConnectionProfile) list.getValue();
+        if (profile == null) {
+            return;
+        }
+
+        details = createDetails(profile);
+        panel.addComponent(details);
+    }
+
+    private DetailsPanel createDetails(ConnectionProfile profile) {
+        DetailsPanel detailsPanel = new DetailsPanel(profile, list);
+        return detailsPanel;
     }
 
     private GridLayout createMainLayout() {
@@ -39,9 +66,21 @@ public class SettingsManagerView extends Window {
         split.setSizeFull();
         split.setSplitPosition(30);
 
-        list = new ListSelect();
+        List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
+        list = new ListSelect(null, new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, profiles));
         list.setSizeFull();
         list.setNullSelectionAllowed(false);
+        list.setImmediate(true);
+        if (!profiles.isEmpty()) {
+            list.select(profiles.get(0));
+        }
+
+        list.addListener(new Property.ValueChangeListener() {
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                refreshDetails();
+            }
+        });
 
         panel = new Panel();
         panel.setSizeFull();
@@ -60,21 +99,17 @@ public class SettingsManagerView extends Window {
         Button addButton = new Button("Add", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-
+                ConnectionProfile profile = new ConnectionProfile();
+                profile.setName("New Profile");
+                SettingsManager.get().getConfiguration().addProfile(profile);
+                list.getContainerDataSource().addItem(profile);
             }
         });
 
-        Button removeButton = new Button("Remove", new Button.ClickListener() {
+        Button saveProfilesButton = new Button("Save Profiles", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-
-            }
-        });
-
-        Button applyButton = new Button("Apply", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-
+                SettingsManager.get().persistConfiguration();
             }
         });
 
@@ -86,10 +121,9 @@ public class SettingsManagerView extends Window {
         });
 
         bottom.addComponent(addButton);
-        bottom.addComponent(removeButton);
-        bottom.addComponent(applyButton);
+        bottom.addComponent(saveProfilesButton);
         bottom.addComponent(closeButton);
-        
+
         bottom.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
         bottom.setExpandRatio(closeButton, 1);
 

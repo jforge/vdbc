@@ -29,4 +29,8 @@ public class Configuration {
     public void setProfiles(List<ConnectionProfile> profiles) {
         this.profiles = profiles;
     }
+
+    public void removeProfile(ConnectionProfile profile) {
+        profiles.remove(profile);
+    }
 }
