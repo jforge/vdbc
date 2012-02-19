@@ -13,12 +13,18 @@ import java.util.List;
 public class Configuration {
 
     @XmlElementWrapper(name = "profiles")
-    @XmlElement(name = "profile")
+    @XmlAnyElement(lax = true)
+    @XmlElementRefs({
+            @XmlElementRef(name = "jdbc", type = JdbcConnectionProfile.class),
+            @XmlElementRef(name = "jndi", type = JndiConnectionProfile.class)
+    })
     private List<ConnectionProfile> profiles;
 
+
     public void addProfile(ConnectionProfile profile) {
-        if (null == profiles)
+        if (null == profiles) {
             profiles = new ArrayList<ConnectionProfile>();
+        }
         profiles.add(profile);
     }
 

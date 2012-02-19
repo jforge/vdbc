@@ -38,7 +38,7 @@ public class VdbcApplication extends Application implements ConnectionListener {
         Window w = getMainWindow();
         w.removeAllComponents();
         w.setContent(new WorkspaceView(databaseSessionManager, this));
-        w.setCaption(connectionProfile.getUrl() + " - " + APPLICATION_TITLE);
+        w.setCaption(connectionProfile.getConnectionPresentationString() + " - " + APPLICATION_TITLE);
     }
 
     @Override

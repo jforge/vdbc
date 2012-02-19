@@ -2,7 +2,7 @@ package org.indp.vdbc;
 
 import com.google.common.io.Files;
 import org.indp.vdbc.model.config.Configuration;
-import org.indp.vdbc.model.config.ConnectionProfile;
+import org.indp.vdbc.model.config.JdbcConnectionProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,11 +32,16 @@ public class SettingsManager {
 
     public synchronized Configuration getConfiguration() {
         if (null == configuration) {
-            if (!SETTINGS_FILE.exists())
+            if (!SETTINGS_FILE.exists()) {
                 // TODO create and persist
                 configuration = createDefaultConfiguration();
-            else
-                configuration = JAXB.unmarshal(SETTINGS_FILE, Configuration.class);
+            } else {
+                try {
+                    configuration = JAXB.unmarshal(SETTINGS_FILE, Configuration.class);
+                } catch (Exception e) {
+                    configuration = createDefaultConfiguration();
+                }
+            }
         }
         return configuration;
     }
@@ -54,7 +59,7 @@ public class SettingsManager {
 
     private Configuration createDefaultConfiguration() {
         Configuration conf = new Configuration();
-        conf.addProfile(new ConnectionProfile("H2 in memory", "org.h2.Driver", "jdbc:h2:mem:db", "sa", ""));
+        conf.addProfile(new JdbcConnectionProfile("H2 in memory", "org.h2.Driver", "jdbc:h2:mem:db", "sa", ""));
         return conf;
     }
 

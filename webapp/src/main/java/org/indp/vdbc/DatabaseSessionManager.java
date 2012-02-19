@@ -1,9 +1,8 @@
 package org.indp.vdbc;
 
-import com.google.common.base.Strings;
-import org.apache.commons.dbcp.BasicDataSource;
+import org.indp.vdbc.exceptions.InvalidProfileException;
+import org.indp.vdbc.model.DataSourceAdapter;
 import org.indp.vdbc.model.config.ConnectionProfile;
-import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,50 +17,36 @@ public class DatabaseSessionManager implements Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseSessionManager.class);
     private ConnectionProfile connectionProfile;
-    private BasicDataSource dataSource;
+    private DataSourceAdapter dataSourceAdapter;
 
     //    @PreDestroy
     public void destroy() {
         disconnect();
     }
 
-    public void test(String driver, String url, String user, String password) throws Exception {
-        Connection conn = JdbcUtils.getConnection(driver, url, user, password);
-        JdbcUtils.close(conn);
-    }
-
-    public void connect(ConnectionProfile profile) throws Exception {
-        test(profile.getDriver(), profile.getUrl(), profile.getUser(), profile.getPassword());
-        disconnect();
-
-        dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(profile.getDriver());
-        dataSource.setUrl(profile.getUrl());
-        dataSource.setUsername(profile.getUser());
-        dataSource.setPassword(profile.getPassword());
-
-        if (!Strings.isNullOrEmpty(profile.getValidationQuery())) {
-            dataSource.setValidationQuery(profile.getValidationQuery());
+    public void connect(ConnectionProfile profile) throws InvalidProfileException {
+        DataSourceAdapter adapter = profile.createDataSourceAdapter();
+        if (!adapter.isValidProfile()) {
+            throw new InvalidProfileException("Profile validation failed.");
         }
 
-        dataSource.setMaxActive(32);
-        dataSource.setMaxIdle(4);
-        dataSource.setMaxWait(20 * 1000);
-        dataSource.setMaxOpenPreparedStatements(8);
+        disconnect();
 
+        dataSourceAdapter = adapter;
         connectionProfile = profile;
     }
 
-    public void disconnect() {
+    public synchronized void disconnect() {
         LOG.info("cleaning up...");
         connectionProfile = null;
-        if (null != dataSource)
+        if (null != dataSourceAdapter) {
             try {
-                dataSource.close();
-                dataSource = null;
+                dataSourceAdapter.close();
+                dataSourceAdapter = null;
             } catch (Exception ex) {
                 LOG.warn("failed to close the data source", ex);
             }
+        }
     }
 
     public ConnectionProfile getConnectionProfile() {
@@ -69,6 +54,10 @@ public class DatabaseSessionManager implements Serializable {
     }
 
     public Connection getConnection() throws SQLException {
-        return dataSource.getConnection();
+        return dataSourceAdapter.getDataSource().getConnection();
+    }
+
+    public boolean isValidProfile(ConnectionProfile profile) {
+        return profile.createDataSourceAdapter().isValidProfile();
     }
 }

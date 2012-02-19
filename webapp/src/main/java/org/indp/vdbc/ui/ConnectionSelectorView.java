@@ -10,7 +10,9 @@ import org.indp.vdbc.ConnectionListener;
 import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
-import org.indp.vdbc.ui.settings.SettingsManagerView;
+import org.indp.vdbc.profile.ConnectionProfileLoginPanel;
+import org.indp.vdbc.profile.ConnectionProfileManager;
+import org.indp.vdbc.ui.settings.SettingsManagerDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,26 +37,32 @@ public class ConnectionSelectorView extends VerticalLayout {
     public void attach() {
         setSizeFull();
 
-        Panel panel = new Panel("DB Console");
-        panel.setWidth(300, UNITS_PIXELS);
-        addComponent(panel);
-        setComponentAlignment(panel, Alignment.MIDDLE_CENTER);
+        Panel rootPanel = new Panel("DB Console");
+        rootPanel.setWidth(300, UNITS_PIXELS);
+        addComponent(rootPanel);
+        setComponentAlignment(rootPanel, Alignment.MIDDLE_CENTER);
 
-        FormLayout l = new FormLayout();
-        panel.addComponent(l);
-        l.setSizeFull();
-        l.setSpacing(true);
-        l.setMargin(false, false, true, false);
+//        FormLayout l = new FormLayout();
+//        panel.addComponent(l);
+//        l.setSizeFull();
+//        l.setSpacing(true);
+//        l.setMargin(false, false, true, false);
+//        final LabelField driver = new LabelField();
+//        final LabelField url = new LabelField();
+//        final TextField userName = new TextField();
+//        final PasswordField password = new PasswordField();
 
-        final LabelField driver = new LabelField();
-        final LabelField url = new LabelField();
-        final TextField userName = new TextField();
-        final PasswordField password = new PasswordField();
+        final Panel profileInfoPanel = new Panel();
+        profileInfoPanel.setWidth("100%");
 
         List<ConnectionProfile> profileList = SettingsManager.get().getConfiguration().getProfiles();
-        final ComboBox profiles = new ComboBox(null, new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, SettingsManager.get().getConfiguration().getProfiles()));
+        final ComboBox profiles = new ComboBox(null,
+                new BeanItemContainer<ConnectionProfile>(
+                        ConnectionProfile.class, SettingsManager.get().getConfiguration().getProfiles()));
+        profiles.setWidth("100%");
+        profiles.setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_PROPERTY);
+        profiles.setItemCaptionPropertyId("name");
         profiles.setImmediate(true);
-        profiles.setNewItemsAllowed(false);
         profiles.setNullSelectionAllowed(false);
         profiles.addListener(new ValueChangeListener() {
 
@@ -64,10 +72,15 @@ public class ConnectionSelectorView extends VerticalLayout {
                 if (cp == null) {
                     return;
                 }
-                driver.setValue(cp.getDriver());
-                url.setValue(cp.getUrl());
-                url.setDescription(cp.getUrl());
-                userName.setValue(cp.getUser());
+                ConnectionProfileManager<? extends ConnectionProfile> connectionProfileManager = ConnectionProfileManager.Lookup.find(cp.getClass());
+                ConnectionProfileLoginPanel<? extends ConnectionProfile> loginPanel = connectionProfileManager.createLoginPanel(cp);
+                profileInfoPanel.removeAllComponents();
+                profileInfoPanel.addComponent(loginPanel);
+                // todo!!
+//                driver.setValue(cp.getDriver());
+//                url.setValue(cp.getUrl());
+//                url.setDescription(cp.getUrl());
+//                userName.setValue(cp.getUser());
             }
         });
 
@@ -75,19 +88,32 @@ public class ConnectionSelectorView extends VerticalLayout {
             profiles.select(profileList.get(0));
         }
 
-        addToForm(l, "Profile:", profiles);
-        addToForm(l, "Driver:", driver);
-        addToForm(l, "URL:", url);
-        addToForm(l, "Username:", userName);
-        addToForm(l, "Password:", password);
+        rootPanel.addComponent(profiles);
+        rootPanel.addComponent(profileInfoPanel);
+
+//        addToForm(l, "Profile:", profiles);
+//        addToForm(l, "Driver:", driver);
+//        addToForm(l, "URL:", url);
+//        addToForm(l, "Username:", userName);
+//        addToForm(l, "Password:", password);
 
         Button connectButton = new Button("Connect", new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                ConnectionProfile connectionProfile = new ConnectionProfile(null,
-                        driver.getValue().toString(), url.getValue().toString(),
-                        userName.getValue().toString(), password.getValue().toString());
+                ConnectionProfile selectedProfile = (ConnectionProfile) profiles.getValue();
+                ConnectionProfile connectionProfile = null;
+                try {
+                    connectionProfile = selectedProfile.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                    getWindow().showNotification(e.getMessage());
+                    return;
+                }
+                // todo!!
+//                        new ConnectionProfile(null,
+//                        driver.getValue().toString(), url.getValue().toString(),
+//                        userName.getValue().toString(), password.getValue().toString());
                 try {
                     databaseSessionManager.connect(connectionProfile);
                     connectionListener.connectionEstablished(connectionProfile);
@@ -102,7 +128,9 @@ public class ConnectionSelectorView extends VerticalLayout {
             @Override
             public void buttonClick(ClickEvent event) {
                 try {
-                    databaseSessionManager.test(driver.getValue().toString(), url.getValue().toString(), userName.getValue().toString(), password.getValue().toString());
+                    ConnectionProfile selectedProfile = (ConnectionProfile) profiles.getValue();
+                    // todo!!
+                    databaseSessionManager.isValidProfile(selectedProfile);
                     getApplication().getMainWindow().showNotification("Test successful");
                 } catch (Exception ex) {
                     LOG.warn("connection test failed", ex);
@@ -115,8 +143,8 @@ public class ConnectionSelectorView extends VerticalLayout {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                SettingsManagerView settingsManagerView = new SettingsManagerView();
-                settingsManagerView.addListener(new Window.CloseListener() {
+                SettingsManagerDialog settingsManagerDialog = new SettingsManagerDialog();
+                settingsManagerDialog.addListener(new Window.CloseListener() {
                     @Override
                     public void windowClose(Window.CloseEvent e) {
                         List<ConnectionProfile> list = SettingsManager.get().getConfiguration().getProfiles();
@@ -126,27 +154,28 @@ public class ConnectionSelectorView extends VerticalLayout {
                         }
                     }
                 });
-                getWindow().addWindow(settingsManagerView);
+                getWindow().addWindow(settingsManagerDialog);
             }
         });
 
         HorizontalLayout hl = new HorizontalLayout();
         hl.setWidth(100, UNITS_PERCENTAGE);
-        panel.addComponent(hl);
+        rootPanel.addComponent(hl);
         hl.addComponent(settingsButton);
         hl.addComponent(testButton);
         hl.addComponent(connectButton);
         hl.setComponentAlignment(testButton, Alignment.MIDDLE_RIGHT);
         hl.setComponentAlignment(connectButton, Alignment.MIDDLE_RIGHT);
 
-        userName.focus();
+        // todo!!
+//        userName.focus();
 
         super.attach();
     }
 
-    private void addToForm(FormLayout grid, String title, Component component) {
-        component.setWidth("100%");
-        component.setCaption(title);
-        grid.addComponent(component);
-    }
+//    private void addToForm(FormLayout grid, String title, Component component) {
+//        component.setWidth("100%");
+//        component.setCaption(title);
+//        grid.addComponent(component);
+//    }
 }

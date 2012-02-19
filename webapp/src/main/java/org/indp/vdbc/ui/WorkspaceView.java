@@ -38,7 +38,7 @@ public class WorkspaceView extends VerticalLayout {
         });
         disconnectButton.setStyleName(BaseTheme.BUTTON_LINK);
 
-        infoBar.addComponent(new Label(profile.getUrl() + " as " + profile.getUser()));
+        infoBar.addComponent(new Label(profile.getConnectionPresentationString()));
         infoBar.addComponent(disconnectButton);
         infoBar.setComponentAlignment(disconnectButton, Alignment.MIDDLE_RIGHT);
 

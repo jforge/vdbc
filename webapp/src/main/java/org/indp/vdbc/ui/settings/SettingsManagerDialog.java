@@ -5,19 +5,21 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
+import org.indp.vdbc.model.config.JdbcConnectionProfile;
+import org.indp.vdbc.profile.ConnectionProfileManager;
+import org.indp.vdbc.profile.ConnectionProfileDetailsPanel;
 
 import java.util.List;
 
 /**
  *
  */
-public class SettingsManagerView extends Window {
+public class SettingsManagerDialog extends Window implements ConnectionProfileDetailsPanel.ProfileListFacade {
 
     private ListSelect list;
     private Panel panel;
-    private DetailsPanel details;
 
-    public SettingsManagerView() {
+    public SettingsManagerDialog() {
         setModal(true);
         setResizable(false);
         setCaption("Settings");
@@ -38,18 +40,20 @@ public class SettingsManagerView extends Window {
     private void refreshDetails() {
         panel.removeAllComponents();
 
-        ConnectionProfile profile = (ConnectionProfile) list.getValue();
+        JdbcConnectionProfile profile = (JdbcConnectionProfile) list.getValue();
         if (profile == null) {
             return;
         }
 
-        details = createDetails(profile);
-        panel.addComponent(details);
+        panel.addComponent(createDetails(profile));
     }
 
-    private DetailsPanel createDetails(ConnectionProfile profile) {
-        DetailsPanel detailsPanel = new DetailsPanel(profile, list);
-        return detailsPanel;
+    private Component createDetails(ConnectionProfile profile) {
+        ConnectionProfileManager<? extends ConnectionProfile> factory = ConnectionProfileManager.Lookup.find(profile.getClass());
+        if (factory == null) {
+            return new Label("Unknown profile type.");
+        }
+        return factory.createPropertiesPanel(profile, this);
     }
 
     private GridLayout createMainLayout() {
@@ -68,6 +72,8 @@ public class SettingsManagerView extends Window {
 
         List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
         list = new ListSelect(null, new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, profiles));
+        list.setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_PROPERTY);
+        list.setItemCaptionPropertyId("name");
         list.setSizeFull();
         list.setNullSelectionAllowed(false);
         list.setImmediate(true);
@@ -99,10 +105,12 @@ public class SettingsManagerView extends Window {
         Button addButton = new Button("Add", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                ConnectionProfile profile = new ConnectionProfile();
-                profile.setName("New Profile");
-                SettingsManager.get().getConfiguration().addProfile(profile);
-                list.getContainerDataSource().addItem(profile);
+                getApplication().getMainWindow().addWindow(new ProfileTypeSelectorDialog(new ProfileTypeSelectorDialog.SelectionListener() {
+                    @Override
+                    public void onFactorySelected(ConnectionProfileManager factory) {
+                        createProfile(factory);
+                    }
+                }));
             }
         });
 
@@ -128,5 +136,24 @@ public class SettingsManagerView extends Window {
         bottom.setExpandRatio(closeButton, 1);
 
         return bottom;
+    }
+
+    private void createProfile(ConnectionProfileManager factory) {
+        ConnectionProfile profile = factory.createConnectionProfile();
+        profile.setName("New Profile");
+        SettingsManager.get().getConfiguration().addProfile(profile);
+        list.getContainerDataSource().addItem(profile);
+        list.select(profile);
+    }
+
+    @Override
+    public ConnectionProfile getSelectedProfile() {
+        return (ConnectionProfile) list.getValue();
+    }
+
+    @Override
+    public void removeProfile(ConnectionProfile profile) {
+        list.getContainerDataSource().removeItem(profile);
+        list.select(null);
     }
 }

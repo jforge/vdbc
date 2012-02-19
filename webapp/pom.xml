@@ -29,6 +29,7 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.6.2</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>commons-dbcp</groupId>
@@ -39,6 +40,7 @@
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <version>1.3.163</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -51,7 +53,7 @@
         <finalName>vdbc</finalName>
         <resources>
             <resource>
-                <directory>${basedir}/</directory>
+                <directory>${basedir}/src/main/resources</directory>
                 <filtering>false</filtering>
             </resource>
         </resources>
