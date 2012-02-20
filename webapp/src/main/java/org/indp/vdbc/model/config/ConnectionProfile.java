@@ -11,7 +11,7 @@ import java.io.Serializable;
  *
  */
 @XmlAccessorType(XmlAccessType.NONE)
-public abstract class ConnectionProfile implements Serializable, Cloneable {
+public abstract class ConnectionProfile implements Serializable {
 
     @XmlAttribute
     private String name;
@@ -19,11 +19,6 @@ public abstract class ConnectionProfile implements Serializable, Cloneable {
     public abstract String getConnectionPresentationString();
 
     public abstract DataSourceAdapter createDataSourceAdapter();
-
-    @Override
-    public ConnectionProfile clone() throws CloneNotSupportedException {
-        return (ConnectionProfile) super.clone();
-    }
 
     public String getName() {
         return name;

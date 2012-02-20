@@ -17,7 +17,7 @@ import java.util.List;
 public class SettingsManagerDialog extends Window implements ConnectionProfileDetailsPanel.ProfileListFacade {
 
     private ListSelect list;
-    private Panel panel;
+    private ComponentContainer panel;
 
     public SettingsManagerDialog() {
         setModal(true);
@@ -88,7 +88,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             }
         });
 
-        panel = new Panel();
+        panel = new VerticalLayout();
         panel.setSizeFull();
 
         split.addComponent(list);

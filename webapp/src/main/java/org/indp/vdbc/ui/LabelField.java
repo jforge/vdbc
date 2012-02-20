@@ -13,13 +13,17 @@ public class LabelField extends CustomComponent implements Property {
 
     private final Label label;
 
-    public LabelField() {
+    public LabelField(String title, String value) {
         label = new Label();
         label.setWidth("100%");
         HorizontalLayout hl = new HorizontalLayout();
         hl.setWidth("100%");
         hl.addComponent(label);
         setCompositionRoot(hl);
+
+        setCaption(title);
+        setDescription(value);
+        setValue(value);
     }
 
     @Override

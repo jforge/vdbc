@@ -2,6 +2,7 @@ package org.indp.vdbc.model.config;
 
 import com.google.common.base.Strings;
 import org.apache.commons.dbcp.BasicDataSource;
+import org.indp.vdbc.exceptions.InvalidProfileException;
 import org.indp.vdbc.model.DataSourceAdapter;
 import org.indp.vdbc.util.JdbcUtils;
 
@@ -124,23 +125,24 @@ public class JdbcConnectionProfile extends ConnectionProfile {
         }
 
         @Override
-        public boolean isValidProfile() {
+        public void validateProfile() throws InvalidProfileException {
             try {
                 Connection conn = JdbcUtils.getConnection(driver, url, user, password);
                 JdbcUtils.close(conn);
-                return true;
             } catch (Exception e) {
-                return false;
+                throw new InvalidProfileException(e.getMessage());
             }
         }
 
         @Override
         public void close() throws IOException {
-            try {
-                dataSource.close();
-                dataSource = null;
-            } catch (SQLException e) {
-                throw new IOException(e);
+            if (dataSource != null) {
+                try {
+                    dataSource.close();
+                    dataSource = null;
+                } catch (SQLException e) {
+                    throw new IOException(e);
+                }
             }
         }
     }

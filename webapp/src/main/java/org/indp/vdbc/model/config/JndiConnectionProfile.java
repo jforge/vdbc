@@ -1,5 +1,6 @@
 package org.indp.vdbc.model.config;
 
+import org.indp.vdbc.exceptions.InvalidProfileException;
 import org.indp.vdbc.model.DataSourceAdapter;
 
 import javax.naming.InitialContext;
@@ -59,8 +60,10 @@ public class JndiConnectionProfile extends ConnectionProfile {
         }
 
         @Override
-        public boolean isValidProfile() {
-            return lookup() != null;
+        public void validateProfile() throws InvalidProfileException {
+            if (lookup() == null) {
+                throw new InvalidProfileException("Name lookup failed.");
+            }
         }
 
         @Override

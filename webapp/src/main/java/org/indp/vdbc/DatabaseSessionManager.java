@@ -26,9 +26,7 @@ public class DatabaseSessionManager implements Serializable {
 
     public void connect(ConnectionProfile profile) throws InvalidProfileException {
         DataSourceAdapter adapter = profile.createDataSourceAdapter();
-        if (!adapter.isValidProfile()) {
-            throw new InvalidProfileException("Profile validation failed.");
-        }
+        adapter.validateProfile();
 
         disconnect();
 
@@ -57,7 +55,7 @@ public class DatabaseSessionManager implements Serializable {
         return dataSourceAdapter.getDataSource().getConnection();
     }
 
-    public boolean isValidProfile(ConnectionProfile profile) {
-        return profile.createDataSourceAdapter().isValidProfile();
+    public void validateProfile(ConnectionProfile profile) throws InvalidProfileException {
+        profile.createDataSourceAdapter().validateProfile();
     }
 }
