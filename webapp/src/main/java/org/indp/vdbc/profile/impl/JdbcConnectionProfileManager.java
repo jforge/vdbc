@@ -23,13 +23,13 @@ public class JdbcConnectionProfileManager implements ConnectionProfileManager<Jd
 
     @Override
     public ConnectionProfileDetailsPanel<JdbcConnectionProfile> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileListFacade profileListFacade) {
-        return new JdbcConnectionProfilePanel((JdbcConnectionProfile) profile, profileListFacade);
+        return new JdbcConnectionProfileDetailsPanel((JdbcConnectionProfile) profile, profileListFacade);
     }
 
     @Override
     public ConnectionProfileLoginPanel<JdbcConnectionProfile> createLoginPanel(ConnectionProfile profile) {
         assert profile instanceof JdbcConnectionProfile;
-        return new JdbcConnectionProfileLoginPanel<JdbcConnectionProfile>((JdbcConnectionProfile) profile);
+        return new JdbcConnectionProfileLoginPanel((JdbcConnectionProfile) profile);
     }
 
     @Override

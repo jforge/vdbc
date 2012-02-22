@@ -5,9 +5,8 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
-import org.indp.vdbc.model.config.JdbcConnectionProfile;
-import org.indp.vdbc.profile.ConnectionProfileManager;
 import org.indp.vdbc.profile.ConnectionProfileDetailsPanel;
+import org.indp.vdbc.profile.ConnectionProfileManager;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
     private void refreshDetails() {
         panel.removeAllComponents();
 
-        JdbcConnectionProfile profile = (JdbcConnectionProfile) list.getValue();
+        ConnectionProfile profile = (ConnectionProfile) list.getValue();
         if (profile == null) {
             return;
         }

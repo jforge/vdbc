@@ -4,22 +4,20 @@ import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.*;
 import org.indp.vdbc.model.config.ConnectionProfile;
-import org.indp.vdbc.model.config.JdbcConnectionProfile;
-import org.indp.vdbc.profile.ConnectionProfileDetailsPanel;
-
-/**
+import org.indp.vdbc.model.config.JndiConnectionProfile;
+import org.indp.vdbc.profile.ConnectionProfileDetailsPanel; /**
  *
  */
-public class JdbcConnectionProfilePanel extends ConnectionProfileDetailsPanel<JdbcConnectionProfile> {
+public class JndiConnectionProfileDetailsPanel extends ConnectionProfileDetailsPanel<JndiConnectionProfile> {
 
     private DetailsForm detailsForm;
 
-    public JdbcConnectionProfilePanel(JdbcConnectionProfile profile, ProfileListFacade profileListFacade) {
+    public JndiConnectionProfileDetailsPanel(JndiConnectionProfile profile, ProfileListFacade profileListFacade) {
         super(profile, profileListFacade);
     }
 
     @Override
-    protected synchronized Component getDetailsComponent() {
+    protected Component getDetailsComponent() {
         if (detailsForm == null) {
             detailsForm = new DetailsForm(getProfile());
         }
@@ -41,7 +39,7 @@ public class JdbcConnectionProfilePanel extends ConnectionProfileDetailsPanel<Jd
 
             setFormFieldFactory(new FieldFactory());
             setItemDataSource(new BeanItem<ConnectionProfile>(profile));
-            setVisibleItemProperties(new String[]{"name", "driver", "url", "user", "password", "validationQuery"});
+            setVisibleItemProperties(new String[]{"name", "jndiName"});
         }
 
     }
@@ -52,10 +50,9 @@ public class JdbcConnectionProfilePanel extends ConnectionProfileDetailsPanel<Jd
             TextField textField = new TextField(createCaptionByPropertyId(propertyId));
             textField.setWidth("100%");
             textField.setNullRepresentation("");
-            if (!("password".equals(propertyId) || "validationQuery".equals(propertyId))) {
-                textField.setRequired(true);
-            }
+            textField.setRequired("jndiName".equals(propertyId));
             return textField;
         }
     }
+
 }
