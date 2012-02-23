@@ -52,7 +52,13 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         if (factory == null) {
             return new Label("Unknown profile type.");
         }
-        return factory.createPropertiesPanel(profile, this);
+
+        ConnectionProfileDetailsPanel<? extends ConnectionProfile> propertiesPanel = factory.createPropertiesPanel(profile, this);
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSizeFull();
+        layout.addComponent(propertiesPanel);
+        layout.setMargin(false, false, false, true);
+        return layout;
     }
 
     private GridLayout createMainLayout() {

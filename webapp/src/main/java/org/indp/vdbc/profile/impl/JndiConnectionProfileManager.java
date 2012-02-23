@@ -18,7 +18,7 @@ public class JndiConnectionProfileManager implements ConnectionProfileManager<Jn
 
     @Override
     public JndiConnectionProfile createConnectionProfile() {
-        return new JndiConnectionProfile();
+        return new JndiConnectionProfile("java:comp/env/");
     }
 
     @Override

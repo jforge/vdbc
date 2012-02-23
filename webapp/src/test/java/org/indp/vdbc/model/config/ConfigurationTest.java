@@ -24,13 +24,6 @@ public class ConfigurationTest {
         StringWriter writer = new StringWriter();
         JAXB.marshal(c, writer);
 
-        assertTrue(writer.toString().replace('\n', ' ').matches(".*<vdbc-config>\\s*<profiles>\\s*" +
-                "<jdbc password=\"p1\" user=\"u1\" url=\"url1\" driver=\"d1\" name=\"1\"/>\\s*" +
-                "<jdbc password=\"p2\" user=\"u2\" url=\"url2\" driver=\"d2\" name=\"2\"/>\\s*" +
-                "<jndi jndiName=\"jdbc/DS\" name=\"jdbc/DS\"/>\\s*" +
-                "</profiles>\\s*" +
-                "</vdbc-config>\\s*"));
-
         Configuration configuration = JAXB.unmarshal(new StringReader(writer.toString()), Configuration.class);
         assertNotNull(configuration);
         List<ConnectionProfile> profiles = configuration.getProfiles();
