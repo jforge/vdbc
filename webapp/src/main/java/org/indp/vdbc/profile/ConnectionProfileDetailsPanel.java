@@ -4,6 +4,10 @@ import com.vaadin.terminal.ErrorMessage;
 import com.vaadin.ui.*;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
+import org.indp.vdbc.ui.ConfirmDialog;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -28,7 +32,7 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
 
         void removeProfile(ConnectionProfile profile);
     }
-    
+
     @Override
     public void attach() {
         super.attach();
@@ -64,14 +68,23 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
             public void buttonClick(Button.ClickEvent event) {
                 ConnectionProfile value = profileListFacade.getSelectedProfile();
                 if (value != null) {
-                    SettingsManager.get().getConfiguration().removeProfile(value);
-                    profileListFacade.removeProfile(value);
+                    removeProfile(value);
                 } else {
                     getWindow().showNotification("Select some profile to remove it");
                 }
             }
         }));
         return footer;
+    }
+
+    private void removeProfile(final ConnectionProfile profile) {
+        ConfirmDialog.confirmYesNo(getApplication(), "Delete profile?", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingsManager.get().getConfiguration().removeProfile(profile);
+                profileListFacade.removeProfile(profile);
+            }
+        });
     }
 
     protected final T getProfile() {

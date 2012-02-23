@@ -32,7 +32,7 @@ public class JndiConnectionProfile extends ConnectionProfile {
 
     @Override
     public String getConnectionPresentationString() {
-        return "jndi:" + getJndiName();
+        return getJndiName();
     }
 
     @Override
