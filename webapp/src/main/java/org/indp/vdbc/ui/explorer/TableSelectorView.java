@@ -4,10 +4,12 @@ import com.vaadin.data.Property;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
+import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.ui.explorer.details.TableDetailsView;
@@ -58,9 +60,23 @@ public class TableSelectorView extends VerticalLayout {
                 }
             });
 
-            vl.addComponent(selectors);
+            TextField filter = new TextField();
+            filter.setInputPrompt("filter");
+            filter.setWidth("100%");
+            filter.setStyleName(Reindeer.TEXTFIELD_SMALL);
 
+            filter.addListener(new FieldEvents.TextChangeListener() {
+                @Override
+                public void textChange(FieldEvents.TextChangeEvent event) {
+                    String text = event.getText();
+                    tableListContainer.removeAllContainerFilters();
+                    tableListContainer.addContainerFilter(VALUE_PROPERTY, text, true, false);
+                }
+            });
+            
+            vl.addComponent(selectors);
             vl.addComponent(objectList);
+            vl.addComponent(filter);
             vl.setExpandRatio(objectList, 1f);
 
             addComponent(vl);
@@ -74,12 +90,11 @@ public class TableSelectorView extends VerticalLayout {
         FormLayout l = new FormLayout();
         l.setWidth("100%");
         l.setSpacing(false);
-//        l.setMargin(true, false, true, false);
         l.setMargin(false);
 
         MetadataRetriever metadataRetriever = sessionManager.getMetadata();
         String catalogTerm = metadataRetriever.getCatalogTerm();
-        catalogTerm = catalogTerm.substring(0, 1).toUpperCase() + catalogTerm.substring(1, catalogTerm.length());
+        catalogTerm = catalogTerm.substring(0, 1).toUpperCase() + catalogTerm.substring(1);
         List<String> catalogNames = metadataRetriever.getCatalogs();
         final ComboBox catalogs = new ComboBox(catalogTerm + ":", catalogNames);
         catalogs.setWidth("100%");
@@ -88,7 +103,7 @@ public class TableSelectorView extends VerticalLayout {
         catalogs.setVisible(!catalogNames.isEmpty());
 
         String schemaTerm = metadataRetriever.getSchemaTerm().toLowerCase();
-        schemaTerm = schemaTerm.substring(0, 1).toUpperCase() + schemaTerm.substring(1, schemaTerm.length());
+        schemaTerm = schemaTerm.substring(0, 1).toUpperCase() + schemaTerm.substring(1);
 
         List<String> schemaNames = metadataRetriever.getSchemas();
         final ComboBox schemas = new ComboBox(schemaTerm + ":", schemaNames);
@@ -117,13 +132,9 @@ public class TableSelectorView extends VerticalLayout {
         schemas.addListener(valueChangeListener);
         tableTypes.addListener(valueChangeListener);
 
-//        TextField filter = new TextField("Filter:");
-//        filter.setWidth("100%");
-
         l.addComponent(catalogs);
         l.addComponent(schemas);
         l.addComponent(tableTypes);
-//        l.addComponent(filter);
         return l;
     }
 
