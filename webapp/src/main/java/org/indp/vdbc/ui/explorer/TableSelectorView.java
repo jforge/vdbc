@@ -11,12 +11,10 @@ import com.vaadin.ui.Window.Notification;
 import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.ui.explorer.details.TableDetailsView;
-import org.indp.vdbc.util.JdbcUtils;
 import org.indp.vdbc.util.MetadataRetriever;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -27,25 +25,20 @@ public class TableSelectorView extends VerticalLayout {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableSelectorView.class);
     private static final String VALUE_PROPERTY = "value";
-    //    private DatabaseSessionManager sessionManager;
-    private Connection connection;
-    private MetadataRetriever metadataRetriever;
     private IndexedContainer tableListContainer;
     private DetailsListener detailsListener;
+    private DatabaseSessionManager sessionManager;
 
     public TableSelectorView(DatabaseSessionManager sessionManager) {
+        this.sessionManager = sessionManager;
         try {
-            connection = sessionManager.getConnection();
-            metadataRetriever = new MetadataRetriever(connection);
-
             setSizeFull();
 
             VerticalLayout vl = new VerticalLayout();
             vl.setSizeFull();
-//        vl.setSpacing(true);
             Component selectors = createSelectors();
 
-            tableListContainer = createObjecListContainer();
+            tableListContainer = createObjectListContainer();
             Table objectList = new Table(null, tableListContainer);
             objectList.setSizeFull();
             objectList.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
@@ -58,8 +51,9 @@ public class TableSelectorView extends VerticalLayout {
                         return;
 
                     JdbcTable item = (JdbcTable) event.getItemId();
-                    if (null == item)
+                    if (null == item) {
                         return;
+                    }
                     detailsListener.showDetails(createDetails(item));
                 }
             });
@@ -73,22 +67,17 @@ public class TableSelectorView extends VerticalLayout {
 
         } catch (SQLException ex) {
             LOG.error("failed to create table selector view", ex);
-            JdbcUtils.close(connection);
         }
-    }
-
-    @Override
-    public void detach() {
-        JdbcUtils.close(connection);
-        super.detach();
     }
 
     protected Component createSelectors() throws SQLException {
         FormLayout l = new FormLayout();
         l.setWidth("100%");
         l.setSpacing(false);
-        l.setMargin(true, false, true, false);
+//        l.setMargin(true, false, true, false);
+        l.setMargin(false);
 
+        MetadataRetriever metadataRetriever = sessionManager.getMetadata();
         String catalogTerm = metadataRetriever.getCatalogTerm();
         catalogTerm = catalogTerm.substring(0, 1).toUpperCase() + catalogTerm.substring(1, catalogTerm.length());
         List<String> catalogNames = metadataRetriever.getCatalogs();
@@ -138,7 +127,7 @@ public class TableSelectorView extends VerticalLayout {
         return l;
     }
 
-    protected IndexedContainer createObjecListContainer() {
+    protected IndexedContainer createObjectListContainer() {
         IndexedContainer c = new IndexedContainer();
         c.addContainerProperty(VALUE_PROPERTY, String.class, null);
         return c;
@@ -162,7 +151,7 @@ public class TableSelectorView extends VerticalLayout {
 
         List<JdbcTable> tables;
         try {
-            tables = metadataRetriever.getTables(catalog, schema, tableType);
+            tables = sessionManager.getMetadata().getTables(catalog, schema, tableType);
         } catch (Exception ex) {
             getApplication().getMainWindow().showNotification("Error<br/>", ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
             return;
@@ -173,7 +162,7 @@ public class TableSelectorView extends VerticalLayout {
     }
 
     protected Component createDetails(JdbcTable table) {
-        TableDetailsView dv = new TableDetailsView(table, connection);
+        TableDetailsView dv = new TableDetailsView(table, sessionManager);
         return dv;
     }
 

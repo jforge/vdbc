@@ -2,6 +2,9 @@ package org.indp.vdbc.util;
 
 import org.indp.vdbc.model.jdbc.JdbcTable;
 
+import javax.sql.DataSource;
+import java.io.Closeable;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
@@ -12,12 +15,23 @@ import java.util.List;
 /**
  *
  */
-public class MetadataRetriever {
+public class MetadataRetriever implements Closeable {
 
     private final DatabaseMetaData metaData;
+    private final Connection connection;
 
-    public MetadataRetriever(Connection connection) throws SQLException {
+    public MetadataRetriever(DataSource dataSource) throws SQLException {
+        this.connection = dataSource.getConnection();
         this.metaData = connection.getMetaData();
+    }
+
+    @Override
+    public void close() throws IOException {
+        JdbcUtils.close(connection);
+    }
+
+    public DatabaseMetaData getRawMetadata() {
+        return metaData;
     }
 
     public List<String> getCatalogs() throws SQLException {

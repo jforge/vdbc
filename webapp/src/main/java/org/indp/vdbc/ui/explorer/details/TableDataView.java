@@ -1,18 +1,19 @@
 package org.indp.vdbc.ui.explorer.details;
 
-import com.vaadin.data.Property;
+import com.google.common.base.Strings;
+import com.vaadin.data.util.sqlcontainer.SQLContainer;
+import com.vaadin.data.util.sqlcontainer.connection.J2EEConnectionPool;
+import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
+import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.model.jdbc.JdbcTable;
-import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.ui.Toolbar;
-import org.indp.vdbc.ui.UiUtils;
-import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
-import java.util.Arrays;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
 /**
  *
@@ -20,16 +21,11 @@ import java.util.Arrays;
 public class TableDataView extends CustomComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
-    //
-//    private JdbcTable table;
-    //private Connection connection;
-    //
-    private VerticalLayout tableContainer;
-    private Property maxRowCount;
+    private final VerticalLayout tableContainer;
+    private final J2EEConnectionPool connectionPool;
 
-    public TableDataView(final JdbcTable table, final Connection connection) {
-//        this.table = table;
-//        this.connection = connection;
+    public TableDataView(final JdbcTable table, final DatabaseSessionManager sessionManager) {
+        connectionPool = new J2EEConnectionPool(sessionManager.getDataSource());
 
         setCaption("Data");
 
@@ -37,24 +33,14 @@ public class TableDataView extends CustomComponent {
         vl.setSizeFull();
         setCompositionRoot(vl);
 
-        ComboBox limitsCombo = new ComboBox(null, Arrays.asList(100L, 250L, 500L, 1000L));
-        limitsCombo.setNullSelectionAllowed(false);
-        limitsCombo.setNullSelectionItemId(100L);
-        limitsCombo.setNewItemsAllowed(false);
-        limitsCombo.setWidth("100px");
-        this.maxRowCount = limitsCombo;
 
         Toolbar toolbar = new Toolbar();
         toolbar.setWidth("100%");
-        toolbar.addComponent(new Label("Row count:"));
-        toolbar.addComponent(UiUtils.createHorizontalSpacer(5));
-        toolbar.addComponent(limitsCombo);
-        toolbar.addComponent(UiUtils.createHorizontalSpacer(5));
         toolbar.addComponent(new Button("Refresh", new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                refreshDataView(table, connection);
+                refreshDataView(table, sessionManager);
             }
         }));
 
@@ -64,38 +50,37 @@ public class TableDataView extends CustomComponent {
         vl.addComponent(tableContainer);
         vl.setExpandRatio(tableContainer, 1f);
 
-        refreshDataView(table, connection);
+        refreshDataView(table, sessionManager);
     }
 
-    protected void refreshDataView(JdbcTable table, Connection connection) {
-        Statement stmt = null;
-        ResultSet rs = null;
+    protected void refreshDataView(JdbcTable tableDefinition, DatabaseSessionManager sessionManager) {
         Component component;
         try {
-            // TODO extract from view layer
-            stmt = connection.createStatement();
-            stmt.setMaxRows(null != maxRowCount.getValue() ? ((Long) maxRowCount.getValue()).intValue() : 100);
-            rs = stmt.executeQuery("select * from " + createTableName(table, connection));
-            component = new ResultSetTable(rs);
-            component.setSizeFull();
-        } catch (SQLException ex) {
-            LOG.warn("failed to retrieve table data", ex);
-            component = new Label(ex.getMessage());
-        } finally {
-            JdbcUtils.close(rs);
-            JdbcUtils.close(stmt);
+            FreeformQuery query = new FreeformQuery("select * from " + createTableName(tableDefinition, sessionManager), connectionPool);
+            SQLContainer container = new SQLContainer(query);
+            Table table = new Table(null, container);
+            table.setSelectable(true);
+            table.setColumnReorderingAllowed(true);
+            table.setColumnCollapsingAllowed(true);
+            table.setSizeFull();
+            component = table;
+        } catch (SQLException e) {
+            LOG.warn("failed to retrieve tableDefinition data", e);
+            component = new Label(e.getMessage());
         }
         tableContainer.removeAllComponents();
         tableContainer.addComponent(component);
     }
 
-    protected String createTableName(JdbcTable table, Connection connection) throws SQLException {
-        DatabaseMetaData metaData = connection.getMetaData();
+    protected String createTableName(JdbcTable table, DatabaseSessionManager sessionManager) throws SQLException {
+        DatabaseMetaData metaData = sessionManager.getMetadata().getRawMetadata();
         StringBuilder sb = new StringBuilder();
-        if (null != table.getCatalog() && !table.getCatalog().isEmpty() && metaData.supportsCatalogsInTableDefinitions())
+        if (!Strings.isNullOrEmpty(table.getCatalog()) && metaData.supportsCatalogsInTableDefinitions()) {
             sb.append(table.getCatalog()).append(".");
-        if (null != table.getSchema() && !table.getSchema().isEmpty() && metaData.supportsSchemasInTableDefinitions())
+        }
+        if (!Strings.isNullOrEmpty(table.getSchema()) && metaData.supportsSchemasInTableDefinitions()) {
             sb.append(table.getSchema()).append(".");
+        }
         sb.append(table.getName());
         return sb.toString();
     }
