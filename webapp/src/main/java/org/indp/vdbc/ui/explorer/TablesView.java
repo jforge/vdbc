@@ -2,7 +2,7 @@ package org.indp.vdbc.ui.explorer;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.SplitPanel;
+import com.vaadin.ui.HorizontalSplitPanel;
 import org.indp.vdbc.DatabaseSessionManager;
 
 /**
@@ -15,9 +15,8 @@ public class TablesView extends CustomComponent {
         setCaption("Tables");
 
         setSizeFull();
-        final SplitPanel sp = new SplitPanel(SplitPanel.ORIENTATION_HORIZONTAL);
+        final HorizontalSplitPanel sp = new HorizontalSplitPanel();
         sp.setSizeFull();
-//        sp.setStyleName("small");
 
         TableSelectorView tableSelectorView = new TableSelectorView(databaseSessionManager);
         tableSelectorView.setDetailsListener(new DetailsListener() {
@@ -30,7 +29,6 @@ public class TablesView extends CustomComponent {
         });
 
         sp.setFirstComponent(tableSelectorView);
-//        sp.setSecondComponent(new Panel("details"));
         sp.setSplitPosition(300, UNITS_PIXELS);
         setCompositionRoot(sp);
     }

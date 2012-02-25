@@ -23,14 +23,12 @@ import java.sql.SQLException;
 public class QueryExecutorView extends CustomComponent {
 
     private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorView.class);
-    //    private DatabaseSessionManager manager;
     private Connection connection;
     //
-    private SplitPanel splitPanel;
+    private VerticalSplitPanel splitPanel;
     private QueryOptionsView queryOptionsView;
 
     public QueryExecutorView(DatabaseSessionManager manager) {
-//        this.manager = manager;
         setCaption("Query");
         setSizeFull();
 
@@ -46,7 +44,7 @@ public class QueryExecutorView extends CustomComponent {
         vl.setSizeFull();
         setCompositionRoot(vl);
 
-        splitPanel = new SplitPanel(SplitPanel.ORIENTATION_VERTICAL);
+        splitPanel = new VerticalSplitPanel();
         splitPanel.setSizeFull();
 
         final TextField query = new TextField();

@@ -31,7 +31,7 @@ public class DatabaseMetadataView extends CustomComponent {
             setCompositionRoot(new Label(ex.getMessage()));
         }
 
-        final SplitPanel sp = new SplitPanel(SplitPanel.ORIENTATION_HORIZONTAL);
+        final HorizontalSplitPanel sp = new HorizontalSplitPanel();
         sp.setSizeFull();
         setCompositionRoot(sp);
 
