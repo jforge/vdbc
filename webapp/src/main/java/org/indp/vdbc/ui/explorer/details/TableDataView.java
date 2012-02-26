@@ -60,6 +60,7 @@ public class TableDataView extends CustomComponent {
             SQLContainer container = new SQLContainer(query);
             Table table = new Table(null, container);
             table.setSelectable(true);
+            table.setSortDisabled(true);
             table.setColumnReorderingAllowed(true);
             table.setColumnCollapsingAllowed(true);
             table.setSizeFull();

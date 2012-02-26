@@ -31,6 +31,15 @@
 
     <build>
         <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+                <directory>src</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -40,8 +49,12 @@
                     <source>1.6</source>
                     <target>1.6</target>
                     <excludes>
+                        <exclude>jline/*.java</exclude>
+                        <exclude>workbench/*.java</exclude>
+                        <exclude>workbench/console/*.java</exclude>
                         <exclude>workbench/gui/*.java</exclude>
                         <exclude>workbench/gui/**/*.java</exclude>
+                        <exclude>workbench/print/*.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
@@ -51,8 +64,12 @@
                 <version>2.3.2</version>
                 <configuration>
                     <excludes>
+                        <exclude>jline/*</exclude>
+                        <exclude>workbench/*</exclude>
+                        <exclude>workbench/console*</exclude>
                         <exclude>workbench/gui/*</exclude>
                         <exclude>workbench/gui/**/*</exclude>
+                        <exclude>workbench/print*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
