@@ -73,7 +73,7 @@ public class TableSelectorView extends VerticalLayout {
                     tableListContainer.addContainerFilter(VALUE_PROPERTY, text, true, false);
                 }
             });
-            
+
             vl.addComponent(selectors);
             vl.addComponent(objectList);
             vl.addComponent(filter);
@@ -101,6 +101,9 @@ public class TableSelectorView extends VerticalLayout {
         catalogs.setNullSelectionAllowed(false);
         catalogs.setImmediate(true);
         catalogs.setVisible(!catalogNames.isEmpty());
+        if (catalogNames.size() == 1) {
+            catalogs.select(catalogNames.get(0));
+        }
 
         String schemaTerm = metadataRetriever.getSchemaTerm().toLowerCase();
         schemaTerm = schemaTerm.substring(0, 1).toUpperCase() + schemaTerm.substring(1);
@@ -111,11 +114,15 @@ public class TableSelectorView extends VerticalLayout {
         schemas.setNullSelectionAllowed(false);
         schemas.setImmediate(true);
         schemas.setVisible(!schemaNames.isEmpty());
+        if (schemaNames.size() == 1) {
+            schemas.select(schemaNames.get(0));
+        }
 
         List<String> tableTypesList = metadataRetriever.getTableTypes();
         final ComboBox tableTypes = new ComboBox("Table type:", tableTypesList);
-        if (tableTypesList.contains("TABLE"))
+        if (tableTypesList.contains("TABLE")) {
             tableTypes.select("TABLE");
+        }
         tableTypes.setWidth("100%");
         tableTypes.setNullSelectionAllowed(false);
         tableTypes.setImmediate(true);
