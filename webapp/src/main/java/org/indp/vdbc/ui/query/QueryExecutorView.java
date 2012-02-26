@@ -9,6 +9,7 @@ import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import workbench.sql.formatter.SqlFormatter;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -92,18 +93,18 @@ public class QueryExecutorView extends CustomComponent {
                 connection.setAutoCommit(enabled);
             }
         });
-//        queryOptionsView.setFormatSqlAction(new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                SqlFormatter sqlFormatter = new SqlFormatter(query.getValue().toString());
-//                try {
-//                    query.setValue(sqlFormatter.getFormattedSql());
-//                } catch (Exception ex) {
-//                    logger.warn("failed to format sql", ex);
-//                }
-//            }
-//        });
+        queryOptionsView.setFormatSqlActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SqlFormatter sqlFormatter = new SqlFormatter(query.getValue().toString(), null);
+                try {
+                    query.setValue(sqlFormatter.getFormattedSql());
+                } catch (Exception ex) {
+                    LOG.warn("failed to format sql", ex);
+                }
+            }
+        });
 
         splitPanel.setFirstComponent(query);
         splitPanel.setSecondComponent(new Label());

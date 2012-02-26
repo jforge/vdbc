@@ -3,6 +3,7 @@ package org.indp.vdbc.ui.query;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window.Notification;
+import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.ui.ActionListenerAdapter;
 import org.indp.vdbc.ui.UiUtils;
 
@@ -15,7 +16,7 @@ import java.util.Arrays;
  */
 public class QueryOptionsView extends HorizontalLayout {
 
-    //    private ActionListener formatSqlAction;
+    private ActionListenerAdapter formatSqlActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter executeActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter commitActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter rollbackActionListener = new ActionListenerAdapter();
@@ -31,15 +32,7 @@ public class QueryOptionsView extends HorizontalLayout {
 //        setSpacing(true);
         setWidth("100%");
 
-//        final Button formatSqlButton = new Button("Format", new Button.ClickListener() {
-//
-//            @Override
-//            public void buttonClick(ClickEvent event) {
-//                if (null != formatSqlAction)
-//                    formatSqlAction.actionPerformed(null);
-//            }
-//        });
-//        formatSqlButton.addStyleName("small");
+        final Button formatSqlButton = createToolButton("Format", formatSqlActionListener);
 
         final Button executeButton = createToolButton("Execute", executeActionListener);
         executeButton.setDescription("Press Ctrl+Enter to execute the query");
@@ -89,8 +82,8 @@ public class QueryOptionsView extends HorizontalLayout {
         maxRowsBox.setValue(100);
 
 
-//        addComponent(formatSqlButton);
-//        addComponent(UiUtils.createHorizontalSpacer(15));
+        addComponent(formatSqlButton);
+        addComponent(UiUtils.createHorizontalSpacer(15));
         addComponent(executeButton);
         addComponent(UiUtils.createHorizontalSpacer(5));
         addComponent(commitButton);
@@ -100,6 +93,7 @@ public class QueryOptionsView extends HorizontalLayout {
         addComponent(maxRowsBox);
         setExpandRatio(autocommitCheckBox, 1);
         setComponentAlignment(executeButton, Alignment.MIDDLE_LEFT);
+        setComponentAlignment(formatSqlButton, Alignment.MIDDLE_LEFT);
         setComponentAlignment(commitButton, Alignment.MIDDLE_LEFT);
         setComponentAlignment(rollbackButton, Alignment.MIDDLE_LEFT);
         setComponentAlignment(autocommitCheckBox, Alignment.MIDDLE_LEFT);
@@ -108,7 +102,7 @@ public class QueryOptionsView extends HorizontalLayout {
 
     protected Button createToolButton(String caption, Button.ClickListener clickListener) {
         final Button button = new Button(caption, clickListener);
-        button.addStyleName("small");
+        button.addStyleName(Reindeer.BUTTON_SMALL);
         return button;
     }
 
@@ -123,9 +117,10 @@ public class QueryOptionsView extends HorizontalLayout {
     public void setRollbackActionListener(ActionListener rollbackActionListener) {
         this.rollbackActionListener.setActionListener(rollbackActionListener);
     }
-//    public void setFormatSqlAction(ActionListener formatSqlAction) {
-//        this.formatSqlAction = formatSqlAction;
-//    }
+
+    public void setFormatSqlActionListener(ActionListener formatSqlActionListener) {
+        this.formatSqlActionListener.setActionListener(formatSqlActionListener);
+    }
 
     public int getMaxRows() {
         return (Integer) maxRowsBox.getValue();
