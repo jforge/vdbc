@@ -24,7 +24,11 @@ public class TableDetailsView extends CustomComponent {
         TableDataView tableContentView = new TableDataView(table, sessionManager);
         tableContentView.setSizeFull();
 
+        TableSourceView tableSourceView = new TableSourceView(table, sessionManager);
+        tableSourceView.setSizeFull();
+
         tabSheet.addTab(tableStructureView);
         tabSheet.addTab(tableContentView);
+        tabSheet.addTab(tableSourceView);
     }
 }
