@@ -4,6 +4,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
+import org.hibernate.engine.jdbc.internal.BasicFormatterImpl;
 import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.util.JdbcUtils;
@@ -96,12 +97,13 @@ public class QueryExecutorView extends CustomComponent {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-//                SqlFormatter sqlFormatter = new SqlFormatter(query.getValue().toString(), null);
-//                try {
-//                    query.setValue(sqlFormatter.getFormattedSql());
-//                } catch (Exception ex) {
-//                    LOG.warn("failed to format sql", ex);
-//                }
+                // TODO format selected text
+                String sql = query.getValue().toString();
+                String formatted = new BasicFormatterImpl().format(sql);
+                if (formatted.startsWith("\n")) {
+                    formatted = formatted.substring(1);
+                }
+                query.setValue(formatted);
             }
         });
 
