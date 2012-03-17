@@ -1,7 +1,7 @@
 package org.indp.vdbc.ui.metadata;
 
 import com.vaadin.ui.*;
-import org.indp.vdbc.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.util.JdbcUtils;
 
 import java.sql.Connection;

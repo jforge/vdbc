@@ -7,7 +7,7 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window.Notification;
 import org.indp.vdbc.ConnectionListener;
-import org.indp.vdbc.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.profile.ConnectionProfileLoginPanel;

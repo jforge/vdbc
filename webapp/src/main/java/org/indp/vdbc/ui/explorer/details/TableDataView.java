@@ -6,7 +6,7 @@ import com.vaadin.data.util.sqlcontainer.connection.J2EEConnectionPool;
 import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import org.indp.vdbc.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.ui.Toolbar;
 import org.slf4j.Logger;

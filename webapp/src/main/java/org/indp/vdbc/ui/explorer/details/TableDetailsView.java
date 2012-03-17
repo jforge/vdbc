@@ -3,7 +3,7 @@ package org.indp.vdbc.ui.explorer.details;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.themes.Reindeer;
-import org.indp.vdbc.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 
 /**

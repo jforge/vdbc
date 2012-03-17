@@ -3,6 +3,7 @@ package org.indp.vdbc;
 import com.vaadin.Application;
 import com.vaadin.ui.Window;
 import org.indp.vdbc.model.config.ConnectionProfile;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.ui.ConnectionSelectorView;
 import org.indp.vdbc.ui.WorkspaceView;
 import org.slf4j.Logger;

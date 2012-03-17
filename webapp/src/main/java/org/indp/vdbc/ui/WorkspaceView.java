@@ -6,7 +6,7 @@ import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.ConnectionListener;
-import org.indp.vdbc.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.ui.explorer.TablesView;
 import org.indp.vdbc.ui.metadata.DatabaseMetadataView;

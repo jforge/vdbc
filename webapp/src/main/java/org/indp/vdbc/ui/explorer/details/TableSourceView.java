@@ -2,8 +2,8 @@ package org.indp.vdbc.ui.explorer.details;
 
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
-import org.indp.vdbc.DatabaseSessionManager;
 import org.indp.vdbc.model.jdbc.JdbcTable;
+import org.indp.vdbc.services.DatabaseSessionManager;
 
 /**
  *

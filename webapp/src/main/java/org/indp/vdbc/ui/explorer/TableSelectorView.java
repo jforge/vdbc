@@ -10,7 +10,7 @@ import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.Reindeer;
-import org.indp.vdbc.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.ui.explorer.details.TableDetailsView;
 import org.indp.vdbc.util.MetadataRetriever;

@@ -4,7 +4,7 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
-import org.indp.vdbc.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
