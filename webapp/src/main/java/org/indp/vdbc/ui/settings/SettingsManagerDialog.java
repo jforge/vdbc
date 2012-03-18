@@ -5,8 +5,8 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
-import org.indp.vdbc.profile.ConnectionProfileDetailsPanel;
-import org.indp.vdbc.profile.ConnectionProfileManager;
+import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
+import org.indp.vdbc.ui.profile.ConnectionProfileManager;
 
 import java.util.List;
 

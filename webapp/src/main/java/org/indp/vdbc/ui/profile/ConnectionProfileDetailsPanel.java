@@ -1,4 +1,4 @@
-package org.indp.vdbc.profile;
+package org.indp.vdbc.ui.profile;
 
 import com.vaadin.terminal.ErrorMessage;
 import com.vaadin.ui.*;

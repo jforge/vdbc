@@ -1,7 +1,7 @@
 package org.indp.vdbc.ui.settings;
 
 import com.vaadin.ui.*;
-import org.indp.vdbc.profile.ConnectionProfileManager;
+import org.indp.vdbc.ui.profile.ConnectionProfileManager;
 
 import java.util.Collection;
 

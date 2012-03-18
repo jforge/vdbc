@@ -1,10 +1,10 @@
-package org.indp.vdbc.profile.impl;
+package org.indp.vdbc.ui.profile.impl;
 
 import com.vaadin.data.Item;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.*;
 import org.indp.vdbc.model.config.ConnectionProfile;
-import org.indp.vdbc.profile.ConnectionProfileDetailsPanel;
+import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
 
 import java.util.Arrays;
 import java.util.Collections;

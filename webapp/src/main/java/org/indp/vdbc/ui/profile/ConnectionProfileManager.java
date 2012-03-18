@@ -1,4 +1,4 @@
-package org.indp.vdbc.profile;
+package org.indp.vdbc.ui.profile;
 
 import org.indp.vdbc.model.config.ConnectionProfile;
 

@@ -1,10 +1,10 @@
-package org.indp.vdbc.profile.impl;
+package org.indp.vdbc.ui.profile.impl;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JndiConnectionProfile;
-import org.indp.vdbc.profile.ConnectionProfileLoginPanel;
+import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
 import org.indp.vdbc.ui.LabelField;
 
 /**

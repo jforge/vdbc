@@ -1,10 +1,10 @@
-package org.indp.vdbc.profile.impl;
+package org.indp.vdbc.ui.profile.impl;
 
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JndiConnectionProfile;
-import org.indp.vdbc.profile.ConnectionProfileDetailsPanel;
-import org.indp.vdbc.profile.ConnectionProfileLoginPanel;
-import org.indp.vdbc.profile.ConnectionProfileManager;
+import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
+import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
+import org.indp.vdbc.ui.profile.ConnectionProfileManager;
 
 /**
  *

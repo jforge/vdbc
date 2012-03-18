@@ -1,4 +1,4 @@
-package org.indp.vdbc.profile;
+package org.indp.vdbc.ui.profile;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;

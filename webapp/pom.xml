@@ -6,13 +6,17 @@
         <artifactId>vdbc</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>webapp</artifactId>
+    <artifactId>vdbc-webapp</artifactId>
     <packaging>war</packaging>
 
-    <name>VDBC Webapp</name>
     <url>http://code.google.com/p/vdbc/</url>
 
     <dependencies>
+        <dependency>
+            <groupId>org.indp.vdbc</groupId>
+            <artifactId>vdbc-data</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -51,12 +55,6 @@
                 <filtering>false</filtering>
             </resource>
         </resources>
-        <!--<plugins>-->
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-compiler-plugin</artifactId>-->
-            <!--</plugin>-->
-        <!--</plugins>-->
     </build>
 
 </project>
