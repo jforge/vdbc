@@ -179,7 +179,7 @@ public class TableSelectorView extends VerticalLayout {
             tableListContainer.addItem(t).getItemProperty(VALUE_PROPERTY).setValue(t.getName());
     }
 
-    protected Component createDetails(JdbcTable table) {
+    protected ObjectDetails createDetails(JdbcTable table) {
         TableDetailsView dv = new TableDetailsView(table, sessionManager);
         return dv;
     }
