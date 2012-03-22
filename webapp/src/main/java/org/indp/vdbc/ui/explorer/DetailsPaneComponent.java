@@ -12,6 +12,7 @@ public class DetailsPaneComponent extends CustomComponent {
 
     public DetailsPaneComponent() {
         tabSheet = new TabSheet();
+        tabSheet.setSizeFull();
         setCompositionRoot(tabSheet);
         setSizeFull();
     }
