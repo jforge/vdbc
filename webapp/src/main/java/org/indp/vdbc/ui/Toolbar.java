@@ -13,19 +13,26 @@ public class Toolbar extends CustomComponent {
 
     public Toolbar() {
         content = new HorizontalLayout();
-//        content.setSizeFull();
+        content.setWidth("100%");
         setCompositionRoot(content);
         addStyleName("toolbar");
     }
 
     @Override
     public void addComponent(Component component) {
-        this.addComponent(component, Alignment.MIDDLE_LEFT);
+        this.addComponent(component, Alignment.MIDDLE_LEFT, null);
     }
 
     public void addComponent(Component component, Alignment alignment) {
+        addComponent(component, alignment, null);
+    }
+
+    public void addComponent(Component component, Alignment alignment, String styleName) {
         content.addComponent(component);
         content.setComponentAlignment(component, alignment);
+        if (styleName != null) {
+            component.setStyleName(styleName);
+        }
     }
 
     public void addLinkButton(String caption, Alignment alignment, Button.ClickListener clickListener) {

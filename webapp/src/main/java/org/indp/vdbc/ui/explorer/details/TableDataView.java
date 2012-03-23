@@ -6,8 +6,9 @@ import com.vaadin.data.util.sqlcontainer.connection.J2EEConnectionPool;
 import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import org.indp.vdbc.services.DatabaseSessionManager;
+import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.jdbc.JdbcTable;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.ui.Toolbar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +19,12 @@ import java.sql.SQLException;
 /**
  *
  */
-public class TableDataView extends CustomComponent {
+public class TableDataView extends CustomComponent implements ToolbarOwner {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
     private final VerticalLayout tableContainer;
     private final J2EEConnectionPool connectionPool;
+    private final Toolbar toolbar;
 
     public TableDataView(final JdbcTable table, final DatabaseSessionManager sessionManager) {
         connectionPool = new J2EEConnectionPool(sessionManager.getDataSource());
@@ -34,7 +36,7 @@ public class TableDataView extends CustomComponent {
         setCompositionRoot(vl);
 
 
-        Toolbar toolbar = new Toolbar();
+        toolbar = new Toolbar();
         toolbar.setWidth("100%");
         toolbar.addComponent(new Button("Refresh", new Button.ClickListener() {
 
@@ -42,11 +44,11 @@ public class TableDataView extends CustomComponent {
             public void buttonClick(ClickEvent event) {
                 refreshDataView(table, sessionManager);
             }
-        }));
+        }), Alignment.MIDDLE_RIGHT, Reindeer.BUTTON_SMALL);
 
         tableContainer = new VerticalLayout();
         tableContainer.setSizeFull();
-        vl.addComponent(toolbar);
+
         vl.addComponent(tableContainer);
         vl.setExpandRatio(tableContainer, 1f);
 
@@ -84,5 +86,10 @@ public class TableDataView extends CustomComponent {
         }
         sb.append(table.getName());
         return sb.toString();
+    }
+
+    @Override
+    public Component getToolbar() {
+        return toolbar;
     }
 }
