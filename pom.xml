@@ -11,9 +11,14 @@
 
     <name>Vaadin Database Console</name>
 
+    <properties>
+        <maven.build.timestamp.format>yyMMdd</maven.build.timestamp.format>
+    </properties>
+
     <modules>
         <module>vdbc-data</module>
         <module>webapp</module>
+        <module>distrib</module>
     </modules>
 
     <dependencyManagement>
