@@ -16,13 +16,14 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
 
     private Property pinned;
     private final HorizontalLayout customToolbar = new HorizontalLayout();
+    private final TabSheet tabSheet;
 
     public TableDetailsView(JdbcTable table, DatabaseSessionManager sessionManager) {
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         setCompositionRoot(layout);
 
-        TabSheet tabSheet = createTabSheet(table, sessionManager);
+        tabSheet = createTabSheet(table, sessionManager);
 
         layout.addComponent(createToobar());
         layout.addComponent(tabSheet);
@@ -35,7 +36,7 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
         HorizontalLayout toolbar = new HorizontalLayout();
         toolbar.setWidth("100%");
 
-        CheckBox checkBox = new CheckBox("Pin", false);
+        CheckBox checkBox = new CheckBox("Pin Tab", false);
         pinned = checkBox;
 
         customToolbar.setWidth("100%");
@@ -82,11 +83,25 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
 
     @Override
     public DetailsState getDetailsState() {
-        return null;
+        State state = new State();
+        state.selectedTabIndex = tabSheet.getTabPosition(tabSheet.getTab(tabSheet.getSelectedTab()));
+        return state;
+    }
+
+    @Override
+    public void setDetailsState(DetailsState state) {
+        if (state instanceof State) {
+            TabSheet.Tab tab = tabSheet.getTab(((State) state).selectedTabIndex);
+            tabSheet.setSelectedTab(tab.getComponent());
+        }
     }
 
     @Override
     public boolean isTemporary() {
         return Boolean.FALSE.equals(pinned.getValue());
+    }
+
+    private static class State implements DetailsState {
+        int selectedTabIndex;
     }
 }

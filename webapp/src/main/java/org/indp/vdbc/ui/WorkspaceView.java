@@ -44,21 +44,21 @@ public class WorkspaceView extends VerticalLayout {
 
         Toolbar toolbar = new Toolbar();
         toolbar.setSpacing(true);
-        toolbar.addLinkButton("Query", null, new Button.ClickListener() {
+        toolbar.addLinkButton("Query", new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
                 addTab(new QueryExecutorView(manager));
             }
         });
-        toolbar.addLinkButton("Tables", null, new Button.ClickListener() {
+        toolbar.addLinkButton("Tables", new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
                 addTab(new TablesView(manager));
             }
         });
-        toolbar.addLinkButton("Database Metadata", null, new Button.ClickListener() {
+        toolbar.addLinkButton("Database Metadata", new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {

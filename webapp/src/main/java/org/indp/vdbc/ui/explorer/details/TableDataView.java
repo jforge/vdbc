@@ -5,11 +5,9 @@ import com.vaadin.data.util.sqlcontainer.SQLContainer;
 import com.vaadin.data.util.sqlcontainer.connection.J2EEConnectionPool;
 import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.services.DatabaseSessionManager;
-import org.indp.vdbc.ui.Toolbar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +22,7 @@ public class TableDataView extends CustomComponent implements ToolbarOwner {
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
     private final VerticalLayout tableContainer;
     private final J2EEConnectionPool connectionPool;
-    private final Toolbar toolbar;
+    private final HorizontalLayout toolbar;
 
     public TableDataView(final JdbcTable table, final DatabaseSessionManager sessionManager) {
         connectionPool = new J2EEConnectionPool(sessionManager.getDataSource());
@@ -35,16 +33,20 @@ public class TableDataView extends CustomComponent implements ToolbarOwner {
         vl.setSizeFull();
         setCompositionRoot(vl);
 
-
-        toolbar = new Toolbar();
+        toolbar = new HorizontalLayout();
         toolbar.setWidth("100%");
-        toolbar.addComponent(new Button("Refresh", new Button.ClickListener() {
+        Button refreshButton = new Button("Refresh", new Button.ClickListener() {
 
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void buttonClick(Button.ClickEvent event) {
                 refreshDataView(table, sessionManager);
             }
-        }), Alignment.MIDDLE_RIGHT, Reindeer.BUTTON_SMALL);
+
+        });
+        refreshButton.setStyleName(Reindeer.BUTTON_SMALL);
+        toolbar.addComponent(refreshButton);
+        toolbar.setComponentAlignment(refreshButton, Alignment.MIDDLE_RIGHT);
+
 
         tableContainer = new VerticalLayout();
         tableContainer.setSizeFull();

@@ -49,9 +49,9 @@ public class TableSelectorView extends VerticalLayout {
 
                 @Override
                 public void itemClick(ItemClickEvent event) {
-                    if (null == detailsListener)
+                    if (null == detailsListener) {
                         return;
-
+                    }
                     JdbcTable item = (JdbcTable) event.getItemId();
                     if (null == item) {
                         return;

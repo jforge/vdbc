@@ -9,5 +9,7 @@ public interface ObjectDetails extends Component {
 
     DetailsState getDetailsState();
 
+    void setDetailsState(DetailsState state);
+
     boolean isTemporary();
 }

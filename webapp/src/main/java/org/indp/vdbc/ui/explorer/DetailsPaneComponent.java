@@ -19,7 +19,7 @@ public class DetailsPaneComponent extends CustomComponent {
 
     public void showDetails(ObjectDetails objectDetails) {
         // first we try to replace selected tab
-        ObjectDetails selectedTab = (ObjectDetails) tabSheet.getSelectedTab();
+        ObjectDetails selectedTab = getSelectedDetailComponent();
         if (selectedTab != null && selectedTab.isTemporary()) {
             replaceDetailsTab(selectedTab, objectDetails);
             return;
@@ -37,6 +37,10 @@ public class DetailsPaneComponent extends CustomComponent {
         // no temporary tabs, so we create one
         tabSheet.addTab(objectDetails);
         setupTab(objectDetails);
+    }
+
+    public ObjectDetails getSelectedDetailComponent() {
+        return (ObjectDetails) tabSheet.getSelectedTab();
     }
 
     private void replaceDetailsTab(ObjectDetails oldContent, ObjectDetails newContent) {

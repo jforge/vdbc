@@ -24,6 +24,11 @@ public class TablesView extends CustomComponent {
 
             @Override
             public void showDetails(ObjectDetails detailsComponent) {
+                ObjectDetails selectedDetailComponent = detailsPaneComponent.getSelectedDetailComponent();
+                if (selectedDetailComponent != null) {
+                    detailsComponent.setDetailsState(selectedDetailComponent.getDetailsState());
+                }
+
                 detailsComponent.setSizeFull();
                 detailsPaneComponent.showDetails(detailsComponent);
             }
