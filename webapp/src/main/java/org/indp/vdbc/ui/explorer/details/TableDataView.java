@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.vaadin.data.util.sqlcontainer.SQLContainer;
 import com.vaadin.data.util.sqlcontainer.connection.J2EEConnectionPool;
 import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
+import com.vaadin.event.Action;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.jdbc.JdbcTable;
@@ -68,6 +69,22 @@ public class TableDataView extends CustomComponent implements ToolbarOwner {
             table.setColumnReorderingAllowed(true);
             table.setColumnCollapsingAllowed(true);
             table.setSizeFull();
+            table.addActionHandler(new Action.Handler() {
+                private final String singleRecordViewAction = "Single record view...";
+
+                @Override
+                public Action[] getActions(Object target, Object sender) {
+                    return new Action[] {new Action(singleRecordViewAction)};
+                }
+
+                @Override
+                public void handleAction(Action action, Object sender, Object target) {
+                    if (!singleRecordViewAction.equals(action.getCaption())) {
+                        return;
+                    }
+                    getApplication().getMainWindow().addWindow(new SingleRecordViewWindow());
+                }
+            });
             component = table;
         } catch (SQLException e) {
             LOG.warn("failed to retrieve tableDefinition data", e);
