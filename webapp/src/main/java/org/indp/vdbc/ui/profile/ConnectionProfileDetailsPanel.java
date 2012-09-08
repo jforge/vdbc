@@ -37,21 +37,33 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
     public void attach() {
         super.attach();
         setSizeFull();
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-        setCompositionRoot(layout);
 
         Component panel = getDetailsComponent();
         Component footer = createFooter();
+
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSizeFull();
+
         layout.addComponent(panel);
         layout.addComponent(footer);
         layout.setExpandRatio(panel, 1);
+
+        setCompositionRoot(layout);
     }
 
     private Component createFooter() {
-        HorizontalLayout footer = new HorizontalLayout();
-        footer.setSpacing(true);
-        footer.addComponent(new Button("Apply", new Button.ClickListener() {
+        Button removeButton = new Button("Remove Profile", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                ConnectionProfile value = profileListFacade.getSelectedProfile();
+                if (value != null) {
+                    removeProfile(value);
+                } else {
+                    getWindow().showNotification("Select some profile to remove it");
+                }
+            }
+        });
+        Button applyButton = new Button("Apply Changes", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 try {
@@ -62,18 +74,12 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
                     }
                 }
             }
-        }));
-        footer.addComponent(new Button("Remove", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                ConnectionProfile value = profileListFacade.getSelectedProfile();
-                if (value != null) {
-                    removeProfile(value);
-                } else {
-                    getWindow().showNotification("Select some profile to remove it");
-                }
-            }
-        }));
+        });
+
+        HorizontalLayout footer = new HorizontalLayout();
+        footer.setSpacing(true);
+        footer.addComponent(removeButton);
+        footer.addComponent(applyButton);
         return footer;
     }
 

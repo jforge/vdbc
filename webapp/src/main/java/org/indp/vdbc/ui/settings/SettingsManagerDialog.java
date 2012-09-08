@@ -2,7 +2,9 @@ package org.indp.vdbc.ui.settings;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
@@ -19,21 +21,32 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
     private ComponentContainer panel;
 
     public SettingsManagerDialog() {
+    }
+
+    @Override
+    public void attach() {
         setModal(true);
         setResizable(false);
         setCaption("Settings");
         setWidth("600px");
         setHeight("420px");
 
-        GridLayout layout = createMainLayout();
-        setContent(layout);
+        ComponentContainer workArea = createWorkArea();
 
-        Component bottom = createBottomBar();
-        layout.addComponent(bottom, 0, 1);
-        layout.setComponentAlignment(bottom, Alignment.MIDDLE_RIGHT);
-        layout.setRowExpandRatio(0, 1);
+        VerticalLayout vl = new VerticalLayout();
+        vl.setMargin(true);
+        vl.addComponent(workArea);
+        vl.setSizeFull();
+
+        setContent(vl);
 
         refreshDetails();
+
+        addAction(new CloseShortcut(this, ShortcutAction.KeyCode.ESCAPE));
+
+        super.attach();
+
+        this.focus();
     }
 
     private void refreshDetails() {
@@ -61,20 +74,22 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         return layout;
     }
 
-    private GridLayout createMainLayout() {
-        GridLayout layout = new GridLayout(1, 2);
-        layout.setSpacing(true);
-        layout.setMargin(true);
-        layout.addComponent(createWorkArea(), 0, 0);
-        layout.setSizeFull();
-        return layout;
-    }
+    private ComponentContainer createWorkArea() {
+        panel = new VerticalLayout();
+        panel.setSizeFull();
 
-    private Component createWorkArea() {
         HorizontalSplitPanel split = new HorizontalSplitPanel();
+        split.setStyleName(Reindeer.SPLITPANEL_SMALL);
+        split.setMargin(true);
         split.setSizeFull();
         split.setSplitPosition(30);
+        split.addComponent(createLeftSide());
+        split.addComponent(panel);
 
+        return split;
+    }
+
+    private ComponentContainer createLeftSide() {
         List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
         list = new ListSelect(null, new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, profiles));
         list.setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_PROPERTY);
@@ -92,20 +107,6 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
                 refreshDetails();
             }
         });
-
-        panel = new VerticalLayout();
-        panel.setSizeFull();
-
-        split.addComponent(list);
-        split.addComponent(panel);
-
-        return split;
-    }
-
-    private Component createBottomBar() {
-        HorizontalLayout bottom = new HorizontalLayout();
-        bottom.setWidth("100%");
-        bottom.setSpacing(true);
 
         Button addButton = new Button("Add", new Button.ClickListener() {
             @Override
@@ -126,21 +127,19 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             }
         });
 
-        Button closeButton = new Button("Close", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                close();
-            }
-        });
+        HorizontalLayout listButtons = new HorizontalLayout();
+        listButtons.setSpacing(true);
+        listButtons.addComponent(addButton);
+        listButtons.addComponent(saveProfilesButton);
 
-        bottom.addComponent(addButton);
-        bottom.addComponent(saveProfilesButton);
-        bottom.addComponent(closeButton);
+        VerticalLayout leftSide = new VerticalLayout();
+        leftSide.setSizeFull();
+        leftSide.setSpacing(true);
+        leftSide.addComponent(list);
+        leftSide.addComponent(listButtons);
+        leftSide.setExpandRatio(list, 1f);
 
-        bottom.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
-        bottom.setExpandRatio(closeButton, 1);
-
-        return bottom;
+        return leftSide;
     }
 
     private void createProfile(ConnectionProfileManager factory) {
