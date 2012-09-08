@@ -18,7 +18,7 @@ import java.sql.SQLException;
 /**
  *
  */
-public class TableDataView extends CustomComponent implements ToolbarOwner {
+public class TableDataView extends CustomComponent implements ToolbarContributor {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
     private final VerticalLayout tableContainer;

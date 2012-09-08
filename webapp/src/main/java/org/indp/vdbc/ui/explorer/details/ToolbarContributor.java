@@ -5,6 +5,6 @@ import com.vaadin.ui.Component;
 /**
  *
  */
-public interface ToolbarOwner {
+public interface ToolbarContributor {
     Component getToolbar();
 }

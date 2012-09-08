@@ -3,3 +3,7 @@ window per connection
 progressbar in query window
 
 profile color (dev, prod, test)
+
+default schema setting
+
+save layout

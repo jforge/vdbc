@@ -71,8 +71,8 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
             public void selectedTabChange(TabSheet.SelectedTabChangeEvent event) {
                 customToolbar.removeAllComponents();
                 Component selectedTab = event.getTabSheet().getSelectedTab();
-                if (selectedTab instanceof ToolbarOwner) {
-                    Component contextToolbar = ((ToolbarOwner) selectedTab).getToolbar();
+                if (selectedTab instanceof ToolbarContributor) {
+                    Component contextToolbar = ((ToolbarContributor) selectedTab).getToolbar();
                     customToolbar.addComponent(contextToolbar);
                 }
             }
