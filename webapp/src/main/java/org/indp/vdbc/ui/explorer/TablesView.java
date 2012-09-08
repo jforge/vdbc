@@ -19,8 +19,8 @@ public class TablesView extends CustomComponent {
 
         final DetailsPaneComponent detailsPaneComponent = new DetailsPaneComponent();
 
-        TableSelectorView tableSelectorView = new TableSelectorView(databaseSessionManager);
-        tableSelectorView.setDetailsListener(new DetailsListener() {
+        TableSelectorComponent tableSelector = new TableSelectorComponent(databaseSessionManager);
+        tableSelector.setDetailsListener(new DetailsListener() {
 
             @Override
             public void showDetails(ObjectDetails detailsComponent) {
@@ -34,7 +34,7 @@ public class TablesView extends CustomComponent {
             }
         });
 
-        sp.setFirstComponent(tableSelectorView);
+        sp.setFirstComponent(tableSelector);
         sp.setSecondComponent(detailsPaneComponent);
         sp.setSplitPosition(300, UNITS_PIXELS);
         setCompositionRoot(sp);

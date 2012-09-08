@@ -7,11 +7,13 @@ import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.Reindeer;
-import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.model.jdbc.JdbcTable;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.ui.explorer.details.TableDetailsView;
 import org.indp.vdbc.util.MetadataRetriever;
 import org.slf4j.Logger;
@@ -23,21 +25,23 @@ import java.util.List;
 /**
  *
  */
-public class TableSelectorView extends VerticalLayout {
+public class TableSelectorComponent extends CustomComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TableSelectorView.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TableSelectorComponent.class);
     private static final String VALUE_PROPERTY = "value";
     private IndexedContainer tableListContainer;
     private DetailsListener detailsListener;
     private DatabaseSessionManager sessionManager;
 
-    public TableSelectorView(DatabaseSessionManager sessionManager) {
+    public TableSelectorComponent(DatabaseSessionManager sessionManager) {
         this.sessionManager = sessionManager;
-        try {
-            setSizeFull();
+    }
 
-            VerticalLayout vl = new VerticalLayout();
-            vl.setSizeFull();
+    @Override
+    public void attach() {
+        super.attach();
+        setSizeFull();
+        try {
             Component selectors = createSelectors();
 
             tableListContainer = createObjectListContainer();
@@ -60,8 +64,8 @@ public class TableSelectorView extends VerticalLayout {
                 }
             });
 
-            TextField filter = new TextField();
-            filter.setInputPrompt("filter");
+            final TextField filter = new TextField();
+            filter.setInputPrompt("filter (Alt-F to focus)");
             filter.setWidth("100%");
             filter.setStyleName(Reindeer.TEXTFIELD_SMALL);
 
@@ -74,15 +78,31 @@ public class TableSelectorView extends VerticalLayout {
                 }
             });
 
+            VerticalLayout vl = new VerticalLayout();
+            vl.setSizeFull();
             vl.addComponent(selectors);
             vl.addComponent(objectList);
             vl.addComponent(filter);
             vl.setExpandRatio(objectList, 1f);
 
-            addComponent(vl);
+            Panel root = new Panel();
+            root.setSizeFull();
+            root.setStyleName(Reindeer.PANEL_LIGHT);
+            root.setContent(vl);
+
+            root.addAction(new ShortcutListener("activate filter", ShortcutAction.KeyCode.F, new int[]{ShortcutAction.ModifierKey.ALT}){
+
+                @Override
+                public void handleAction(Object sender, Object target) {
+                    filter.focus();
+                }
+            });
+
+            setCompositionRoot(root);
 
         } catch (SQLException ex) {
             LOG.error("failed to create table selector view", ex);
+            setCompositionRoot(new Label(ex.getMessage()));
         }
     }
 
@@ -153,8 +173,6 @@ public class TableSelectorView extends VerticalLayout {
 
     protected void updateTableList(Property catalogProperty, Property schemaProperty, Property tableTypeProperty) {
         tableListContainer.removeAllItems();
-//        if (null == schemaProperty.getValue() || null == tableTypeProperty.getValue())
-//            return;
 
         String catalog = null, schema = null, tableType = null;
         if (null != catalogProperty.getValue())
