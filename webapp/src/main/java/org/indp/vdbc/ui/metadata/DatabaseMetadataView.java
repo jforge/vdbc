@@ -1,7 +1,7 @@
 package org.indp.vdbc.ui.metadata;
 
 import com.vaadin.ui.*;
-import org.indp.vdbc.services.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.util.JdbcUtils;
 
 import java.sql.Connection;
@@ -21,12 +21,12 @@ public class DatabaseMetadataView extends CustomComponent {
         void showDetails(Component detailsComponent);
     }
 
-    public DatabaseMetadataView(DatabaseSessionManager sessionManager) {
+    public DatabaseMetadataView(DatabaseSession databaseSession) {
         setCaption("Database Metadata");
         setSizeFull();
 
         try {
-            connection = sessionManager.getConnection();
+            connection = databaseSession.getConnection();
         } catch (Exception ex) {
             setCompositionRoot(new Label(ex.getMessage()));
         }

@@ -7,7 +7,7 @@ import org.indp.vdbc.model.config.JndiConnectionProfile;
  */
 public class JndiConnectionProfileDetailsPanel extends AbstractConnectionProfileDetailsPanel<JndiConnectionProfile> {
 
-    private static final String[] VISIBLE_PROPERTIES = {"name", "jndiName"};
+    private static final String[] VISIBLE_PROPERTIES = {"name", "dialect", "jndiName"};
     private static final String[] OPTIONAL_PROPERTIES = {};
 
     public JndiConnectionProfileDetailsPanel(JndiConnectionProfile profile, ProfileListFacade profileListFacade) {

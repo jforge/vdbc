@@ -14,7 +14,7 @@ public class TableSourceView extends CustomComponent {
         setCaption("Source");
 
 //        try {
-//            TableSourceBuilder builder = TableSourceBuilderFactory.getBuilder(ConnectionAdapter.create(sessionManager));
+//            TableSourceBuilder builder = TableSourceBuilderFactory.getBuilder(ConnectionAdapter.create(sessionFactory));
 //            String source = builder.getNativeTableSource(new TableIdentifier(table.getCatalog(), table.getSchema(), table.getName()), true);
 //            setCompositionRoot(new Label(source));
 //        } catch (SQLException e) {

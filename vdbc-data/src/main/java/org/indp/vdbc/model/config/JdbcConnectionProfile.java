@@ -41,8 +41,9 @@ public class JdbcConnectionProfile extends ConnectionProfile {
     public JdbcConnectionProfile() {
     }
 
-    public JdbcConnectionProfile(String name, String driver, String url, String user, String password) {
+    public JdbcConnectionProfile(String name, String dialect, String driver, String url, String user, String password) {
         setName(name);
+        setDialect(dialect);
         this.driver = driver;
         this.url = url;
         this.user = user;

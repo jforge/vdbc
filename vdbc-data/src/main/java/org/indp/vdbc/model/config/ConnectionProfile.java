@@ -16,6 +16,9 @@ public abstract class ConnectionProfile implements Serializable {
     @XmlAttribute
     private String name;
 
+    @XmlAttribute
+    private String dialect;
+
     public abstract String getConnectionPresentationString();
 
     public abstract DataSourceAdapter createDataSourceAdapter();
@@ -26,5 +29,13 @@ public abstract class ConnectionProfile implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDialect() {
+        return dialect;
+    }
+
+    public void setDialect(String dialect) {
+        this.dialect = dialect;
     }
 }

@@ -6,10 +6,9 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window.Notification;
-import org.indp.vdbc.ConnectionListener;
-import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
+import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
 import org.indp.vdbc.ui.profile.ConnectionProfileManager;
 import org.indp.vdbc.ui.settings.SettingsManagerDialog;
@@ -26,11 +25,9 @@ public class ConnectionSelectorView extends VerticalLayout {
 
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionSelectorView.class);
     private final DatabaseSessionManager databaseSessionManager;
-    private final ConnectionListener connectionListener;
 
-    public ConnectionSelectorView(DatabaseSessionManager databaseSessionManager, ConnectionListener connectionListener) {
+    public ConnectionSelectorView(DatabaseSessionManager databaseSessionManager) {
         this.databaseSessionManager = databaseSessionManager;
-        this.connectionListener = connectionListener;
     }
 
     @Override
@@ -82,8 +79,7 @@ public class ConnectionSelectorView extends VerticalLayout {
                 ConnectionProfileLoginPanel panel = profileInfoPanel.getPanel();
                 ConnectionProfile profile = panel.createConnectionProfile();
                 try {
-                    databaseSessionManager.connect(profile);
-                    connectionListener.connectionEstablished(profile);
+                    databaseSessionManager.createSession(profile);
                 } catch (Exception ex) {
                     getApplication().getMainWindow().showNotification("Failed to connect<br/>", ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
                 }

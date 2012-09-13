@@ -5,7 +5,7 @@ import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
 import org.hibernate.engine.jdbc.internal.BasicFormatterImpl;
-import org.indp.vdbc.services.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
@@ -29,12 +29,12 @@ public class QueryExecutorView extends CustomComponent {
     private VerticalSplitPanel splitPanel;
     private QueryOptionsView queryOptionsView;
 
-    public QueryExecutorView(DatabaseSessionManager manager) {
+    public QueryExecutorView(DatabaseSession databaseSession) {
         setCaption("Query");
         setSizeFull();
 
         try {
-            connection = manager.getConnection();
+            connection = databaseSession.getConnection();
         } catch (Exception ex) {
             LOG.warn("connection failed", ex);
             addComponent(new Label(ex.getMessage()));
@@ -129,6 +129,7 @@ public class QueryExecutorView extends CustomComponent {
             String statMsg = "";
 
             // TODO cancelable execution
+            // TODO show infinite progress
             PreparedStatement stmt = connection.prepareStatement(query);
             stmt.setMaxRows(queryOptionsView.getMaxRows());
             boolean hasResultSet = stmt.execute();

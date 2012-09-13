@@ -7,7 +7,7 @@ import org.indp.vdbc.model.config.JdbcConnectionProfile;
  */
 public class JdbcConnectionProfileDetailsPanel extends AbstractConnectionProfileDetailsPanel<JdbcConnectionProfile> {
 
-    private static final String[] VISIBLE_PROPERTIES = {"name", "driver", "url", "user", "password", "validationQuery"};
+    private static final String[] VISIBLE_PROPERTIES = {"name", "dialect", "driver", "url", "user", "password", "validationQuery"};
     private static final String[] OPTIONAL_PROPERTIES = {"password", "validationQuery"};
 
     public JdbcConnectionProfileDetailsPanel(JdbcConnectionProfile profile, ProfileListFacade profileListFacade) {

@@ -24,7 +24,7 @@ public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
     @Override
     public ConnectionProfile createConnectionProfile() {
         JdbcConnectionProfile profile = getProfile();
-        return new JdbcConnectionProfile(profile.getName(), profile.getDriver(), profile.getUrl(),
+        return new JdbcConnectionProfile(profile.getName(), profile.getDialect(), profile.getDriver(), profile.getUrl(),
                 userName.getValue().toString(), password.getValue().toString());
     }
 

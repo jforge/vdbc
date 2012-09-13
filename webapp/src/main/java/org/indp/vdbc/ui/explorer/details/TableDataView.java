@@ -8,7 +8,9 @@ import com.vaadin.event.Action;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.jdbc.JdbcTable;
-import org.indp.vdbc.services.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSession;
+import org.indp.vdbc.util.CustomFreeformQuery;
+import org.indp.vdbc.util.ReadonlyFreeformStatementDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,8 +27,8 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
     private final J2EEConnectionPool connectionPool;
     private final HorizontalLayout toolbar;
 
-    public TableDataView(final JdbcTable table, final DatabaseSessionManager sessionManager) {
-        connectionPool = new J2EEConnectionPool(sessionManager.getDataSource());
+    public TableDataView(final JdbcTable table, final DatabaseSession databaseSession) {
+        connectionPool = new J2EEConnectionPool(databaseSession.getDataSource());
 
         setCaption("Data");
 
@@ -40,7 +42,7 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
 
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                refreshDataView(table, sessionManager);
+                refreshDataView(table, databaseSession);
             }
 
         });
@@ -55,15 +57,19 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
         vl.addComponent(tableContainer);
         vl.setExpandRatio(tableContainer, 1f);
 
-        refreshDataView(table, sessionManager);
+        refreshDataView(table, databaseSession);
     }
 
-    protected void refreshDataView(JdbcTable tableDefinition, DatabaseSessionManager sessionManager) {
+    protected void refreshDataView(JdbcTable tableDefinition, DatabaseSession databaseSession) {
         Component component;
         try {
-            FreeformQuery query = new FreeformQuery("select * from " + createTableName(tableDefinition, sessionManager), connectionPool);
+            final String tableName = createTableName(tableDefinition, databaseSession);
+            final String queryString = "select * from " + tableName;
+            final FreeformQuery query = new CustomFreeformQuery(queryString, connectionPool);
+            query.setDelegate(new ReadonlyFreeformStatementDelegate(tableName, databaseSession));
             SQLContainer container = new SQLContainer(query);
             Table table = new Table(null, container);
+            table.setPageLength(150); // todo configure
             table.setSelectable(true);
             table.setSortDisabled(true);
             table.setColumnReorderingAllowed(true);
@@ -74,7 +80,7 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
 
                 @Override
                 public Action[] getActions(Object target, Object sender) {
-                    return new Action[] {new Action(singleRecordViewAction)};
+                    return new Action[]{new Action(singleRecordViewAction)};
                 }
 
                 @Override
@@ -94,8 +100,8 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
         tableContainer.addComponent(component);
     }
 
-    protected String createTableName(JdbcTable table, DatabaseSessionManager sessionManager) throws SQLException {
-        DatabaseMetaData metaData = sessionManager.getMetadata().getRawMetadata();
+    protected String createTableName(JdbcTable table, DatabaseSession databaseSession) throws SQLException {
+        DatabaseMetaData metaData = databaseSession.getMetadata().getRawMetadata();
         StringBuilder sb = new StringBuilder();
         if (!Strings.isNullOrEmpty(table.getCatalog()) && metaData.supportsCatalogsInTableDefinitions()) {
             sb.append(table.getCatalog()).append(".");

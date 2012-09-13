@@ -7,13 +7,11 @@ import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.jdbc.JdbcTable;
-import org.indp.vdbc.services.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.details.TableDetailsView;
 import org.indp.vdbc.util.MetadataRetriever;
 import org.slf4j.Logger;
@@ -31,10 +29,10 @@ public class TableSelectorComponent extends CustomComponent {
     private static final String VALUE_PROPERTY = "value";
     private IndexedContainer tableListContainer;
     private DetailsListener detailsListener;
-    private DatabaseSessionManager sessionManager;
+    private final DatabaseSession databaseSession;
 
-    public TableSelectorComponent(DatabaseSessionManager sessionManager) {
-        this.sessionManager = sessionManager;
+    public TableSelectorComponent(DatabaseSession databaseSession) {
+        this.databaseSession = databaseSession;
     }
 
     @Override
@@ -65,7 +63,7 @@ public class TableSelectorComponent extends CustomComponent {
             });
 
             final TextField filter = new TextField();
-            filter.setInputPrompt("filter (Alt-F to focus)");
+            filter.setInputPrompt("filter");
             filter.setWidth("100%");
             filter.setStyleName(Reindeer.TEXTFIELD_SMALL);
 
@@ -85,20 +83,19 @@ public class TableSelectorComponent extends CustomComponent {
             vl.addComponent(filter);
             vl.setExpandRatio(objectList, 1f);
 
-            Panel root = new Panel();
-            root.setSizeFull();
-            root.setStyleName(Reindeer.PANEL_LIGHT);
-            root.setContent(vl);
+//            Panel root = new Panel();
+//            root.setSizeFull();
+//            root.setStyleName(Reindeer.PANEL_LIGHT);
+//            root.setContent(vl);
+//            root.addAction(new ShortcutListener("activate filter", ShortcutAction.KeyCode.F, new int[]{ShortcutAction.ModifierKey.ALT}){
+//
+//                @Override
+//                public void handleAction(Object sender, Object target) {
+//                    filter.focus();
+//                }
+//            });
 
-            root.addAction(new ShortcutListener("activate filter", ShortcutAction.KeyCode.F, new int[]{ShortcutAction.ModifierKey.ALT}){
-
-                @Override
-                public void handleAction(Object sender, Object target) {
-                    filter.focus();
-                }
-            });
-
-            setCompositionRoot(root);
+            setCompositionRoot(vl);
 
         } catch (SQLException ex) {
             LOG.error("failed to create table selector view", ex);
@@ -112,7 +109,7 @@ public class TableSelectorComponent extends CustomComponent {
         l.setSpacing(false);
         l.setMargin(false);
 
-        MetadataRetriever metadataRetriever = sessionManager.getMetadata();
+        MetadataRetriever metadataRetriever = databaseSession.getMetadata();
         String catalogTerm = metadataRetriever.getCatalogTerm();
         catalogTerm = catalogTerm.substring(0, 1).toUpperCase() + catalogTerm.substring(1);
         List<String> catalogNames = metadataRetriever.getCatalogs();
@@ -187,7 +184,7 @@ public class TableSelectorComponent extends CustomComponent {
 
         List<JdbcTable> tables;
         try {
-            tables = sessionManager.getMetadata().getTables(catalog, schema, tableType);
+            tables = databaseSession.getMetadata().getTables(catalog, schema, tableType);
         } catch (Exception ex) {
             getApplication().getMainWindow().showNotification("Error<br/>", ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
             return;
@@ -198,7 +195,7 @@ public class TableSelectorComponent extends CustomComponent {
     }
 
     protected ObjectDetails createDetails(JdbcTable table) {
-        TableDetailsView dv = new TableDetailsView(table, sessionManager);
+        TableDetailsView dv = new TableDetailsView(table, databaseSession);
         return dv;
     }
 

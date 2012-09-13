@@ -4,7 +4,7 @@ import com.vaadin.data.Property;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.jdbc.JdbcTable;
-import org.indp.vdbc.services.DatabaseSessionManager;
+import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.DetailsState;
 import org.indp.vdbc.ui.explorer.ObjectDetails;
 
@@ -18,12 +18,12 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
     private final HorizontalLayout customToolbar = new HorizontalLayout();
     private final TabSheet tabSheet;
 
-    public TableDetailsView(JdbcTable table, DatabaseSessionManager sessionManager) {
+    public TableDetailsView(JdbcTable table, DatabaseSession databaseSession) {
         VerticalLayout layout = new VerticalLayout();
         layout.setSizeFull();
         setCompositionRoot(layout);
 
-        tabSheet = createTabSheet(table, sessionManager);
+        tabSheet = createTabSheet(table, databaseSession);
 
         layout.addComponent(createToobar());
         layout.addComponent(tabSheet);
@@ -48,18 +48,18 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
         return toolbar;
     }
 
-    private TabSheet createTabSheet(JdbcTable table, DatabaseSessionManager sessionManager) {
+    private TabSheet createTabSheet(JdbcTable table, DatabaseSession databaseSession) {
         TabSheet tabSheet = new TabSheet();
         tabSheet.setSizeFull();
         tabSheet.addStyleName(Reindeer.TABSHEET_SMALL);
 
-        TableStructureView tableStructureView = new TableStructureView(table, sessionManager);
+        TableStructureView tableStructureView = new TableStructureView(table, databaseSession);
         tableStructureView.setSizeFull();
 
-        TableDataView tableContentView = new TableDataView(table, sessionManager);
+        TableDataView tableContentView = new TableDataView(table, databaseSession);
         tableContentView.setSizeFull();
 
-//        TableSourceView tableSourceView = new TableSourceView(table, sessionManager);
+//        TableSourceView tableSourceView = new TableSourceView(table, sessionFactory);
 //        tableSourceView.setSizeFull();
 
         tabSheet.addTab(tableStructureView);

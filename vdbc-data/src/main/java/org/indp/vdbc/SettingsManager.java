@@ -59,7 +59,7 @@ public class SettingsManager {
 
     private Configuration createDefaultConfiguration() {
         Configuration conf = new Configuration();
-        conf.addProfile(new JdbcConnectionProfile("H2 in memory", "org.h2.Driver", "jdbc:h2:mem:db", "sa", ""));
+        conf.addProfile(new JdbcConnectionProfile("H2 in memory", "h2", "org.h2.Driver", "jdbc:h2:mem:db", "sa", ""));
         return conf;
     }
 
