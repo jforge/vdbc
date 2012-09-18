@@ -9,7 +9,7 @@ import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.TablesView;
 import org.indp.vdbc.ui.metadata.DatabaseMetadataView;
-import org.indp.vdbc.ui.query.QueryExecutorView;
+import org.indp.vdbc.ui.query.QueryExecutorComponent;
 
 /**
  *
@@ -46,7 +46,7 @@ public class WorkspaceView extends VerticalLayout {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                addTab(new QueryExecutorView(databaseSession));
+                addTab(new QueryExecutorComponent(databaseSession));
             }
         });
         toolbar.addLinkButton("Tables", new Button.ClickListener() {

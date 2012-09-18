@@ -21,15 +21,15 @@ import java.sql.SQLException;
  *
  *
  */
-public class QueryExecutorView extends CustomComponent {
+public class QueryExecutorComponent extends CustomComponent {
 
-    private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorView.class);
+    private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorComponent.class);
     private Connection connection;
     //
     private VerticalSplitPanel splitPanel;
     private QueryOptionsView queryOptionsView;
 
-    public QueryExecutorView(DatabaseSession databaseSession) {
+    public QueryExecutorComponent(DatabaseSession databaseSession) {
         setCaption("Query");
         setSizeFull();
 
@@ -40,13 +40,6 @@ public class QueryExecutorView extends CustomComponent {
             addComponent(new Label(ex.getMessage()));
             return;
         }
-
-        VerticalLayout vl = new VerticalLayout();
-        vl.setSizeFull();
-        setCompositionRoot(vl);
-
-        splitPanel = new VerticalSplitPanel();
-        splitPanel.setSizeFull();
 
         final TextField query = new TextField();
         query.setSizeFull();
@@ -107,8 +100,14 @@ public class QueryExecutorView extends CustomComponent {
             }
         });
 
+        splitPanel = new VerticalSplitPanel();
+        splitPanel.setSizeFull();
         splitPanel.setFirstComponent(query);
         splitPanel.setSecondComponent(new Label());
+
+        VerticalLayout vl = new VerticalLayout();
+        vl.setSizeFull();
+        setCompositionRoot(vl);
 
         vl.addComponent(queryOptionsView);
         vl.addComponent(splitPanel);
@@ -123,37 +122,60 @@ public class QueryExecutorView extends CustomComponent {
         });
     }
 
-    protected void executeQuery(String query) {
-        try {
-            long start = System.currentTimeMillis();
-            String statMsg = "";
+    protected void executeQuery(final String query) {
+        final long start = System.currentTimeMillis();
 
-            // TODO cancelable execution
-            // TODO show infinite progress
-            PreparedStatement stmt = connection.prepareStatement(query);
-            stmt.setMaxRows(queryOptionsView.getMaxRows());
-            boolean hasResultSet = stmt.execute();
-            if (hasResultSet) {
-                ResultSetTable table = new ResultSetTable(stmt.getResultSet());
-                splitPanel.setSecondComponent(table);
-                statMsg = "rows fetched: " + table.getItemIds().size();
-            } else {
-                int cnt = stmt.getUpdateCount();
-                splitPanel.setSecondComponent(new Label("Updated " + cnt + " row(s)"));
-                statMsg = "rows updated: " + cnt;
+        // TODO cancelable execution
+
+        ProgressIndicator progressIndicator = new ProgressIndicator();
+        progressIndicator.setIndeterminate(true);
+        progressIndicator.setPollingInterval(500);
+        VerticalLayout vl = new VerticalLayout();
+        vl.setSizeFull();
+        vl.addComponent(progressIndicator);
+        vl.setComponentAlignment(progressIndicator, Alignment.MIDDLE_CENTER);
+        splitPanel.setSecondComponent(vl);
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                String statMsg = "";
+                Component resultComponent;
+                try {
+                    PreparedStatement stmt = connection.prepareStatement(query);
+                    try {
+                        stmt.setMaxRows(queryOptionsView.getMaxRows());
+                        boolean hasResultSet = stmt.execute();
+                        if (hasResultSet) {
+                            ResultSetTable table = new ResultSetTable(stmt.getResultSet());
+                            statMsg = "rows fetched: " + table.getItemIds().size();
+                            resultComponent = table;
+                        } else {
+                            int cnt = stmt.getUpdateCount();
+                            statMsg = "rows updated: " + cnt;
+                            resultComponent = new Label("Updated " + cnt + " row(s)");
+                        }
+                    } finally {
+                        JdbcUtils.close(stmt);
+                    }
+
+                    long end = System.currentTimeMillis();
+                    synchronized (getApplication()) {
+                        getApplication().getMainWindow().showNotification(
+                                "Query Stats<br/>",
+                                "exec time: " + (end - start) / 1000.0 + " ms<br/>" + statMsg,
+                                Notification.TYPE_TRAY_NOTIFICATION);
+                    }
+                } catch (SQLException e) {
+                    LOG.debug("failed to execute sql query", e);
+                    resultComponent = new Label(e.getMessage());
+                }
+                synchronized (getApplication()) {
+                    splitPanel.setSecondComponent(resultComponent);
+                }
             }
-            JdbcUtils.close(stmt);
-
-            long end = System.currentTimeMillis();
-            getApplication().getMainWindow().showNotification(
-                    "Query Stats<br/>",
-                    "exec time: " + (end - start) / 1000.0 + " ms<br/>" + statMsg,
-                    Notification.TYPE_TRAY_NOTIFICATION);
-
-        } catch (SQLException ex) {
-            LOG.debug("failed to execute sql query", ex);
-            splitPanel.setSecondComponent(new Label(ex.getMessage()));
-        }
+        }, "vdbc-query-" + System.currentTimeMillis());
+        thread.start();
     }
 
     @Override
