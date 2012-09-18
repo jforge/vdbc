@@ -117,6 +117,7 @@ public class TableSelectorComponent extends CustomComponent {
         catalogs.setWidth("100%");
         catalogs.setNullSelectionAllowed(false);
         catalogs.setImmediate(true);
+        catalogs.setFilteringMode(AbstractSelect.Filtering.FILTERINGMODE_CONTAINS);
         catalogs.setVisible(!catalogNames.isEmpty());
         if (catalogNames.size() == 1) {
             catalogs.select(catalogNames.get(0));
@@ -130,6 +131,7 @@ public class TableSelectorComponent extends CustomComponent {
         schemas.setWidth("100%");
         schemas.setNullSelectionAllowed(false);
         schemas.setImmediate(true);
+        schemas.setFilteringMode(AbstractSelect.Filtering.FILTERINGMODE_CONTAINS);
         schemas.setVisible(!schemaNames.isEmpty());
         if (schemaNames.size() == 1) {
             schemas.select(schemaNames.get(0));
@@ -143,6 +145,7 @@ public class TableSelectorComponent extends CustomComponent {
         tableTypes.setWidth("100%");
         tableTypes.setNullSelectionAllowed(false);
         tableTypes.setImmediate(true);
+        tableTypes.setFilteringMode(AbstractSelect.Filtering.FILTERINGMODE_CONTAINS);
 
         ValueChangeListener valueChangeListener = new ValueChangeListener() {
 
