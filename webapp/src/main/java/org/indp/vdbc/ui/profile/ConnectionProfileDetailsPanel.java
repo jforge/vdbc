@@ -31,6 +31,8 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
         ConnectionProfile getSelectedProfile();
 
         void removeProfile(ConnectionProfile profile);
+
+        void profileUpdated(ConnectionProfile profile);
     }
 
     @Override
@@ -68,6 +70,8 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
             public void buttonClick(Button.ClickEvent event) {
                 try {
                     apply();
+                    profileListFacade.profileUpdated(profile);
+                    getWindow().showNotification("Changes applied", "Save profiles to persist settings for further use.", Window.Notification.TYPE_TRAY_NOTIFICATION);
                 } catch (Exception e) {
                     if (e instanceof ErrorMessage) {
                         getWindow().showNotification("Check required values", Window.Notification.TYPE_WARNING_MESSAGE);

@@ -160,4 +160,9 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         list.getContainerDataSource().removeItem(profile);
         list.select(null);
     }
+
+    @Override
+    public void profileUpdated(ConnectionProfile profile) {
+        list.setItemCaption(profile, profile.getName());
+    }
 }
