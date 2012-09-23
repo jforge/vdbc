@@ -43,7 +43,6 @@ public abstract class AbstractConnectionProfileDetailsPanel<T extends Connection
         public DetailsForm(ConnectionProfile profile, String[] visibleProperties, String[] optionalProperties) {
             this.optionalProperties = optionalProperties;
             setSizeFull();
-            setCaption(profile.getName());
             setWriteThrough(false);
             setInvalidCommitted(false);
 
