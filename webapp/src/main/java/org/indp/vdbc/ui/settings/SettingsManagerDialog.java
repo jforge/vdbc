@@ -4,7 +4,6 @@ import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
@@ -78,15 +77,16 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         panel = new VerticalLayout();
         panel.setSizeFull();
 
-        HorizontalSplitPanel split = new HorizontalSplitPanel();
-        split.setStyleName(Reindeer.SPLITPANEL_SMALL);
-        split.setMargin(true);
-        split.setSizeFull();
-        split.setSplitPosition(30);
-        split.addComponent(createLeftSide());
-        split.addComponent(panel);
+        ComponentContainer leftSide = createLeftSide();
+        leftSide.setWidth("170px");
 
-        return split;
+        HorizontalLayout layout = new HorizontalLayout();
+        layout.setSizeFull();
+        layout.addComponent(leftSide);
+        layout.addComponent(panel);
+        layout.setExpandRatio(panel, 1f);
+
+        return layout;
     }
 
     private ComponentContainer createLeftSide() {
