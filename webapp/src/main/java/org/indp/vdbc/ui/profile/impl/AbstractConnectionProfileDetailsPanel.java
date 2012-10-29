@@ -5,10 +5,10 @@ import com.vaadin.data.util.BeanItem;
 import com.vaadin.ui.*;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
+import org.indp.vdbc.ui.profile.config.ProfileField;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -38,46 +38,40 @@ public abstract class AbstractConnectionProfileDetailsPanel<T extends Connection
 
     protected static class DetailsForm extends Form {
 
-        private final String[] optionalProperties;
+        private final Map<String, ProfileField> properties;
 
-        public DetailsForm(ConnectionProfile profile, String[] visibleProperties, String[] optionalProperties) {
-            this.optionalProperties = optionalProperties;
+        public DetailsForm(ConnectionProfile profile, ProfileField... fields) {
+            properties = new LinkedHashMap<String, ProfileField>();
+            for (ProfileField field : fields) {
+                properties.put(field.getId(), field);
+            }
+
             setSizeFull();
             setWriteThrough(false);
             setInvalidCommitted(false);
 
             setFormFieldFactory(createFieldFactory());
             setItemDataSource(new BeanItem<ConnectionProfile>(profile));
-            setVisibleItemProperties(visibleProperties);
+            setVisibleItemProperties(properties.keySet().toArray());
         }
 
         protected FormFieldFactory createFieldFactory() {
-            return new FieldFactory(optionalProperties);
+            return new FieldFactory(properties);
         }
     }
 
     protected static class FieldFactory extends DefaultFieldFactory {
-        private final List<String> optionalProperties;
+        private Map<String, ProfileField> properties;
 
-        public FieldFactory() {
-            optionalProperties = Collections.emptyList();
-        }
-
-        public FieldFactory(String[] optionalProperties) {
-            this.optionalProperties = Arrays.asList(optionalProperties);
+        public FieldFactory(Map<String, ProfileField> properties) {
+            this.properties = properties;
         }
 
         @Override
         public Field createField(Item item, Object propertyId, Component uiContext) {
-            TextField textField = new TextField(createCaptionByPropertyId(propertyId));
-            textField.setWidth("100%");
-            textField.setNullRepresentation("");
-            textField.setRequired(isRequired(propertyId.toString()));
-            return textField;
-        }
-
-        private boolean isRequired(String s) {
-            return !optionalProperties.contains(s);
+            assert propertyId instanceof String;
+            ProfileField profileField = properties.get(propertyId);
+            return profileField == null ? null : profileField.getFactory().createField();
         }
     }
 }
