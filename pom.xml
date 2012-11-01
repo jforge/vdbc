@@ -32,7 +32,7 @@
             <dependency>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin</artifactId>
-                <version>6.8.3</version>
+                <version>6.8.5</version>
             </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -64,7 +64,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-                <version>4.1.7.Final</version>
+                <version>4.1.8.Final</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -85,6 +85,7 @@
         </pluginManagement>
     </build>
 
+<!--
     <profiles>
         <profile>
             <id>development</id>
@@ -108,5 +109,6 @@
             </build>
         </profile>
     </profiles>
+-->
 
 </project>
