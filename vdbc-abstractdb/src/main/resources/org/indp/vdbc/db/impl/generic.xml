@@ -1,0 +1,7 @@
+<dialect>
+    <features>
+        <feature id="select.all.from.table" expression="select * from @{tableName}"/>
+        <feature id="select.all.from.table.limit.offset" expression="select * from @{tableName} limit @{limit} offset @{offset}"/>
+        <feature id="count.all" expression="select count(*) from @{tableName}"/>
+    </features>
+</dialect>

@@ -16,7 +16,7 @@ import java.util.Arrays;
  */
 public class QueryOptionsView extends HorizontalLayout {
 
-    private ActionListenerAdapter formatSqlActionListener = new ActionListenerAdapter();
+//    private ActionListenerAdapter formatSqlActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter executeActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter commitActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter rollbackActionListener = new ActionListenerAdapter();
@@ -32,7 +32,7 @@ public class QueryOptionsView extends HorizontalLayout {
 //        setSpacing(true);
         setWidth("100%");
 
-        final Button formatSqlButton = createToolButton("Format", formatSqlActionListener);
+//        final Button formatSqlButton = createToolButton("Format", formatSqlActionListener);
 
         final Button executeButton = createToolButton("Execute", executeActionListener);
         executeButton.setDescription("Press Ctrl+Enter to execute the query");
@@ -82,7 +82,7 @@ public class QueryOptionsView extends HorizontalLayout {
         maxRowsBox.setValue(100);
 
 
-        addComponent(formatSqlButton);
+//        addComponent(formatSqlButton);
         addComponent(UiUtils.createHorizontalSpacer(15));
         addComponent(executeButton);
         addComponent(UiUtils.createHorizontalSpacer(5));
@@ -93,7 +93,7 @@ public class QueryOptionsView extends HorizontalLayout {
         addComponent(maxRowsBox);
         setExpandRatio(autocommitCheckBox, 1);
         setComponentAlignment(executeButton, Alignment.MIDDLE_LEFT);
-        setComponentAlignment(formatSqlButton, Alignment.MIDDLE_LEFT);
+//        setComponentAlignment(formatSqlButton, Alignment.MIDDLE_LEFT);
         setComponentAlignment(commitButton, Alignment.MIDDLE_LEFT);
         setComponentAlignment(rollbackButton, Alignment.MIDDLE_LEFT);
         setComponentAlignment(autocommitCheckBox, Alignment.MIDDLE_LEFT);
@@ -119,7 +119,7 @@ public class QueryOptionsView extends HorizontalLayout {
     }
 
     public void setFormatSqlActionListener(ActionListener formatSqlActionListener) {
-        this.formatSqlActionListener.setActionListener(formatSqlActionListener);
+//        this.formatSqlActionListener.setActionListener(formatSqlActionListener);
     }
 
     public int getMaxRows() {

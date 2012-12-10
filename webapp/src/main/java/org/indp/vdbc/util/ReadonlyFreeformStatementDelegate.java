@@ -5,7 +5,7 @@ import com.vaadin.data.util.sqlcontainer.RowItem;
 import com.vaadin.data.util.sqlcontainer.query.FreeformStatementDelegate;
 import com.vaadin.data.util.sqlcontainer.query.OrderBy;
 import com.vaadin.data.util.sqlcontainer.query.generator.StatementHelper;
-import org.hibernate.dialect.Dialect;
+import org.indp.vdbc.db.Dialect;
 import org.indp.vdbc.services.DatabaseSession;
 
 import java.sql.Connection;
@@ -27,27 +27,14 @@ public class ReadonlyFreeformStatementDelegate implements FreeformStatementDeleg
     @Override
     public StatementHelper getQueryStatement(int offset, int limit) throws UnsupportedOperationException {
         StatementHelper helper = new StatementHelper();
-        helper.setQueryString(dialect.getLimitString("select * from " + tableName, offset, limit));
-        if (dialect.supportsVariableLimit()) {
-            if (dialect.bindLimitParametersInReverseOrder()) {
-                helper.addParameterValue(limit);
-                if (offset > 0) {
-                    helper.addParameterValue(offset);
-                }
-            } else {
-                if (offset > 0) {
-                    helper.addParameterValue(offset);
-                }
-                helper.addParameterValue(limit);
-            }
-        }
+        helper.setQueryString(dialect.getExpressions().selectAllFromTable(tableName, offset, limit));
         return helper;
     }
 
     @Override
     public StatementHelper getCountStatement() throws UnsupportedOperationException {
         StatementHelper helper = new StatementHelper();
-        helper.setQueryString("select count(*) from " + tableName);
+        helper.setQueryString(dialect.getExpressions().count(tableName));
         return helper;
     }
 

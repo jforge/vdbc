@@ -1,7 +1,8 @@
 package org.indp.vdbc.services;
 
-import org.hibernate.dialect.Dialect;
 import org.indp.vdbc.ConnectionListener;
+import org.indp.vdbc.db.Dialect;
+import org.indp.vdbc.db.DialectSupport;
 import org.indp.vdbc.model.DataSourceAdapter;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.util.MetadataRetriever;
@@ -31,7 +32,7 @@ public class DatabaseSession {
         this.connectionProfile = connectionProfile;
         this.connectionListener = connectionListener;
         this.dataSourceAdapter = connectionProfile.createDataSourceAdapter();
-        this.dialect = DialectSupport.getDialect(connectionProfile.getDialect());
+        this.dialect = createDialect(connectionProfile);
     }
 
     public synchronized void close() {
@@ -86,6 +87,15 @@ public class DatabaseSession {
     public boolean isClosed() {
         return closed;
     }
+
+    private Dialect createDialect(ConnectionProfile connectionProfile) {
+        Dialect dialect = DialectSupport.getDialect(connectionProfile.getDialect());
+        if (dialect == null) {
+            dialect = DialectSupport.getGenericDialect();
+        }
+        return dialect;
+    }
+
 //    public void doWithConnection(ConnectionAwareAction action) {
 //        Connection connection = null;
 //        try {

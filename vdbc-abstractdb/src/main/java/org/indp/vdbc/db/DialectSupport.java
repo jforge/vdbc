@@ -1,6 +1,6 @@
-package org.indp.vdbc.services;
+package org.indp.vdbc.db;
 
-import org.hibernate.dialect.*;
+import org.indp.vdbc.db.impl.GenericDialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,12 +17,8 @@ public class DialectSupport {
     private static final Map<String, DialectItem> DIALECTS = new LinkedHashMap<String, DialectItem>();
 
     static {
-        add(new DialectItem("h2", "H2", H2Dialect.class));
-        add(new DialectItem("derby107", "Derby 10.7 and later", DerbyTenSevenDialect.class));
-        add(new DialectItem("mysql5", "MySql 5", MySQL5Dialect.class));
-        add(new DialectItem("mysql5innodb", "MySql 5 InnoDB", MySQL5InnoDBDialect.class));
-        add(new DialectItem("oracle10g", "Oracle 10g", Oracle10gDialect.class));
-        add(new DialectItem("postgresql82", "PostgreSQL", PostgreSQL82Dialect.class));
+        add(new DialectItem("generic", "Generic", GenericDialect.class));
+//        add(new DialectItem("derby", "Derby", ));
     }
 
     public static Dialect getDialect(String id) {
@@ -49,6 +45,10 @@ public class DialectSupport {
 
     public static Collection<String> getDialectCodes() {
         return DIALECTS.keySet();
+    }
+
+    public static Dialect getGenericDialect() {
+        return getDialect("generic");
     }
 
     private static void add(DialectItem item) {

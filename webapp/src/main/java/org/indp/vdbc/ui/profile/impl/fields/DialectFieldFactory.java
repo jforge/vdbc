@@ -2,7 +2,7 @@ package org.indp.vdbc.ui.profile.impl.fields;
 
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.Field;
-import org.indp.vdbc.services.DialectSupport;
+import org.indp.vdbc.db.DialectSupport;
 import org.indp.vdbc.ui.profile.config.AbstractFormFieldFactory;
 
 import java.util.Collection;

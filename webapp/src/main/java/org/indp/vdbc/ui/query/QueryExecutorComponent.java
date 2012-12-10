@@ -4,7 +4,6 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Window.Notification;
-import org.hibernate.engine.jdbc.internal.BasicFormatterImpl;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.util.JdbcUtils;
@@ -86,19 +85,19 @@ public class QueryExecutorComponent extends CustomComponent {
                 connection.setAutoCommit(enabled);
             }
         });
-        queryOptionsView.setFormatSqlActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO format selected text
-                String sql = query.getValue().toString();
-                String formatted = new BasicFormatterImpl().format(sql);
-                if (formatted.startsWith("\n")) {
-                    formatted = formatted.substring(1);
-                }
-                query.setValue(formatted);
-            }
-        });
+//        queryOptionsView.setFormatSqlActionListener(new ActionListener() {
+//
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                // TODO format selected text
+//                String sql = query.getValue().toString();
+//                String formatted = new BasicFormatterImpl().format(sql);
+//                if (formatted.startsWith("\n")) {
+//                    formatted = formatted.substring(1);
+//                }
+//                query.setValue(formatted);
+//            }
+//        });
 
         splitPanel = new VerticalSplitPanel();
         splitPanel.setSizeFull();

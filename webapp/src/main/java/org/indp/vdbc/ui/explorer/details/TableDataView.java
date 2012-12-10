@@ -69,7 +69,7 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
             query.setDelegate(new ReadonlyFreeformStatementDelegate(tableName, databaseSession));
             SQLContainer container = new SQLContainer(query);
             Table table = new Table(null, container);
-            table.setPageLength(150); // todo configure
+            table.setPageLength(100); // todo configure
             table.setSelectable(true);
             table.setSortDisabled(true);
             table.setColumnReorderingAllowed(true);
