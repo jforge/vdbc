@@ -1,0 +1,12 @@
+<dialect extends="generic" name="Derby">
+    <example-urls>
+        <url>jdbc:derby:[db directory]</url>
+        <url>jdbc:derby:jar:([jar path])[db name]</url>
+    </example-urls>
+    <drivers>
+        <driver>org.apache.derby.jdbc.EmbeddedDriver</driver>
+        <driver>org.apache.derby.jdbc.ClientDriver</driver>
+    </drivers>
+    <features>
+    </features>
+</dialect>

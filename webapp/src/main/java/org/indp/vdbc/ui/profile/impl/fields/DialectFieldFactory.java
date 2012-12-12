@@ -18,14 +18,15 @@ public class DialectFieldFactory extends AbstractFormFieldFactory {
 
     @Override
     public Field createField() {
-        Collection<String> dialectCodes = DialectSupport.getDialectCodes();
+        Collection<String> dialectCodes = DialectSupport.getDialectIds();
         ComboBox box = new ComboBox(getTitle(), dialectCodes);
+        box.setImmediate(true);
         box.setNullSelectionAllowed(false);
         box.setInputPrompt("Select a dialect");
         box.setInvalidAllowed(false);
         box.setRequired(isRequired());
         for (String code : dialectCodes) {
-            box.setItemCaption(code, DialectSupport.getDialectType(code).getTitle());
+            box.setItemCaption(code, DialectSupport.getDialect(code).getName());
         }
         return box;
     }

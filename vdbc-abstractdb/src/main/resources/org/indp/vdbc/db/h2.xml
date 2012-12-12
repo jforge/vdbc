@@ -1,0 +1,13 @@
+<dialect extends="generic" name="H2">
+    <example-urls>
+        <url>jdbc:h2:tcp://localhost/~/sample</url>
+        <url>jdbc:h2:ssl://localhost:8085/~/sample</url>
+        <url>jdbc:h2:file:/data/sample</url>
+        <url>jdbc:h2:mem:test</url>
+    </example-urls>
+    <drivers>
+        <driver>org.h2.Driver</driver>
+    </drivers>
+    <features>
+    </features>
+</dialect>
