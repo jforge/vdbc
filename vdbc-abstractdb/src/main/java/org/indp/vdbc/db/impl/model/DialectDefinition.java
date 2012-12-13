@@ -90,6 +90,10 @@ public class DialectDefinition {
         return features;
     }
 
+    public boolean hasFeature(String name) {
+        return getFeatures().containsKey(name);
+    }
+
     public void setFeatures(Map<String, DialectFeature> features) {
         this.features = features;
     }

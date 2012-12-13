@@ -64,9 +64,19 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
         Component component;
         try {
             final String tableName = createTableName(tableDefinition, databaseSession);
-            final String queryString = "select * from " + tableName;
-            final FreeformQuery query = new CustomFreeformQuery(queryString, connectionPool);
-            query.setDelegate(new ReadonlyFreeformStatementDelegate(tableName, databaseSession));
+            final String queryString = databaseSession.getDialect().getExpressions().selectAllFromTable(tableName);
+
+            final FreeformQuery query;
+
+            // todo StatementDelegateFactory
+            // todo pk columns
+            if (databaseSession.getDialect().supportsLimitedSelects()) {
+                query = new CustomFreeformQuery(queryString, connectionPool);
+                query.setDelegate(new ReadonlyFreeformStatementDelegate(tableName, databaseSession));
+            } else {
+                query = new FreeformQuery(queryString, connectionPool);
+            }
+
             SQLContainer container = new SQLContainer(query);
             Table table = new Table(null, container);
             table.setPageLength(100); // todo configure

@@ -14,4 +14,6 @@ public interface Dialect {
     Expressions getExpressions();
 
     List<String> getExampleUrls();
+
+    boolean supportsLimitedSelects();
 }

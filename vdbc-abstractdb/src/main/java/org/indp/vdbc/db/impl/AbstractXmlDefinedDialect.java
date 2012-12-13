@@ -37,6 +37,11 @@ public abstract class AbstractXmlDefinedDialect implements Dialect {
     }
 
     @Override
+    public boolean supportsLimitedSelects() {
+        return dialectDefinition.hasFeature("select.all.from.table.limit.offset");
+    }
+
+    @Override
     public Expressions getExpressions() {
         if (expressions == null) {
             expressions = new XmlExpressions(dialectDefinition);
