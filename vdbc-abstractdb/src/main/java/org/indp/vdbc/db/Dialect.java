@@ -15,5 +15,7 @@ public interface Dialect {
 
     List<String> getExampleUrls();
 
+    List<String> getDrivers();
+
     boolean supportsLimitedSelects();
 }

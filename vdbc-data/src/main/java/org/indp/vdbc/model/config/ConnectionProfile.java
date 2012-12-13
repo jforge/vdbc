@@ -17,7 +17,7 @@ public abstract class ConnectionProfile implements Serializable {
     private String name;
 
     @XmlAttribute
-    private String dialect;
+    private String dialect = "generic";
 
     public abstract String getConnectionPresentationString();
 

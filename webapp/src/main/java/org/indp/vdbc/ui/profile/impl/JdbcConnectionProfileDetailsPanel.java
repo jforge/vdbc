@@ -1,9 +1,11 @@
 package org.indp.vdbc.ui.profile.impl;
 
 import org.indp.vdbc.model.config.JdbcConnectionProfile;
-import org.indp.vdbc.ui.profile.impl.fields.DialectFieldFactory;
-import org.indp.vdbc.ui.profile.config.ProfileField;
-import org.indp.vdbc.ui.profile.impl.fields.PasswordFieldFactory;
+import org.indp.vdbc.ui.profile.config.AbstractProfileField;
+import org.indp.vdbc.ui.profile.impl.fields.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -15,14 +17,14 @@ public class JdbcConnectionProfileDetailsPanel extends AbstractConnectionProfile
     }
 
     @Override
-    protected DetailsForm createDetailsComponent() {
-        return new DetailsForm(getProfile(),
-                new ProfileField("name"),
-                new ProfileField("dialect", new DialectFieldFactory("Dialect", true)),
-                new ProfileField("driver"),
-                new ProfileField("url"),
-                new ProfileField("user"),
-                new ProfileField("password", new PasswordFieldFactory("Password", false)),
-                new ProfileField("validationQuery", "Validation Query", false));
+    protected List<AbstractProfileField> getFields() {
+        return Arrays.asList(
+                new SimpleProfileField("name"),
+                new DialectField("dialect", "Dialect", true),
+                new DriverField("driver", "Driver", true),
+                new UrlField("url", "JDBC URL", true),
+                new SimpleProfileField("user"),
+                new PasswordField("password", "Password", false),
+                new SimpleProfileField("validationQuery", "Validation Query", false));
     }
 }

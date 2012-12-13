@@ -48,4 +48,9 @@ public abstract class AbstractXmlDefinedDialect implements Dialect {
         }
         return expressions;
     }
+
+    @Override
+    public List<String> getDrivers() {
+        return dialectDefinition.getDrivers();
+    }
 }

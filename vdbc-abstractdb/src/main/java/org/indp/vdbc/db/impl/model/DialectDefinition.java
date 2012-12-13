@@ -33,7 +33,7 @@ public class DialectDefinition {
 
     @XmlElementWrapper(name = "drivers")
     @XmlElement(name = "driver")
-    private List<String> driver;
+    private List<String> drivers;
 
     @XmlElement(name = "features")
     @XmlJavaTypeAdapter(DialectFeatureMapAdapter.class)
@@ -122,11 +122,11 @@ public class DialectDefinition {
         this.name = name;
     }
 
-    public List<String> getDriver() {
-        return driver;
+    public List<String> getDrivers() {
+        return drivers;
     }
 
-    public void setDriver(List<String> driver) {
-        this.driver = driver;
+    public void setDrivers(List<String> drivers) {
+        this.drivers = drivers;
     }
 }
