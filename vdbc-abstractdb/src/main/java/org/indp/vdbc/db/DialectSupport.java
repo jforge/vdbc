@@ -1,8 +1,6 @@
 package org.indp.vdbc.db;
 
-import org.indp.vdbc.db.impl.DerbyDialect;
-import org.indp.vdbc.db.impl.GenericDialect;
-import org.indp.vdbc.db.impl.H2Dialect;
+import org.indp.vdbc.db.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +20,8 @@ public class DialectSupport {
         add(new GenericDialect());
         add(new H2Dialect());
         add(new DerbyDialect());
+        add(new OracleDialect());
+        add(new MysqlDialect());
     }
 
     public static Dialect getDialect(String id) {

@@ -1,4 +1,4 @@
-<dialect extends="generic" name="Derby">
+<dialect extends="generic" name="Derby 10.7+">
     <example-urls>
         <url>jdbc:derby:[db directory]</url>
         <url>jdbc:derby:jar:([jar path])[db name]</url>
@@ -8,5 +8,6 @@
         <driver>org.apache.derby.jdbc.ClientDriver</driver>
     </drivers>
     <features>
+        <feature id="select.all.from.table.limit.offset" expression="select * from @{tableName} offset @{offset} rows fetch next @{limit} rows only"/>
     </features>
 </dialect>

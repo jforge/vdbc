@@ -1,0 +1,13 @@
+<dialect extends="generic" name="MySQL">
+    <example-urls>
+        <url>jdbc:mysql://localhost/db</url>
+        <url>jdbc:mysql://[host][:port]/[database]</url>
+    </example-urls>
+    <drivers>
+        <driver>com.mysql.jdbc.Driver</driver>
+        <driver>org.gjt.mm.mysql.Driver</driver>
+    </drivers>
+    <features>
+        <feature id="select.all.from.table.limit.offset" expression="select * from @{tableName} limit @{offset},@{limit}"/>
+    </features>
+</dialect>

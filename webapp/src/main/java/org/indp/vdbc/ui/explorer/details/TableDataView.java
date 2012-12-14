@@ -24,11 +24,15 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
 
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
     public static final String TITLE = "Data";
-    private final VerticalLayout tableContainer;
     private final J2EEConnectionPool connectionPool;
-    private final HorizontalLayout toolbar;
+    private final JdbcTable table;
+    private final DatabaseSession databaseSession;
+    private VerticalLayout tableContainer;
+    private HorizontalLayout toolbar;
 
     public TableDataView(final JdbcTable table, final DatabaseSession databaseSession) {
+        this.table = table;
+        this.databaseSession = databaseSession;
         connectionPool = new J2EEConnectionPool(databaseSession.getDataSource());
 
         toolbar = new HorizontalLayout();
@@ -53,11 +57,15 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
         vl.addComponent(tableContainer);
         vl.setExpandRatio(tableContainer, 1f);
 
-        refreshDataView(table, databaseSession);
-
         setCompositionRoot(vl);
         setCaption(TITLE);
         setSizeFull();
+    }
+
+    @Override
+    public void attach() {
+        super.attach();
+        refreshDataView(table, databaseSession);
     }
 
     protected void refreshDataView(JdbcTable tableDefinition, DatabaseSession databaseSession) {
@@ -75,6 +83,10 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
                 query.setDelegate(new ReadonlyFreeformStatementDelegate(tableName, databaseSession));
             } else {
                 query = new FreeformQuery(queryString, connectionPool);
+                getApplication().getMainWindow().showNotification(
+                        "Warning!",
+                        "Using slow mode because dialect doesn't<br/>support limit/offset select queries.",
+                        Window.Notification.TYPE_TRAY_NOTIFICATION);
             }
 
             SQLContainer container = new SQLContainer(query);
@@ -86,19 +98,18 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
             table.setColumnCollapsingAllowed(true);
             table.setSizeFull();
             table.addActionHandler(new Action.Handler() {
-                private final String singleRecordViewAction = "Single record view...";
+                private final Action viewSingleRecordAction = new Action("Single record view...");
 
                 @Override
                 public Action[] getActions(Object target, Object sender) {
-                    return new Action[]{new Action(singleRecordViewAction)};
+                    return new Action[]{viewSingleRecordAction};
                 }
 
                 @Override
                 public void handleAction(Action action, Object sender, Object target) {
-                    if (!singleRecordViewAction.equals(action.getCaption())) {
-                        return;
+                    if (action == viewSingleRecordAction) {
+                        getApplication().getMainWindow().addWindow(new SingleRecordViewWindow());
                     }
-                    getApplication().getMainWindow().addWindow(new SingleRecordViewWindow());
                 }
             });
             component = table;
