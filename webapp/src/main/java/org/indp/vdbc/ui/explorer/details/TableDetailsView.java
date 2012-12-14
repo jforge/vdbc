@@ -48,16 +48,20 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
         return toolbar;
     }
 
-    private TabSheet createTabSheet(JdbcTable table, DatabaseSession databaseSession) {
-        TabSheet tabSheet = new TabSheet();
+    private TabSheet createTabSheet(final JdbcTable table, final DatabaseSession databaseSession) {
+        final TabSheet tabSheet = new TabSheet();
         tabSheet.setSizeFull();
         tabSheet.addStyleName(Reindeer.TABSHEET_SMALL);
 
         TableStructureView tableStructureView = new TableStructureView(table, databaseSession);
         tableStructureView.setSizeFull();
 
-        TableDataView tableContentView = new TableDataView(table, databaseSession);
-        tableContentView.setSizeFull();
+        Component tableContentView = new LazyTab(TableDataView.TITLE) {
+            @Override
+            public Component createActualComponent() {
+                return new TableDataView(table, databaseSession);
+            }
+        };
 
 //        TableSourceView tableSourceView = new TableSourceView(table, sessionFactory);
 //        tableSourceView.setSizeFull();
@@ -71,6 +75,11 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
             public void selectedTabChange(TabSheet.SelectedTabChangeEvent event) {
                 customToolbar.removeAllComponents();
                 Component selectedTab = event.getTabSheet().getSelectedTab();
+                if (selectedTab instanceof LazyTab) {
+                    Component actualComponent = ((LazyTab) selectedTab).createActualComponent();
+                    tabSheet.replaceComponent(selectedTab, actualComponent);
+                    selectedTab = actualComponent;
+                }
                 if (selectedTab instanceof ToolbarContributor) {
                     Component contextToolbar = ((ToolbarContributor) selectedTab).getToolbar();
                     customToolbar.addComponent(contextToolbar);
@@ -103,5 +112,15 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
 
     private static class State implements DetailsState {
         int selectedTabIndex;
+    }
+
+    private abstract static class LazyTab extends CustomComponent {
+
+        public abstract Component createActualComponent();
+
+        private LazyTab(String caption) {
+            setCaption(caption);
+            setCompositionRoot(new Label());
+        }
     }
 }

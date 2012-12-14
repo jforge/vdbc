@@ -23,18 +23,13 @@ import java.sql.SQLException;
 public class TableDataView extends CustomComponent implements ToolbarContributor {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
+    public static final String TITLE = "Data";
     private final VerticalLayout tableContainer;
     private final J2EEConnectionPool connectionPool;
     private final HorizontalLayout toolbar;
 
     public TableDataView(final JdbcTable table, final DatabaseSession databaseSession) {
         connectionPool = new J2EEConnectionPool(databaseSession.getDataSource());
-
-        setCaption("Data");
-
-        VerticalLayout vl = new VerticalLayout();
-        vl.setSizeFull();
-        setCompositionRoot(vl);
 
         toolbar = new HorizontalLayout();
         toolbar.setWidth("100%");
@@ -50,14 +45,19 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
         toolbar.addComponent(refreshButton);
         toolbar.setComponentAlignment(refreshButton, Alignment.MIDDLE_RIGHT);
 
-
         tableContainer = new VerticalLayout();
         tableContainer.setSizeFull();
 
+        VerticalLayout vl = new VerticalLayout();
+        vl.setSizeFull();
         vl.addComponent(tableContainer);
         vl.setExpandRatio(tableContainer, 1f);
 
         refreshDataView(table, databaseSession);
+
+        setCompositionRoot(vl);
+        setCaption(TITLE);
+        setSizeFull();
     }
 
     protected void refreshDataView(JdbcTable tableDefinition, DatabaseSession databaseSession) {
