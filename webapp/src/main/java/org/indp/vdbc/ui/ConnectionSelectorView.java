@@ -101,24 +101,31 @@ public class ConnectionSelectorView extends VerticalLayout {
             }
         });
 
-        Button settingsButton = new Button("Settings...", new Button.ClickListener() {
+        Button settingsButton = new Button("Settings...");
+        String settingsEditorEnabled = System.getProperty("vdbc.settings.editor-enabled");
+        if (settingsEditorEnabled != null && !"true".equals(settingsEditorEnabled)) {
+            settingsButton.setEnabled(false);
+            settingsButton.setDescription("Settings editor is disabled because 'vdbc.settings.editor-enabled' system property is defined and its value is not 'true'.");
+        } else {
+            settingsButton.addListener(new Button.ClickListener() {
 
-            @Override
-            public void buttonClick(ClickEvent event) {
-                SettingsManagerDialog settingsManagerDialog = new SettingsManagerDialog();
-                settingsManagerDialog.addListener(new Window.CloseListener() {
-                    @Override
-                    public void windowClose(Window.CloseEvent e) {
-                        List<ConnectionProfile> list = SettingsManager.get().getConfiguration().getProfiles();
-                        profiles.setContainerDataSource(new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, list));
-                        if (!list.isEmpty()) {
-                            profiles.select(list.get(0));
+                @Override
+                public void buttonClick(ClickEvent event) {
+                    SettingsManagerDialog settingsManagerDialog = new SettingsManagerDialog();
+                    settingsManagerDialog.addListener(new Window.CloseListener() {
+                        @Override
+                        public void windowClose(Window.CloseEvent e) {
+                            List<ConnectionProfile> list = SettingsManager.get().getConfiguration().getProfiles();
+                            profiles.setContainerDataSource(new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, list));
+                            if (!list.isEmpty()) {
+                                profiles.select(list.get(0));
+                            }
                         }
-                    }
-                });
-                getWindow().addWindow(settingsManagerDialog);
-            }
-        });
+                    });
+                    getWindow().addWindow(settingsManagerDialog);
+                }
+            });
+        }
 
         HorizontalLayout hl = new HorizontalLayout();
         hl.setWidth(100, UNITS_PERCENTAGE);
