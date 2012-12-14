@@ -39,7 +39,14 @@ public abstract class AbstractConnectionProfileDetailsPanel<T extends Connection
 
     @Override
     protected void apply() {
-        // todo
+        for (AbstractProfileField profileField : fields.values()) {
+            profileField.getFieldComponent().validate();
+        }
+
+        // write values to connection profile if we are still here
+        for (AbstractProfileField profileField : fields.values()) {
+            profileField.writeValue();
+        }
     }
 
     @Override

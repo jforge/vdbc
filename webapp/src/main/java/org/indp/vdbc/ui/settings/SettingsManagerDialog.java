@@ -124,6 +124,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 SettingsManager.get().persistConfiguration();
+                getApplication().getMainWindow().showNotification("Profiles saved.", Notification.TYPE_TRAY_NOTIFICATION);
             }
         });
 
