@@ -32,12 +32,7 @@ public class ConnectionSelectorView extends VerticalLayout {
 
     @Override
     public void attach() {
-        setSizeFull();
-
-        Panel rootPanel = new Panel("DB Console");
-        rootPanel.setWidth(300, UNITS_PIXELS);
-        addComponent(rootPanel);
-        setComponentAlignment(rootPanel, Alignment.MIDDLE_CENTER);
+        super.attach();
 
         final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> profileInfoPanel = new ProfileInfoPanelHolder<ConnectionProfileLoginPanel>();
 
@@ -68,9 +63,6 @@ public class ConnectionSelectorView extends VerticalLayout {
         if (!profileList.isEmpty()) {
             profiles.select(profileList.get(0));
         }
-
-        rootPanel.addComponent(profiles);
-        rootPanel.addComponent(profileInfoPanel);
 
         Button connectButton = new Button("Connect", new Button.ClickListener() {
 
@@ -128,15 +120,22 @@ public class ConnectionSelectorView extends VerticalLayout {
         }
 
         HorizontalLayout hl = new HorizontalLayout();
-        hl.setWidth(100, UNITS_PERCENTAGE);
-        rootPanel.addComponent(hl);
+        hl.setWidth("100%");
         hl.addComponent(settingsButton);
         hl.addComponent(testButton);
         hl.addComponent(connectButton);
         hl.setComponentAlignment(testButton, Alignment.MIDDLE_RIGHT);
         hl.setComponentAlignment(connectButton, Alignment.MIDDLE_RIGHT);
 
-        super.attach();
+        Panel rootPanel = new Panel("DB Console");
+        rootPanel.setWidth("300px");
+        rootPanel.addComponent(profiles);
+        rootPanel.addComponent(profileInfoPanel);
+        rootPanel.addComponent(hl);
+
+        setSizeFull();
+        addComponent(rootPanel);
+        setComponentAlignment(rootPanel, Alignment.MIDDLE_CENTER);
     }
 
     protected static class ProfileInfoPanelHolder<T extends Component> extends CustomComponent {
