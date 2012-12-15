@@ -3,6 +3,7 @@ package org.indp.vdbc.ui;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Window.Notification;
@@ -77,6 +78,7 @@ public class ConnectionSelectorView extends VerticalLayout {
                 }
             }
         });
+        connectButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
         Button testButton = new Button("Test", new Button.ClickListener() {
 
