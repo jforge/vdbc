@@ -4,7 +4,6 @@ import com.google.common.base.Strings;
 import com.vaadin.data.util.sqlcontainer.SQLContainer;
 import com.vaadin.data.util.sqlcontainer.connection.J2EEConnectionPool;
 import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
-import com.vaadin.event.Action;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.jdbc.JdbcTable;
@@ -97,6 +96,7 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
             table.setColumnReorderingAllowed(true);
             table.setColumnCollapsingAllowed(true);
             table.setSizeFull();
+/*
             table.addActionHandler(new Action.Handler() {
                 private final Action viewSingleRecordAction = new Action("Single record view...");
 
@@ -112,6 +112,7 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
                     }
                 }
             });
+*/
             component = table;
         } catch (SQLException e) {
             LOG.warn("failed to retrieve tableDefinition data", e);
