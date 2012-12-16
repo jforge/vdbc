@@ -1,9 +1,11 @@
 package org.indp.vdbc.ui.explorer.details;
 
 import com.google.common.base.Strings;
+import com.vaadin.data.Item;
 import com.vaadin.data.util.sqlcontainer.SQLContainer;
 import com.vaadin.data.util.sqlcontainer.connection.J2EEConnectionPool;
 import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
+import com.vaadin.event.Action;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.jdbc.JdbcTable;
@@ -89,14 +91,13 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
             }
 
             SQLContainer container = new SQLContainer(query);
-            Table table = new Table(null, container);
+            final Table table = new Table(null, container);
             table.setPageLength(100); // todo configure
             table.setSelectable(true);
             table.setSortDisabled(true);
             table.setColumnReorderingAllowed(true);
             table.setColumnCollapsingAllowed(true);
             table.setSizeFull();
-/*
             table.addActionHandler(new Action.Handler() {
                 private final Action viewSingleRecordAction = new Action("Single record view...");
 
@@ -107,12 +108,14 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
 
                 @Override
                 public void handleAction(Action action, Object sender, Object target) {
-                    if (action == viewSingleRecordAction) {
-                        getApplication().getMainWindow().addWindow(new SingleRecordViewWindow());
+                    if (action == viewSingleRecordAction && table.getValue() != null) {
+                        Item item = table.getContainerDataSource().getItem(target);
+                        if (item != null) {
+                            getApplication().getMainWindow().addWindow(new SingleRecordViewWindow(item));
+                        }
                     }
                 }
             });
-*/
             component = table;
         } catch (SQLException e) {
             LOG.warn("failed to retrieve tableDefinition data", e);
