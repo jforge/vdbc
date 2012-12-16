@@ -7,6 +7,6 @@
     </drivers>
     <features>
         <feature id="select.all.from.table.limit.offset"
-                 expression="select * from (select t.*, rownum r$vdbc$ignore from (select * from @{tableName}) t) where r$vdbc$ignore between ${offset+1} and @{offset+limit}"/>
+                 expression="select * from (select t.*, rownum r$vdbcignore from (select * from @{tableName}) t) where r$vdbcignore between ${offset+1} and @{offset+limit}"/>
     </features>
 </dialect>
