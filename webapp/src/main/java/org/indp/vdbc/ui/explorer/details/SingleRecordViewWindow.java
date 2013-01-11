@@ -5,6 +5,7 @@ import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
+import org.indp.vdbc.db.DialectSupport;
 
 /**
  *
@@ -59,8 +60,10 @@ public class SingleRecordViewWindow extends Window {
         FormLayout form = new FormLayout();
         form.setWidth("100%");
         for (Object propertyId : item.getItemPropertyIds()) {
-            Property property = item.getItemProperty(propertyId);
-            form.addComponent(createField(propertyId, property));
+            if (!DialectSupport.isServiceColumn(propertyId.toString())) {
+                Property property = item.getItemProperty(propertyId);
+                form.addComponent(createField(propertyId, property));
+            }
         }
 
         Panel panel = new Panel();

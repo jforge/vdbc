@@ -8,6 +8,7 @@ import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
 import com.vaadin.event.Action;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
+import org.indp.vdbc.db.DialectSupport;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.util.CustomFreeformQuery;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -25,6 +27,7 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
 
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
     public static final String TITLE = "Data";
+
     private final J2EEConnectionPool connectionPool;
     private final JdbcTable table;
     private final DatabaseSession databaseSession;
@@ -116,6 +119,7 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
                     }
                 }
             });
+            table.setVisibleColumns(filterColumns(table.getVisibleColumns()));
             component = table;
         } catch (SQLException e) {
             LOG.warn("failed to retrieve tableDefinition data", e);
@@ -123,6 +127,16 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
         }
         tableContainer.removeAllComponents();
         tableContainer.addComponent(component);
+    }
+
+    private Object[] filterColumns(Object[] visibleColumns) {
+        ArrayList<Object> list = new ArrayList<Object>(visibleColumns.length);
+        for (Object column : visibleColumns) {
+            if (!DialectSupport.isServiceColumn(column.toString())) {
+                list.add(column);
+            }
+        }
+        return list.toArray();
     }
 
     protected String createTableName(JdbcTable table, DatabaseSession databaseSession) throws SQLException {

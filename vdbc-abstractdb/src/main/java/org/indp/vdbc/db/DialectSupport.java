@@ -24,6 +24,8 @@ public class DialectSupport {
         add(new MysqlDialect());
     }
 
+    public static final String VDBCIGNORE_MARKER = "VDBCIGNORE";
+
     public static Dialect getDialect(String id) {
         return DIALECTS.containsKey(id)
                 ? DIALECTS.get(id)
@@ -40,6 +42,10 @@ public class DialectSupport {
 
     private static void add(Dialect dialect) {
         DIALECTS.put(dialect.getId(), dialect);
+    }
+
+    public static boolean isServiceColumn(String name) {
+        return name.contains(VDBCIGNORE_MARKER);
     }
 
     private DialectSupport() {
