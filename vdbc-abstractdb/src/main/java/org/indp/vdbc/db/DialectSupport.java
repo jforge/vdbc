@@ -50,20 +50,4 @@ public class DialectSupport {
 
     private DialectSupport() {
     }
-
-    public static class DialectItem {
-        private String id;
-        private String title;
-        private Class<? extends Dialect> dialectClass;
-
-        private DialectItem(String id, String title, Class<? extends Dialect> dialectClass) {
-            this.id = id;
-            this.title = title;
-            this.dialectClass = dialectClass;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-    }
 }
