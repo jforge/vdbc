@@ -84,17 +84,17 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
                 query.setDelegate(new ReadonlyFreeformStatementDelegate(tableName, databaseSession));
             } else {
                 query = new FreeformQuery(queryString, connectionPool);
-                getApplication().getMainWindow().showNotification(
+                Notification.show(
                         "Warning!",
                         "Using slow mode because dialect doesn't<br/>support limit/offset select queries.",
-                        Window.Notification.TYPE_TRAY_NOTIFICATION);
+                        Notification.Type.TRAY_NOTIFICATION);
             }
 
             SQLContainer container = new SQLContainer(query);
             final Table table = new Table(null, container);
             table.setPageLength(100); // todo configure
             table.setSelectable(true);
-            table.setSortDisabled(true);
+            table.setSortEnabled(false);
             table.setColumnReorderingAllowed(true);
             table.setColumnCollapsingAllowed(true);
             table.setSizeFull();
@@ -111,7 +111,7 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
                     if (action == viewSingleRecordAction && table.getValue() != null) {
                         Item item = table.getContainerDataSource().getItem(target);
                         if (item != null) {
-                            getApplication().getMainWindow().addWindow(new SingleRecordViewWindow(item));
+                            getUI().addWindow(new SingleRecordViewWindow(item));
                         }
                     }
                 }

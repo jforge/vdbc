@@ -1,4 +1,4 @@
-@import "../reindeer/styles.css";
+@import "../reindeer/legacy-styles.css";
 
 textarea.v-textarea-monospace {
     font-family: 'Courier New', Courier, monospace;

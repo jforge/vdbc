@@ -1,6 +1,5 @@
 package org.indp.vdbc.ui;
 
-import com.vaadin.Application;
 import com.vaadin.ui.*;
 
 import java.awt.event.ActionListener;
@@ -12,11 +11,11 @@ public class ConfirmDialog extends Window {
 
     private final HorizontalLayout buttons;
 
-    public static void confirmYesNo(Application application, String message, ActionListener onYes) {
+    public static void confirmYesNo(String message, ActionListener onYes) {
         new ConfirmDialog(message).
                 addYesButton(onYes).
                 addNoButton().
-                show(application);
+                show();
     }
 
     private ConfirmDialog(String message) {
@@ -59,7 +58,7 @@ public class ConfirmDialog extends Window {
         return this;
     }
 
-    private void show(Application application) {
-        application.getMainWindow().addWindow(this);
+    private void show() {
+        UI.getCurrent().addWindow(this);
     }
 }

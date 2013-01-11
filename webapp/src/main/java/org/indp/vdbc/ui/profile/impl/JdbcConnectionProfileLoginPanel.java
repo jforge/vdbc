@@ -1,13 +1,14 @@
 package org.indp.vdbc.ui.profile.impl;
 
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JdbcConnectionProfile;
+import org.indp.vdbc.ui.ReadonlyTextField;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
-import org.indp.vdbc.ui.LabelField;
 
 /**
  *
@@ -30,21 +31,21 @@ public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
 
     @Override
     protected Component createCompositionRoot() {
-        FormLayout root = new FormLayout();
-        root.setSizeFull();
-        root.setSpacing(true);
-        root.setMargin(false, false, true, false);
-
         JdbcConnectionProfile profile = getProfile();
 
-        LabelField driver = new LabelField("Driver:", profile.getDriver());
-        LabelField url = new LabelField("URL:", profile.getUrl());
+        TextField driver = new ReadonlyTextField("Driver:", profile.getDriver());
+        TextField url = new ReadonlyTextField("URL:", profile.getUrl());
+
         userName = new TextField("Username:", profile.getUser());
         password = new PasswordField("Password:");
 
         userName.setWidth("100%");
         password.setWidth("100%");
 
+        FormLayout root = new FormLayout();
+        root.setSizeFull();
+        root.setSpacing(true);
+        root.setMargin(new MarginInfo(false, false, true, false));
         root.addComponent(driver);
         root.addComponent(url);
         root.addComponent(userName);

@@ -7,8 +7,8 @@ import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.services.DatabaseSession;
@@ -45,9 +45,9 @@ public class TableSelectorComponent extends CustomComponent {
             tableListContainer = createObjectListContainer();
             Table objectList = new Table(null, tableListContainer);
             objectList.setSizeFull();
-            objectList.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
+            objectList.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
             objectList.setSelectable(true);
-            objectList.addListener(new ItemClickListener() {
+            objectList.addItemClickListener(new ItemClickListener() {
 
                 @Override
                 public void itemClick(ItemClickEvent event) {
@@ -67,7 +67,7 @@ public class TableSelectorComponent extends CustomComponent {
             filter.setWidth("100%");
             filter.setStyleName(Reindeer.TEXTFIELD_SMALL);
 
-            filter.addListener(new FieldEvents.TextChangeListener() {
+            filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
                 @Override
                 public void textChange(FieldEvents.TextChangeEvent event) {
                     String text = event.getText();
@@ -82,18 +82,6 @@ public class TableSelectorComponent extends CustomComponent {
             vl.addComponent(objectList);
             vl.addComponent(filter);
             vl.setExpandRatio(objectList, 1f);
-
-//            Panel root = new Panel();
-//            root.setSizeFull();
-//            root.setStyleName(Reindeer.PANEL_LIGHT);
-//            root.setContent(vl);
-//            root.addAction(new ShortcutListener("activate filter", ShortcutAction.KeyCode.F, new int[]{ShortcutAction.ModifierKey.ALT}){
-//
-//                @Override
-//                public void handleAction(Object sender, Object target) {
-//                    filter.focus();
-//                }
-//            });
 
             setCompositionRoot(vl);
 
@@ -117,7 +105,7 @@ public class TableSelectorComponent extends CustomComponent {
         catalogs.setWidth("100%");
         catalogs.setNullSelectionAllowed(false);
         catalogs.setImmediate(true);
-        catalogs.setFilteringMode(AbstractSelect.Filtering.FILTERINGMODE_CONTAINS);
+        catalogs.setFilteringMode(FilteringMode.CONTAINS);
         catalogs.setVisible(!catalogNames.isEmpty());
         if (catalogNames.size() == 1) {
             catalogs.select(catalogNames.get(0));
@@ -131,7 +119,7 @@ public class TableSelectorComponent extends CustomComponent {
         schemas.setWidth("100%");
         schemas.setNullSelectionAllowed(false);
         schemas.setImmediate(true);
-        schemas.setFilteringMode(AbstractSelect.Filtering.FILTERINGMODE_CONTAINS);
+        schemas.setFilteringMode(FilteringMode.CONTAINS);
         schemas.setVisible(!schemaNames.isEmpty());
         if (schemaNames.size() == 1) {
             schemas.select(schemaNames.get(0));
@@ -145,7 +133,7 @@ public class TableSelectorComponent extends CustomComponent {
         tableTypes.setWidth("100%");
         tableTypes.setNullSelectionAllowed(false);
         tableTypes.setImmediate(true);
-        tableTypes.setFilteringMode(AbstractSelect.Filtering.FILTERINGMODE_CONTAINS);
+        tableTypes.setFilteringMode(FilteringMode.CONTAINS);
 
         ValueChangeListener valueChangeListener = new ValueChangeListener() {
 
@@ -155,9 +143,9 @@ public class TableSelectorComponent extends CustomComponent {
             }
         };
 
-        catalogs.addListener(valueChangeListener);
-        schemas.addListener(valueChangeListener);
-        tableTypes.addListener(valueChangeListener);
+        catalogs.addValueChangeListener(valueChangeListener);
+        schemas.addValueChangeListener(valueChangeListener);
+        tableTypes.addValueChangeListener(valueChangeListener);
 
         l.addComponent(catalogs);
         l.addComponent(schemas);
@@ -189,7 +177,7 @@ public class TableSelectorComponent extends CustomComponent {
         try {
             tables = databaseSession.getMetadata().getTables(catalog, schema, tableType);
         } catch (Exception ex) {
-            getApplication().getMainWindow().showNotification("Error<br/>", ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
+            Notification.show("Error<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
             return;
         }
 

@@ -2,10 +2,11 @@ package org.indp.vdbc.ui.profile.impl;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.TextField;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JndiConnectionProfile;
+import org.indp.vdbc.ui.ReadonlyTextField;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
-import org.indp.vdbc.ui.LabelField;
 
 /**
  *
@@ -26,7 +27,7 @@ public class JndiConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
         FormLayout root = new FormLayout();
         root.setSizeFull();
 
-        LabelField name = new LabelField("JNDI Name:", getProfile().getJndiName());
+        TextField name = new ReadonlyTextField("JNDI Name:", getProfile().getJndiName());
         root.addComponent(name);
 
         return root;

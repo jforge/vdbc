@@ -1,6 +1,5 @@
 package org.indp.vdbc.ui.profile;
 
-import com.vaadin.terminal.ErrorMessage;
 import com.vaadin.ui.*;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
@@ -61,7 +60,7 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
                 if (value != null) {
                     removeProfile(value);
                 } else {
-                    getWindow().showNotification("Select some profile to remove it");
+                    Notification.show("Select some profile to remove it");
                 }
             }
         });
@@ -71,11 +70,9 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
                 try {
                     apply();
                     profileListFacade.profileUpdated(profile);
-                    getWindow().showNotification("Changes applied", "Save profiles to persist settings for further use.", Window.Notification.TYPE_TRAY_NOTIFICATION);
+                    Notification.show("Changes applied", "Save profiles to persist settings for further use.", Notification.Type.TRAY_NOTIFICATION);
                 } catch (Exception e) {
-                    if (e instanceof ErrorMessage) {
-                        getWindow().showNotification("Check required values", Window.Notification.TYPE_WARNING_MESSAGE);
-                    }
+                    Notification.show("Check required values", Notification.Type.WARNING_MESSAGE);
                 }
             }
         });
@@ -88,7 +85,7 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
     }
 
     private void removeProfile(final ConnectionProfile profile) {
-        ConfirmDialog.confirmYesNo(getApplication(), "Delete profile?", new ActionListener() {
+        ConfirmDialog.confirmYesNo("Delete profile?", new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SettingsManager.get().getConfiguration().removeProfile(profile);

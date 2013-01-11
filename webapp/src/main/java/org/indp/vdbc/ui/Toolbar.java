@@ -1,6 +1,9 @@
 package org.indp.vdbc.ui;
 
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.themes.BaseTheme;
 
 /**
@@ -17,7 +20,6 @@ public class Toolbar extends CustomComponent {
         addStyleName("toolbar");
     }
 
-    @Override
     public void addComponent(Component c) {
         content.addComponent(c);
     }

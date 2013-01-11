@@ -61,20 +61,20 @@ public abstract class AbstractConnectionProfileDetailsPanel<T extends Connection
         List<AbstractProfileField> fields = getFields();
         this.fields = new LinkedHashMap<String, AbstractProfileField>(fields.size());
 
-        FormLayout layout = new FormLayout();
-        layout.setSizeFull();
+        FormLayout formLayout = new FormLayout();
+        formLayout.setWidth("100%");
 
         for (AbstractProfileField field : fields) {
             field.setFormContext(formContext);
             Component vaadinField = field.getFieldComponent();
             this.fields.put(field.getId(), field);
-            layout.addComponent(vaadinField);
+            formLayout.addComponent(vaadinField);
         }
 
         for (AbstractProfileField field : this.fields.values()) {
             field.readValue();
         }
 
-        return layout;
+        return formLayout;
     }
 }

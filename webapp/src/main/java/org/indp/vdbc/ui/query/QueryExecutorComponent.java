@@ -3,7 +3,6 @@ package org.indp.vdbc.ui.query;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Window.Notification;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.util.JdbcUtils;
@@ -36,7 +35,7 @@ public class QueryExecutorComponent extends CustomComponent {
             connection = databaseSession.getConnection();
         } catch (Exception ex) {
             LOG.warn("connection failed", ex);
-            addComponent(new Label(ex.getMessage()));
+            setCompositionRoot(new Label(ex.getMessage()));
             return;
         }
 
@@ -58,10 +57,10 @@ public class QueryExecutorComponent extends CustomComponent {
             public void actionPerformed(ActionEvent e) {
                 try {
                     connection.commit();
-                    getApplication().getMainWindow().showNotification("Commited");
+                    Notification.show("Commited");
                 } catch (SQLException ex) {
                     LOG.warn("commit failed", ex);
-                    getApplication().getMainWindow().showNotification("Commit failed<br/>", ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
+                    Notification.show("Commit failed<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -71,10 +70,10 @@ public class QueryExecutorComponent extends CustomComponent {
             public void actionPerformed(ActionEvent e) {
                 try {
                     connection.rollback();
-                    getApplication().getMainWindow().showNotification("Rolled back");
+                    Notification.show("Rolled back");
                 } catch (SQLException ex) {
                     LOG.warn("rollback failed", ex);
-                    getApplication().getMainWindow().showNotification("Rollback failed<br/>", ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
+                    Notification.show("Rollback failed<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -135,6 +134,8 @@ public class QueryExecutorComponent extends CustomComponent {
         vl.setComponentAlignment(progressIndicator, Alignment.MIDDLE_CENTER);
         splitPanel.setSecondComponent(vl);
 
+        final UI currentUI = UI.getCurrent();
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -159,17 +160,17 @@ public class QueryExecutorComponent extends CustomComponent {
                     }
 
                     long end = System.currentTimeMillis();
-                    synchronized (getApplication()) {
-                        getApplication().getMainWindow().showNotification(
+                    synchronized (currentUI) {
+                        Notification.show(
                                 "Query Stats<br/>",
                                 "exec time: " + (end - start) / 1000.0 + " ms<br/>" + statMsg,
-                                Notification.TYPE_TRAY_NOTIFICATION);
+                                Notification.Type.TRAY_NOTIFICATION);
                     }
                 } catch (SQLException e) {
                     LOG.debug("failed to execute sql query", e);
                     resultComponent = new Label(e.getMessage());
                 }
-                synchronized (getApplication()) {
+                synchronized (currentUI) {
                     splitPanel.setSecondComponent(resultComponent);
                 }
             }

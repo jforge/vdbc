@@ -6,7 +6,6 @@ import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Window.Notification;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSessionManager;
@@ -46,7 +45,7 @@ public class ConnectionSelectorView extends VerticalLayout {
         profiles.setItemCaptionPropertyId("name");
         profiles.setImmediate(true);
         profiles.setNullSelectionAllowed(false);
-        profiles.addListener(new ValueChangeListener() {
+        profiles.addValueChangeListener(new ValueChangeListener() {
 
             @Override
             public void valueChange(ValueChangeEvent event) {
@@ -74,7 +73,7 @@ public class ConnectionSelectorView extends VerticalLayout {
                 try {
                     databaseSessionManager.createSession(profile);
                 } catch (Exception ex) {
-                    getApplication().getMainWindow().showNotification("Failed to connect<br/>", ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
+                    Notification.show("Failed to connect<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -87,10 +86,10 @@ public class ConnectionSelectorView extends VerticalLayout {
                 try {
                     ConnectionProfile selectedProfile = (ConnectionProfile) profiles.getValue();
                     databaseSessionManager.validateProfile(selectedProfile);
-                    getApplication().getMainWindow().showNotification("Test successful");
+                    Notification.show("Test successful");
                 } catch (Exception ex) {
                     LOG.warn("connection test failed", ex);
-                    getApplication().getMainWindow().showNotification("Test failed<br/>", ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
+                    Notification.show("Test failed<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -101,12 +100,12 @@ public class ConnectionSelectorView extends VerticalLayout {
             settingsButton.setEnabled(false);
             settingsButton.setDescription("Settings editor is disabled because 'vdbc.settings.editor-enabled' system property is defined and its value is not 'true'.");
         } else {
-            settingsButton.addListener(new Button.ClickListener() {
+            settingsButton.addClickListener(new Button.ClickListener() {
 
                 @Override
                 public void buttonClick(ClickEvent event) {
                     SettingsManagerDialog settingsManagerDialog = new SettingsManagerDialog();
-                    settingsManagerDialog.addListener(new Window.CloseListener() {
+                    settingsManagerDialog.addCloseListener(new Window.CloseListener() {
                         @Override
                         public void windowClose(Window.CloseEvent e) {
                             List<ConnectionProfile> list = SettingsManager.get().getConfiguration().getProfiles();
@@ -116,24 +115,22 @@ public class ConnectionSelectorView extends VerticalLayout {
                             }
                         }
                     });
-                    getWindow().addWindow(settingsManagerDialog);
+                    getUI().addWindow(settingsManagerDialog);
                 }
             });
         }
 
-        HorizontalLayout hl = new HorizontalLayout();
+        HorizontalLayout hl = new HorizontalLayout(settingsButton, testButton, connectButton);
         hl.setWidth("100%");
-        hl.addComponent(settingsButton);
-        hl.addComponent(testButton);
-        hl.addComponent(connectButton);
         hl.setComponentAlignment(testButton, Alignment.MIDDLE_RIGHT);
         hl.setComponentAlignment(connectButton, Alignment.MIDDLE_RIGHT);
 
+        VerticalLayout rootPanelLayout = new VerticalLayout(profiles, profileInfoPanel, hl);
+        rootPanelLayout.setMargin(true);
+
         Panel rootPanel = new Panel("DB Console");
         rootPanel.setWidth("300px");
-        rootPanel.addComponent(profiles);
-        rootPanel.addComponent(profileInfoPanel);
-        rootPanel.addComponent(hl);
+        rootPanel.setContent(rootPanelLayout);
 
         setSizeFull();
         addComponent(rootPanel);

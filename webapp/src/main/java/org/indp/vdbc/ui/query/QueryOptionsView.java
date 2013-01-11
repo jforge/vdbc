@@ -1,8 +1,7 @@
 package org.indp.vdbc.ui.query;
 
+import com.vaadin.data.Property;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Window.Notification;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.ui.ActionListenerAdapter;
 import org.indp.vdbc.ui.UiUtils;
@@ -16,7 +15,7 @@ import java.util.Arrays;
  */
 public class QueryOptionsView extends HorizontalLayout {
 
-//    private ActionListenerAdapter formatSqlActionListener = new ActionListenerAdapter();
+    //    private ActionListenerAdapter formatSqlActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter executeActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter commitActionListener = new ActionListenerAdapter();
     private ActionListenerAdapter rollbackActionListener = new ActionListenerAdapter();
@@ -44,10 +43,9 @@ public class QueryOptionsView extends HorizontalLayout {
 
         final CheckBox autocommitCheckBox = new CheckBox("Autocommit", true);
         autocommitCheckBox.setImmediate(true);
-        autocommitCheckBox.addListener(new Button.ClickListener() {
-
+        autocommitCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
-            public void buttonClick(ClickEvent event) {
+            public void valueChange(Property.ValueChangeEvent event) {
                 boolean e = !autocommitCheckBox.getValue().equals(Boolean.TRUE);
                 try {
                     autocommitSettingListener.setAutoCommit(!e);
@@ -55,7 +53,7 @@ public class QueryOptionsView extends HorizontalLayout {
                     rollbackButton.setEnabled(e);
                 } catch (Exception ex) {
                     autocommitCheckBox.setValue(!e);
-                    getApplication().getMainWindow().showNotification("Failed to change autocommit setting<br/>", ex.getMessage(), Notification.TYPE_ERROR_MESSAGE);
+                    Notification.show("Failed to change autocommit setting<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -63,7 +61,7 @@ public class QueryOptionsView extends HorizontalLayout {
 //        Label maxRowsLabel = new Label("Max rows:");
         maxRowsBox = new ComboBox(null, Arrays.asList(10, 100, 500, 1000));
         maxRowsBox.setDescription("Max number of rows to retrieve");
-        maxRowsBox.setWidth(100, UNITS_PIXELS);
+        maxRowsBox.setWidth("100px");
         maxRowsBox.setNewItemsAllowed(false);
 //        maxRowsBox.setNewItemHandler(new NewItemHandler() {
 //

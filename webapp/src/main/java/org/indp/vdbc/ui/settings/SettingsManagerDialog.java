@@ -17,46 +17,39 @@ import java.util.List;
 public class SettingsManagerDialog extends Window implements ConnectionProfileDetailsPanel.ProfileListFacade {
 
     private ListSelect list;
-    private ComponentContainer panel;
+    private ComponentContainer detailsContainer;
 
     public SettingsManagerDialog() {
     }
 
     @Override
     public void attach() {
+        super.attach();
+
         setModal(true);
         setResizable(false);
         setCaption("Settings");
         setWidth("600px");
         setHeight("420px");
 
-        ComponentContainer workArea = createWorkArea();
-
-        VerticalLayout vl = new VerticalLayout();
-        vl.setMargin(true);
-        vl.addComponent(workArea);
-        vl.setSizeFull();
-
-        setContent(vl);
+        setContent(createContent());
 
         refreshDetails();
 
         addAction(new CloseShortcut(this, ShortcutAction.KeyCode.ESCAPE));
 
-        super.attach();
-
         this.focus();
     }
 
     private void refreshDetails() {
-        panel.removeAllComponents();
+        detailsContainer.removeAllComponents();
 
         ConnectionProfile profile = (ConnectionProfile) list.getValue();
         if (profile == null) {
             return;
         }
 
-        panel.addComponent(createDetails(profile));
+        detailsContainer.addComponent(createDetails(profile));
     }
 
     private Component createDetails(ConnectionProfile profile) {
@@ -65,26 +58,21 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             return new Label("Unknown profile type.");
         }
 
-        ConnectionProfileDetailsPanel<? extends ConnectionProfile> propertiesPanel = factory.createPropertiesPanel(profile, this);
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-        layout.addComponent(propertiesPanel);
-        layout.setMargin(false, false, false, true);
-        return layout;
+        return factory.createPropertiesPanel(profile, this);
     }
 
-    private ComponentContainer createWorkArea() {
-        panel = new VerticalLayout();
-        panel.setSizeFull();
-
+    private ComponentContainer createContent() {
         ComponentContainer leftSide = createLeftSide();
         leftSide.setWidth("170px");
 
-        HorizontalLayout layout = new HorizontalLayout();
+        detailsContainer = new VerticalLayout();
+        detailsContainer.setSizeFull();
+
+        HorizontalLayout layout = new HorizontalLayout(leftSide, detailsContainer);
+        layout.setSpacing(true);
+        layout.setMargin(true);
         layout.setSizeFull();
-        layout.addComponent(leftSide);
-        layout.addComponent(panel);
-        layout.setExpandRatio(panel, 1f);
+        layout.setExpandRatio(detailsContainer, 1f);
 
         return layout;
     }
@@ -92,7 +80,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
     private ComponentContainer createLeftSide() {
         List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
         list = new ListSelect(null, new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, profiles));
-        list.setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_PROPERTY);
+        list.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
         list.setItemCaptionPropertyId("name");
         list.setSizeFull();
         list.setNullSelectionAllowed(false);
@@ -101,7 +89,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             list.select(profiles.get(0));
         }
 
-        list.addListener(new Property.ValueChangeListener() {
+        list.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 refreshDetails();
@@ -111,7 +99,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         Button addButton = new Button("Add", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                getApplication().getMainWindow().addWindow(new ProfileTypeSelectorDialog(new ProfileTypeSelectorDialog.SelectionListener() {
+                getUI().addWindow(new ProfileTypeSelectorDialog(new ProfileTypeSelectorDialog.SelectionListener() {
                     @Override
                     public void onFactorySelected(ConnectionProfileManager factory) {
                         createProfile(factory);
@@ -124,20 +112,16 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 SettingsManager.get().persistConfiguration();
-                getApplication().getMainWindow().showNotification("Profiles saved.", Notification.TYPE_TRAY_NOTIFICATION);
+                Notification.show("Profiles saved.", Notification.Type.TRAY_NOTIFICATION);
             }
         });
 
-        HorizontalLayout listButtons = new HorizontalLayout();
+        HorizontalLayout listButtons = new HorizontalLayout(addButton, saveProfilesButton);
         listButtons.setSpacing(true);
-        listButtons.addComponent(addButton);
-        listButtons.addComponent(saveProfilesButton);
 
-        VerticalLayout leftSide = new VerticalLayout();
+        VerticalLayout leftSide = new VerticalLayout(list, listButtons);
         leftSide.setSizeFull();
         leftSide.setSpacing(true);
-        leftSide.addComponent(list);
-        leftSide.addComponent(listButtons);
         leftSide.setExpandRatio(list, 1f);
 
         return leftSide;
