@@ -3,8 +3,8 @@ package org.indp.vdbc.ui.explorer.details;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.db.DialectSupport;
 
 /**
@@ -24,6 +24,7 @@ public class SingleRecordViewWindow extends Window {
         setCaption("Record");
         setModal(true);
         setWidth("500px");
+        setResizable(false);
         setContent(createLayout());
         setCloseShortcut(ShortcutAction.KeyCode.ESCAPE);
     }
@@ -39,18 +40,15 @@ public class SingleRecordViewWindow extends Window {
         });
         closeButton.focus();
 
-        HorizontalLayout buttons = new HorizontalLayout();
+        HorizontalLayout buttons = new HorizontalLayout(closeButton);
         buttons.setSpacing(true);
         buttons.setMargin(true);
         buttons.setWidth("100%");
-        buttons.addComponent(closeButton);
         buttons.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
 
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
+        VerticalLayout layout = new VerticalLayout(fields, buttons);
+//        layout.setSizeFull();
         layout.setMargin(false);
-        layout.addComponent(fields);
-        layout.addComponent(buttons);
         layout.setExpandRatio(fields, 1f);
         layout.setComponentAlignment(buttons, Alignment.MIDDLE_RIGHT);
         return layout;
@@ -59,18 +57,14 @@ public class SingleRecordViewWindow extends Window {
     private Component createFields() {
         FormLayout form = new FormLayout();
         form.setWidth("100%");
+        form.setMargin(new MarginInfo(true, true, false, true));
         for (Object propertyId : item.getItemPropertyIds()) {
             if (!DialectSupport.isServiceColumn(propertyId.toString())) {
                 Property property = item.getItemProperty(propertyId);
                 form.addComponent(createField(propertyId, property));
             }
         }
-
-        Panel panel = new Panel();
-        panel.setStyleName(Reindeer.PANEL_LIGHT);
-        panel.setSizeFull();
-        panel.setContent(form);
-        return panel;
+        return form;
     }
 
     private Component createField(Object propertyId, Property property) {
