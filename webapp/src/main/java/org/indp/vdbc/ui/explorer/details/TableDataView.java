@@ -89,7 +89,7 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
                 query = new FreeformQuery(queryString, connectionPool);
                 Notification.show(
                         "Warning!",
-                        "Using slow mode because dialect doesn't<br/>support limit/offset select queries.",
+                        "Using slow mode because dialect doesn't\nsupport limit/offset select queries.",
                         Notification.Type.TRAY_NOTIFICATION);
             }
 

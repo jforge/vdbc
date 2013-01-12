@@ -53,7 +53,7 @@ public class QueryOptionsView extends HorizontalLayout {
                     rollbackButton.setEnabled(e);
                 } catch (Exception ex) {
                     autocommitCheckBox.setValue(!e);
-                    Notification.show("Failed to change autocommit setting<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    Notification.show("Failed to change autocommit setting", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });

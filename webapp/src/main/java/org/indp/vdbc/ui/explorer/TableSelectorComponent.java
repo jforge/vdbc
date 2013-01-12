@@ -177,7 +177,7 @@ public class TableSelectorComponent extends CustomComponent {
         try {
             tables = databaseSession.getMetadata().getTables(catalog, schema, tableType);
         } catch (Exception ex) {
-            Notification.show("Error<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+            Notification.show("Error", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
             return;
         }
 

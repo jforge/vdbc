@@ -73,7 +73,7 @@ public class ConnectionSelectorView extends VerticalLayout {
                 try {
                     databaseSessionManager.createSession(profile);
                 } catch (Exception ex) {
-                    Notification.show("Failed to connect<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    Notification.show("Failed to connect", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -89,7 +89,7 @@ public class ConnectionSelectorView extends VerticalLayout {
                     Notification.show("Test successful");
                 } catch (Exception ex) {
                     LOG.warn("connection test failed", ex);
-                    Notification.show("Test failed<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    Notification.show("Test failed", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });

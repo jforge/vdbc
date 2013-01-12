@@ -39,16 +39,23 @@ public class QueryExecutorComponent extends CustomComponent {
             return;
         }
 
-        final TextField query = new TextField();
+        final TextArea query = new TextArea();
         query.setSizeFull();
-        query.addStyleName("monospace");
+        query.setStyleName("monospace");
+        query.addShortcutListener(new ShortcutListener("Run Query", null, ShortcutAction.KeyCode.ENTER, ShortcutAction.ModifierKey.CTRL) {
+
+            @Override
+            public void handleAction(Object sender, Object target) {
+                executeQuery(query.getValue());
+            }
+        });
 
         queryOptionsView = new QueryOptionsView();
         queryOptionsView.setExecuteActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                executeQuery(query.getValue().toString());
+                executeQuery(query.getValue());
             }
         });
         queryOptionsView.setCommitActionListener(new ActionListener() {
@@ -60,7 +67,7 @@ public class QueryExecutorComponent extends CustomComponent {
                     Notification.show("Commited");
                 } catch (SQLException ex) {
                     LOG.warn("commit failed", ex);
-                    Notification.show("Commit failed<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    Notification.show("Commit failed", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -73,7 +80,7 @@ public class QueryExecutorComponent extends CustomComponent {
                     Notification.show("Rolled back");
                 } catch (SQLException ex) {
                     LOG.warn("rollback failed", ex);
-                    Notification.show("Rollback failed<br/>", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    Notification.show("Rollback failed", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -98,26 +105,14 @@ public class QueryExecutorComponent extends CustomComponent {
 //            }
 //        });
 
-        splitPanel = new VerticalSplitPanel();
+        splitPanel = new VerticalSplitPanel(query, new Label());
         splitPanel.setSizeFull();
-        splitPanel.setFirstComponent(query);
-        splitPanel.setSecondComponent(new Label());
 
-        VerticalLayout vl = new VerticalLayout();
+        VerticalLayout vl = new VerticalLayout(queryOptionsView, splitPanel);
         vl.setSizeFull();
-        setCompositionRoot(vl);
-
-        vl.addComponent(queryOptionsView);
-        vl.addComponent(splitPanel);
         vl.setExpandRatio(splitPanel, 1);
 
-        query.addShortcutListener(new ShortcutListener("Run Query", null, ShortcutAction.KeyCode.ENTER, ShortcutAction.ModifierKey.CTRL) {
-
-            @Override
-            public void handleAction(Object sender, Object target) {
-                executeQuery(query.getValue().toString());
-            }
-        });
+        setCompositionRoot(vl);
     }
 
     protected void executeQuery(final String query) {
@@ -160,18 +155,26 @@ public class QueryExecutorComponent extends CustomComponent {
                     }
 
                     long end = System.currentTimeMillis();
-                    synchronized (currentUI) {
+
+                    currentUI.getSession().lock();
+                    try {
                         Notification.show(
-                                "Query Stats<br/>",
-                                "exec time: " + (end - start) / 1000.0 + " ms<br/>" + statMsg,
+                                "Query Stats",
+                                "exec time: " + (end - start) / 1000.0 + " ms\n" + statMsg,
                                 Notification.Type.TRAY_NOTIFICATION);
+                    } finally {
+                        currentUI.getSession().unlock();
                     }
                 } catch (SQLException e) {
                     LOG.debug("failed to execute sql query", e);
                     resultComponent = new Label(e.getMessage());
                 }
-                synchronized (currentUI) {
+
+                currentUI.getSession().lock();
+                try {
                     splitPanel.setSecondComponent(resultComponent);
+                } finally {
+                    currentUI.getSession().unlock();
                 }
             }
         }, "vdbc-query-" + System.currentTimeMillis());
