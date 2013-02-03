@@ -26,7 +26,7 @@ public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
     public ConnectionProfile createConnectionProfile() {
         JdbcConnectionProfile profile = getProfile();
         return new JdbcConnectionProfile(profile.getName(), profile.getDialect(), profile.getDriver(), profile.getUrl(),
-                userName.getValue().toString(), password.getValue().toString());
+                userName.getValue(), password.getValue());
     }
 
     @Override
@@ -42,14 +42,10 @@ public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
         userName.setWidth("100%");
         password.setWidth("100%");
 
-        FormLayout root = new FormLayout();
+        FormLayout root = new FormLayout(driver, url, userName, password);
         root.setSizeFull();
         root.setSpacing(true);
         root.setMargin(new MarginInfo(false, false, true, false));
-        root.addComponent(driver);
-        root.addComponent(url);
-        root.addComponent(userName);
-        root.addComponent(password);
 
         return root;
     }
