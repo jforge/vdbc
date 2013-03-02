@@ -26,6 +26,7 @@ public class QueryExecutorComponent extends CustomComponent {
     //
     private VerticalSplitPanel splitPanel;
     private QueryOptionsView queryOptionsView;
+    private TextArea query;
 
     public QueryExecutorComponent(DatabaseSession databaseSession) {
         try {
@@ -36,7 +37,7 @@ public class QueryExecutorComponent extends CustomComponent {
             return;
         }
 
-        final TextArea query = new TextArea();
+        query = new TextArea();
         query.setSizeFull();
         query.setStyleName("monospace");
         query.addShortcutListener(new ShortcutListener("Run Query", null, ShortcutAction.KeyCode.ENTER, ShortcutAction.ModifierKey.CTRL) {
@@ -114,7 +115,7 @@ public class QueryExecutorComponent extends CustomComponent {
         setCompositionRoot(vl);
     }
 
-    protected void executeQuery(final String query) {
+    protected void executeQuery(final String sql) {
         final long start = System.currentTimeMillis();
 
         // TODO cancelable execution
@@ -127,6 +128,7 @@ public class QueryExecutorComponent extends CustomComponent {
         vl.addComponent(progressIndicator);
         vl.setComponentAlignment(progressIndicator, Alignment.MIDDLE_CENTER);
         splitPanel.setSecondComponent(vl);
+        setExecutionAllowed(false);
 
         final UI currentUI = UI.getCurrent();
 
@@ -136,7 +138,7 @@ public class QueryExecutorComponent extends CustomComponent {
                 String statMsg = "";
                 Component resultComponent;
                 try {
-                    PreparedStatement stmt = connection.prepareStatement(query);
+                    PreparedStatement stmt = connection.prepareStatement(sql);
                     try {
                         stmt.setMaxRows(queryOptionsView.getMaxRows());
                         boolean hasResultSet = stmt.execute();
@@ -172,12 +174,19 @@ public class QueryExecutorComponent extends CustomComponent {
                 currentUI.getSession().lock();
                 try {
                     splitPanel.setSecondComponent(resultComponent);
+                    query.focus();
+                    setExecutionAllowed(true);
                 } finally {
                     currentUI.getSession().unlock();
                 }
             }
         }, "vdbc-query-" + System.currentTimeMillis());
         thread.start();
+    }
+
+    private void setExecutionAllowed(boolean b) {
+        query.setReadOnly(!b);
+        queryOptionsView.setEnabled(b);
     }
 
     @Override
