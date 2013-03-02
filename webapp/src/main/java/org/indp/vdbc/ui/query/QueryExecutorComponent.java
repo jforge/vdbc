@@ -1,19 +1,21 @@
 package org.indp.vdbc.ui.query;
 
+import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.ResultSetTable;
+import org.indp.vdbc.ui.UiUtils;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 /**
  *
@@ -21,45 +23,53 @@ import java.sql.SQLException;
  */
 public class QueryExecutorComponent extends CustomComponent {
 
+    private static final boolean DEFAULT_AUTO_COMMIT = true;
     private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorComponent.class);
+
     private Connection connection;
     //
     private VerticalSplitPanel splitPanel;
-    private QueryOptionsView queryOptionsView;
+    private HorizontalLayout queryOptionsLayout;
     private TextArea query;
+    private ComboBox maxRowsBox;
 
     public QueryExecutorComponent(DatabaseSession databaseSession) {
         try {
             connection = databaseSession.getConnection();
+            connection.setAutoCommit(DEFAULT_AUTO_COMMIT);
         } catch (Exception ex) {
             LOG.warn("connection failed", ex);
             setCompositionRoot(new Label(ex.getMessage()));
             return;
         }
 
-        query = new TextArea();
-        query.setSizeFull();
-        query.setStyleName("monospace");
-        query.addShortcutListener(new ShortcutListener("Run Query", null, ShortcutAction.KeyCode.ENTER, ShortcutAction.ModifierKey.CTRL) {
+        buildQueryTextEditor();
+        buildToolbar();
 
+        splitPanel = new VerticalSplitPanel(query, new Label());
+        splitPanel.setSizeFull();
+
+        VerticalLayout vl = new VerticalLayout(queryOptionsLayout, splitPanel);
+        vl.setSizeFull();
+        vl.setExpandRatio(splitPanel, 1);
+
+        setCaption("Query");
+        setSizeFull();
+        setCompositionRoot(vl);
+    }
+
+    private void buildToolbar() {
+        final Button executeButton = createToolButton("Execute", new Button.ClickListener() {
             @Override
-            public void handleAction(Object sender, Object target) {
+            public void buttonClick(Button.ClickEvent event) {
                 executeQuery(query.getValue());
             }
         });
+        executeButton.setDescription("Press Ctrl+Enter to execute the query");
 
-        queryOptionsView = new QueryOptionsView();
-        queryOptionsView.setExecuteActionListener(new ActionListener() {
-
+        final Button commitButton = createToolButton("Commit", new Button.ClickListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                executeQuery(query.getValue());
-            }
-        });
-        queryOptionsView.setCommitActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
+            public void buttonClick(Button.ClickEvent event) {
                 try {
                     connection.commit();
                     Notification.show("Commited");
@@ -69,10 +79,10 @@ public class QueryExecutorComponent extends CustomComponent {
                 }
             }
         });
-        queryOptionsView.setRollbackActionListener(new ActionListener() {
-
+        commitButton.setEnabled(false);
+        final Button rollbackButton = createToolButton("Rollback", new Button.ClickListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void buttonClick(Button.ClickEvent event) {
                 try {
                     connection.rollback();
                     Notification.show("Rolled back");
@@ -82,37 +92,70 @@ public class QueryExecutorComponent extends CustomComponent {
                 }
             }
         });
-        queryOptionsView.setAutocommitSettingListener(new QueryOptionsView.AutocommitSettingListener() {
+        rollbackButton.setEnabled(false);
 
+        final CheckBox autocommitCheckBox = new CheckBox("Autocommit", DEFAULT_AUTO_COMMIT);
+        autocommitCheckBox.setImmediate(true);
+        autocommitCheckBox.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
-            public void setAutoCommit(boolean enabled) throws Exception {
-                connection.setAutoCommit(enabled);
+            public void valueChange(Property.ValueChangeEvent event) {
+                boolean autoCommit = Boolean.TRUE.equals(autocommitCheckBox.getValue());
+                try {
+                    connection.setAutoCommit(autoCommit);
+                    commitButton.setEnabled(!autoCommit);
+                    rollbackButton.setEnabled(!autoCommit);
+                } catch (Exception ex) {
+                    autocommitCheckBox.setValue(!autoCommit);
+                    Notification.show("Failed to change autocommit setting", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                }
             }
         });
-//        queryOptionsView.setFormatSqlActionListener(new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                // TODO format selected text
-//                String sql = query.getValue().toString();
-//                String formatted = new BasicFormatterImpl().format(sql);
-//                if (formatted.startsWith("\n")) {
-//                    formatted = formatted.substring(1);
-//                }
-//                query.setValue(formatted);
-//            }
-//        });
 
-        splitPanel = new VerticalSplitPanel(query, new Label());
-        splitPanel.setSizeFull();
+        maxRowsBox = new ComboBox(null, Arrays.asList(10, 100, 500, 1000));
+        maxRowsBox.setDescription("Max number of rows to retrieve");
+        maxRowsBox.setWidth("100px");
+        maxRowsBox.setNewItemsAllowed(false);
+        maxRowsBox.setNullSelectionAllowed(false);
+        maxRowsBox.setValue(100);
 
-        VerticalLayout vl = new VerticalLayout(queryOptionsView, splitPanel);
-        vl.setSizeFull();
-        vl.setExpandRatio(splitPanel, 1);
+        queryOptionsLayout = new HorizontalLayout(
+                UiUtils.createHorizontalSpacer(15),
+                executeButton,
+                UiUtils.createHorizontalSpacer(5),
+                commitButton,
+                rollbackButton,
+                UiUtils.createHorizontalSpacer(5),
+                autocommitCheckBox,
+                maxRowsBox);
+        queryOptionsLayout.setWidth("100%");
+        queryOptionsLayout.setExpandRatio(autocommitCheckBox, 1);
+        queryOptionsLayout.setComponentAlignment(executeButton, Alignment.MIDDLE_LEFT);
+        queryOptionsLayout.setComponentAlignment(commitButton, Alignment.MIDDLE_LEFT);
+        queryOptionsLayout.setComponentAlignment(rollbackButton, Alignment.MIDDLE_LEFT);
+        queryOptionsLayout.setComponentAlignment(autocommitCheckBox, Alignment.MIDDLE_LEFT);
+        queryOptionsLayout.setComponentAlignment(maxRowsBox, Alignment.MIDDLE_RIGHT);
+    }
 
-        setCaption("Query");
-        setSizeFull();
-        setCompositionRoot(vl);
+    private void buildQueryTextEditor() {
+        query = new TextArea();
+        query.setSizeFull();
+        query.setStyleName("monospace");
+        query.addShortcutListener(new ShortcutListener("Run Query", null, ShortcutAction.KeyCode.ENTER, ShortcutAction.ModifierKey.CTRL) {
+
+            @Override
+            public void handleAction(Object sender, Object target) {
+                String sql = query.getValue();
+                if (sql != null && !sql.isEmpty()) {
+                    executeQuery(sql);
+                }
+            }
+        });
+    }
+
+    protected Button createToolButton(String caption, Button.ClickListener clickListener) {
+        final Button button = new Button(caption, clickListener);
+        button.addStyleName(Reindeer.BUTTON_SMALL);
+        return button;
     }
 
     protected void executeQuery(final String sql) {
@@ -140,7 +183,7 @@ public class QueryExecutorComponent extends CustomComponent {
                 try {
                     PreparedStatement stmt = connection.prepareStatement(sql);
                     try {
-                        stmt.setMaxRows(queryOptionsView.getMaxRows());
+                        stmt.setMaxRows(getMaxRows());
                         boolean hasResultSet = stmt.execute();
                         if (hasResultSet) {
                             ResultSetTable table = new ResultSetTable(stmt.getResultSet());
@@ -184,9 +227,14 @@ public class QueryExecutorComponent extends CustomComponent {
         thread.start();
     }
 
+    private int getMaxRows() {
+        Object value = maxRowsBox.getValue();
+        return value == null ? 0 : (Integer) value;
+    }
+
     private void setExecutionAllowed(boolean b) {
         query.setReadOnly(!b);
-        queryOptionsView.setEnabled(b);
+        queryOptionsLayout.setEnabled(b);
     }
 
     @Override
