@@ -23,7 +23,7 @@ import java.util.ArrayList;
 /**
  *
  */
-public class TableDataView extends CustomComponent implements ToolbarContributor {
+public class TableDataView extends VerticalLayout implements ToolbarContributor {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
     public static final String TITLE = "Data";
@@ -56,12 +56,8 @@ public class TableDataView extends CustomComponent implements ToolbarContributor
         tableContainer = new VerticalLayout();
         tableContainer.setSizeFull();
 
-        VerticalLayout vl = new VerticalLayout();
-        vl.setSizeFull();
-        vl.addComponent(tableContainer);
-        vl.setExpandRatio(tableContainer, 1f);
-
-        setCompositionRoot(vl);
+        addComponent(tableContainer);
+        setExpandRatio(tableContainer, 1f);
         setCaption(TITLE);
         setSizeFull();
     }

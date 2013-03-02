@@ -1,6 +1,5 @@
 package org.indp.vdbc.ui.explorer;
 
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.HorizontalSplitPanel;
 import org.indp.vdbc.services.DatabaseSession;
 
@@ -8,17 +7,10 @@ import org.indp.vdbc.services.DatabaseSession;
  *
  *
  */
-public class TablesView extends CustomComponent {
+public class TablesView extends HorizontalSplitPanel {
 
     public TablesView(DatabaseSession databaseSession) {
-        setCaption("Tables");
-
-        setSizeFull();
-        final HorizontalSplitPanel sp = new HorizontalSplitPanel();
-        sp.setSizeFull();
-
         final DetailsPaneComponent detailsPaneComponent = new DetailsPaneComponent();
-
         TableSelectorComponent tableSelector = new TableSelectorComponent(databaseSession);
         tableSelector.setDetailsListener(new DetailsListener() {
 
@@ -34,10 +26,10 @@ public class TablesView extends CustomComponent {
             }
         });
 
-        sp.setFirstComponent(tableSelector);
-        sp.setSecondComponent(detailsPaneComponent);
-        sp.setSplitPosition(300, UNITS_PIXELS);
-        setCompositionRoot(sp);
+        setSizeFull();
+        setCaption("Tables");
+        setFirstComponent(tableSelector);
+        setSecondComponent(detailsPaneComponent);
+        setSplitPosition(300, Unit.PIXELS);
     }
-
 }

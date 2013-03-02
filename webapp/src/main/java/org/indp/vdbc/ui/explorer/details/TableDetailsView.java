@@ -12,23 +12,17 @@ import org.indp.vdbc.ui.explorer.ObjectDetails;
  *
  *
  */
-public class TableDetailsView extends CustomComponent implements ObjectDetails {
+public class TableDetailsView extends VerticalLayout implements ObjectDetails {
 
     private Property pinned;
     private final HorizontalLayout customToolbar = new HorizontalLayout();
     private final TabSheet tabSheet;
 
     public TableDetailsView(JdbcTable table, DatabaseSession databaseSession) {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-        setCompositionRoot(layout);
-
         tabSheet = createTabSheet(table, databaseSession);
-
-        layout.addComponent(createToobar());
-        layout.addComponent(tabSheet);
-        layout.setExpandRatio(tabSheet, 1f);
-
+        addComponents(createToobar(), tabSheet);
+        setExpandRatio(tabSheet, 1f);
+        setSizeFull();
         setCaption(table.getName());
     }
 
@@ -70,7 +64,7 @@ public class TableDetailsView extends CustomComponent implements ObjectDetails {
         tabSheet.addTab(tableContentView);
 //        tabSheet.addTab(tableSourceView);
 
-        tabSheet.addListener(new TabSheet.SelectedTabChangeListener() {
+        tabSheet.addSelectedTabChangeListener(new TabSheet.SelectedTabChangeListener() {
             @Override
             public void selectedTabChange(TabSheet.SelectedTabChangeEvent event) {
                 customToolbar.removeAllComponents();

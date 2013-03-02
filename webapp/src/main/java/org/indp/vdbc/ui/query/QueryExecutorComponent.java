@@ -28,9 +28,6 @@ public class QueryExecutorComponent extends CustomComponent {
     private QueryOptionsView queryOptionsView;
 
     public QueryExecutorComponent(DatabaseSession databaseSession) {
-        setCaption("Query");
-        setSizeFull();
-
         try {
             connection = databaseSession.getConnection();
         } catch (Exception ex) {
@@ -112,6 +109,8 @@ public class QueryExecutorComponent extends CustomComponent {
         vl.setSizeFull();
         vl.setExpandRatio(splitPanel, 1);
 
+        setCaption("Query");
+        setSizeFull();
         setCompositionRoot(vl);
     }
 

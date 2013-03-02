@@ -28,9 +28,6 @@ public class QueryOptionsView extends HorizontalLayout {
     }
 
     public QueryOptionsView() {
-//        setSpacing(true);
-        setWidth("100%");
-
 //        final Button formatSqlButton = createToolButton("Format", formatSqlActionListener);
 
         final Button executeButton = createToolButton("Execute", executeActionListener);
@@ -79,16 +76,19 @@ public class QueryOptionsView extends HorizontalLayout {
 //        maxRowsBox.setNullSelectionItemId(100);
         maxRowsBox.setValue(100);
 
+//        setSpacing(true);
+        setWidth("100%");
 
 //        addComponent(formatSqlButton);
-        addComponent(UiUtils.createHorizontalSpacer(15));
-        addComponent(executeButton);
-        addComponent(UiUtils.createHorizontalSpacer(5));
-        addComponent(commitButton);
-        addComponent(rollbackButton);
-        addComponent(UiUtils.createHorizontalSpacer(5));
-        addComponent(autocommitCheckBox);
-        addComponent(maxRowsBox);
+        addComponents(
+                UiUtils.createHorizontalSpacer(15),
+                executeButton,
+                UiUtils.createHorizontalSpacer(5),
+                commitButton,
+                rollbackButton,
+                UiUtils.createHorizontalSpacer(5),
+                autocommitCheckBox,
+                maxRowsBox);
         setExpandRatio(autocommitCheckBox, 1);
         setComponentAlignment(executeButton, Alignment.MIDDLE_LEFT);
 //        setComponentAlignment(formatSqlButton, Alignment.MIDDLE_LEFT);

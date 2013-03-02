@@ -37,7 +37,7 @@ public abstract class SeparatedValuesStringDetailsProvider implements DetailsPro
         Table t = new Table();
         t.setSizeFull();
         t.setSelectable(true);
-        t.setColumnHeaderMode(Table.COLUMN_HEADER_MODE_HIDDEN);
+        t.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
         t.addContainerProperty(VALUE_PROPERTY, String.class, null);
 //        t.setColumnHeader(VALUE_PROPERTY, title);
         for (int i = 0; i < values.length; ++i) {

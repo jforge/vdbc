@@ -21,11 +21,6 @@ public class WorkspaceView extends VerticalLayout {
 
     public WorkspaceView(final DatabaseSession databaseSession) {
         ConnectionProfile profile = databaseSession.getConnectionProfile();
-        setSizeFull();
-
-        HorizontalLayout infoBar = new HorizontalLayout();
-        infoBar.setWidth(100, UNITS_PERCENTAGE);
-//        infoBar.setMargin(false, true, false, true);
 
         Button disconnectButton = new Button("Disconnect", new Button.ClickListener() {
 
@@ -35,10 +30,6 @@ public class WorkspaceView extends VerticalLayout {
             }
         });
         disconnectButton.setStyleName(BaseTheme.BUTTON_LINK);
-
-        infoBar.addComponent(new Label(profile.getConnectionPresentationString()));
-        infoBar.addComponent(disconnectButton);
-        infoBar.setComponentAlignment(disconnectButton, Alignment.MIDDLE_RIGHT);
 
         Toolbar toolbar = new Toolbar();
         toolbar.setSpacing(true);
@@ -68,9 +59,15 @@ public class WorkspaceView extends VerticalLayout {
         tabSheet.setSizeFull();
         tabSheet.addStyleName(Reindeer.TABSHEET_HOVER_CLOSABLE);
 
-        addComponent(infoBar);
-        addComponent(toolbar);
-        addComponent(tabSheet);
+        HorizontalLayout infoBar = new HorizontalLayout(
+                new Label(profile.getConnectionPresentationString()),
+                disconnectButton);
+        infoBar.setWidth("100%");
+//        infoBar.setMargin(false, true, false, true);
+        infoBar.setComponentAlignment(disconnectButton, Alignment.MIDDLE_RIGHT);
+
+        setSizeFull();
+        addComponents(infoBar, toolbar, tabSheet);
         setExpandRatio(tabSheet, 1);
     }
 

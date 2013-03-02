@@ -3,7 +3,10 @@ package org.indp.vdbc.ui;
 import com.vaadin.data.Container;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.IndexedContainer;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,35 +21,26 @@ import java.util.List;
  *
  *
  */
-public class ResultSetTable extends CustomComponent {
+public class ResultSetTable extends VerticalLayout {
 
     private static final Logger LOG = LoggerFactory.getLogger(ResultSetTable.class);
-    private final Table table;
+    private Table table;
 
     public ResultSetTable(ResultSet resultSet) {
         this(resultSet, null);
     }
 
     public ResultSetTable(ResultSet resultSet, List<String> columns) {
-        setSizeFull();
-
-        VerticalLayout vl = new VerticalLayout();
-        vl.setSizeFull();
-        setCompositionRoot(vl);
-
         Component content;
         try {
-            content = createResultsTable(resultSet, columns);
+            table = createResultsTable(resultSet, columns);
+            content = table;
         } catch (Exception ex) {
             content = new Label("Failed to process supplied result set: " + ex.getMessage());
         }
 
-        vl.addComponent(content);
-
-        if (content instanceof Table)
-            table = (Table) content;
-        else
-            table = null;
+        setSizeFull();
+        addComponent(content);
     }
 
     public Collection<?> getItemIds() {
