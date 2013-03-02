@@ -38,7 +38,7 @@ public class VdbcUI extends UI implements ConnectionListener {
     @Override
     public void connectionEstablished(DatabaseSession databaseSession) {
         setContent(new WorkspaceView(databaseSession));
-        getPage().setTitle(databaseSession.getConnectionProfile().getConnectionPresentationString() + " - " + APPLICATION_TITLE);
+        getPage().setTitle(databaseSession.getConnectionProfile().getName() + " - " + APPLICATION_TITLE);
     }
 
     @Override
