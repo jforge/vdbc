@@ -6,6 +6,7 @@ import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.services.DatabaseSession;
+import org.indp.vdbc.ui.ModuleContentComponent;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.ui.UiUtils;
 import org.indp.vdbc.util.JdbcUtils;
@@ -21,11 +22,12 @@ import java.util.Arrays;
  *
  *
  */
-public class QueryExecutorComponent extends CustomComponent {
+public class QueryExecutorComponent extends ModuleContentComponent {
 
     private static final boolean DEFAULT_AUTO_COMMIT = true;
     private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorComponent.class);
 
+    private final DatabaseSession databaseSession;
     private Connection connection;
     //
     private VerticalSplitPanel splitPanel;
@@ -34,14 +36,13 @@ public class QueryExecutorComponent extends CustomComponent {
     private ComboBox maxRowsBox;
 
     public QueryExecutorComponent(DatabaseSession databaseSession) {
-        try {
-            connection = databaseSession.getConnection();
-            connection.setAutoCommit(DEFAULT_AUTO_COMMIT);
-        } catch (Exception ex) {
-            LOG.warn("connection failed", ex);
-            setCompositionRoot(new Label(ex.getMessage()));
-            return;
-        }
+        this.databaseSession = databaseSession;
+    }
+
+    @Override
+    protected Component createContent() throws Exception {
+        connection = databaseSession.getConnection();
+        connection.setAutoCommit(DEFAULT_AUTO_COMMIT);
 
         buildQueryTextEditor();
         buildToolbar();
@@ -52,10 +53,17 @@ public class QueryExecutorComponent extends CustomComponent {
         VerticalLayout vl = new VerticalLayout(queryOptionsLayout, splitPanel);
         vl.setSizeFull();
         vl.setExpandRatio(splitPanel, 1);
+        return vl;
+    }
 
-        setCaption("Query");
-        setSizeFull();
-        setCompositionRoot(vl);
+    @Override
+    protected String getTitle() {
+        return "Query";
+    }
+
+    @Override
+    protected void close() {
+        JdbcUtils.close(connection);
     }
 
     private void buildToolbar() {
@@ -119,7 +127,7 @@ public class QueryExecutorComponent extends CustomComponent {
         maxRowsBox.setValue(100);
 
         queryOptionsLayout = new HorizontalLayout(
-                UiUtils.createHorizontalSpacer(15),
+                UiUtils.createHorizontalSpacer(5),
                 executeButton,
                 UiUtils.createHorizontalSpacer(5),
                 commitButton,
@@ -235,11 +243,5 @@ public class QueryExecutorComponent extends CustomComponent {
     private void setExecutionAllowed(boolean b) {
         query.setReadOnly(!b);
         queryOptionsLayout.setEnabled(b);
-    }
-
-    @Override
-    public void detach() {
-        JdbcUtils.close(connection);
-        super.detach();
     }
 }

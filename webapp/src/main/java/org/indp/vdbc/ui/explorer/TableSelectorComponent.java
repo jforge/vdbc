@@ -23,7 +23,7 @@ import java.util.List;
 /**
  *
  */
-public class TableSelectorComponent extends CustomComponent {
+public class TableSelectorComponent extends VerticalLayout {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableSelectorComponent.class);
     private static final String VALUE_PROPERTY = "value";
@@ -31,64 +31,48 @@ public class TableSelectorComponent extends CustomComponent {
     private DetailsListener detailsListener;
     private final DatabaseSession databaseSession;
 
-    public TableSelectorComponent(DatabaseSession databaseSession) {
+    public TableSelectorComponent(DatabaseSession databaseSession) throws SQLException {
         this.databaseSession = databaseSession;
-    }
 
-    @Override
-    public void attach() {
-        super.attach();
+        Component selectors = createSelectors();
+
+        tableListContainer = createObjectListContainer();
+        Table objectList = new Table(null, tableListContainer);
+        objectList.setSizeFull();
+        objectList.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
+        objectList.setSelectable(true);
+        objectList.addItemClickListener(new ItemClickListener() {
+
+            @Override
+            public void itemClick(ItemClickEvent event) {
+                if (null == detailsListener) {
+                    return;
+                }
+                JdbcTable item = (JdbcTable) event.getItemId();
+                if (null == item) {
+                    return;
+                }
+                detailsListener.showDetails(createDetails(item));
+            }
+        });
+
+        final TextField filter = new TextField();
+        filter.setInputPrompt("filter");
+        filter.setWidth("100%");
+        filter.setStyleName(Reindeer.TEXTFIELD_SMALL);
+
+        filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
+            @Override
+            public void textChange(FieldEvents.TextChangeEvent event) {
+                String text = event.getText();
+                tableListContainer.removeAllContainerFilters();
+                tableListContainer.addContainerFilter(VALUE_PROPERTY, text, true, false);
+            }
+        });
+
         setSizeFull();
-        try {
-            Component selectors = createSelectors();
-
-            tableListContainer = createObjectListContainer();
-            Table objectList = new Table(null, tableListContainer);
-            objectList.setSizeFull();
-            objectList.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
-            objectList.setSelectable(true);
-            objectList.addItemClickListener(new ItemClickListener() {
-
-                @Override
-                public void itemClick(ItemClickEvent event) {
-                    if (null == detailsListener) {
-                        return;
-                    }
-                    JdbcTable item = (JdbcTable) event.getItemId();
-                    if (null == item) {
-                        return;
-                    }
-                    detailsListener.showDetails(createDetails(item));
-                }
-            });
-
-            final TextField filter = new TextField();
-            filter.setInputPrompt("filter");
-            filter.setWidth("100%");
-            filter.setStyleName(Reindeer.TEXTFIELD_SMALL);
-
-            filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
-                @Override
-                public void textChange(FieldEvents.TextChangeEvent event) {
-                    String text = event.getText();
-                    tableListContainer.removeAllContainerFilters();
-                    tableListContainer.addContainerFilter(VALUE_PROPERTY, text, true, false);
-                }
-            });
-
-            VerticalLayout vl = new VerticalLayout();
-            vl.setSizeFull();
-            vl.addComponent(selectors);
-            vl.addComponent(objectList);
-            vl.addComponent(filter);
-            vl.setExpandRatio(objectList, 1f);
-
-            setCompositionRoot(vl);
-
-        } catch (SQLException ex) {
-            LOG.error("failed to create table selector view", ex);
-            setCompositionRoot(new Label(ex.getMessage()));
-        }
+        addComponents(selectors, objectList, filter);
+        setExpandRatio(objectList, 1f);
     }
 
     protected Component createSelectors() throws SQLException {
@@ -163,13 +147,15 @@ public class TableSelectorComponent extends CustomComponent {
         tableListContainer.removeAllItems();
 
         String catalog = null, schema = null, tableType = null;
-        if (null != catalogProperty.getValue())
+        if (null != catalogProperty.getValue()) {
             catalog = catalogProperty.getValue().toString();
-        if (null != schemaProperty.getValue())
+        }
+        if (null != schemaProperty.getValue()) {
             schema = schemaProperty.getValue().toString();
-        if (null != tableTypeProperty.getValue())
+        }
+        if (null != tableTypeProperty.getValue()) {
             tableType = tableTypeProperty.getValue().toString();
-
+        }
 
         // TODO what if tableType == null
 
@@ -181,8 +167,9 @@ public class TableSelectorComponent extends CustomComponent {
             return;
         }
 
-        for (JdbcTable t : tables)
+        for (JdbcTable t : tables) {
             tableListContainer.addItem(t).getItemProperty(VALUE_PROPERTY).setValue(t.getName());
+        }
     }
 
     protected ObjectDetails createDetails(JdbcTable table) {

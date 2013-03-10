@@ -7,3 +7,17 @@ textarea.v-textarea-monospace {
 .v-customcomponent-toolbar {
     padding: 3px;
 }
+
+.module-header {
+    padding-bottom: 2px;
+    padding-top: 2px;
+    margin-bottom: 2px;
+    margin-top: 2px;
+    border-top: 1px dotted gray;
+    border-bottom: 1px dotted gray;
+}
+
+.module-header .module-title {
+    font-weight: bold;
+    color: #033a73;
+}

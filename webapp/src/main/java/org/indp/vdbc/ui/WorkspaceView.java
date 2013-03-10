@@ -2,9 +2,7 @@ package org.indp.vdbc.ui;
 
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.TabSheet.Tab;
 import com.vaadin.ui.themes.BaseTheme;
-import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.TablesView;
@@ -17,7 +15,7 @@ import org.indp.vdbc.ui.query.QueryExecutorComponent;
  */
 public class WorkspaceView extends VerticalLayout {
 
-    private TabSheet tabSheet;
+    private Component detailsComponent;
 
     public WorkspaceView(final DatabaseSession databaseSession) {
         ConnectionProfile profile = databaseSession.getConnectionProfile();
@@ -37,27 +35,23 @@ public class WorkspaceView extends VerticalLayout {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                addTab(new QueryExecutorComponent(databaseSession));
+                addView(new QueryExecutorComponent(databaseSession));
             }
         });
         toolbar.addLinkButton("Tables", new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                addTab(new TablesView(databaseSession));
+                addView(new TablesView(databaseSession));
             }
         });
         toolbar.addLinkButton("Database Metadata", new Button.ClickListener() {
 
             @Override
             public void buttonClick(ClickEvent event) {
-                addTab(new DatabaseMetadataView(databaseSession));
+                addView(new DatabaseMetadataView(databaseSession));
             }
         });
-
-        tabSheet = new TabSheet();
-        tabSheet.setSizeFull();
-        tabSheet.addStyleName(Reindeer.TABSHEET_HOVER_CLOSABLE);
 
         HorizontalLayout infoBar = new HorizontalLayout(
                 new Label(profile.getConnectionPresentationString()),
@@ -67,13 +61,17 @@ public class WorkspaceView extends VerticalLayout {
         infoBar.setComponentAlignment(disconnectButton, Alignment.MIDDLE_RIGHT);
 
         setSizeFull();
-        addComponents(infoBar, toolbar, tabSheet);
-        setExpandRatio(tabSheet, 1);
+        addComponents(infoBar, toolbar);
+        addView(new Label());
     }
 
-    protected void addTab(Component component) {
-        Tab tab = tabSheet.addTab(component);
-        tab.setClosable(true);
-        tabSheet.setSelectedTab(component);
+    protected void addView(Component component) {
+        if (detailsComponent != null) {
+            replaceComponent(detailsComponent, component);
+        } else {
+            addComponent(component);
+        }
+        detailsComponent = component;
+        setExpandRatio(detailsComponent, 1);
     }
 }

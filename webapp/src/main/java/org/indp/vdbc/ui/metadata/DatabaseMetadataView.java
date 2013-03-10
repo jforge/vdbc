@@ -1,8 +1,12 @@
 package org.indp.vdbc.ui.metadata;
 
-import com.vaadin.ui.*;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalSplitPanel;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.services.DatabaseSession;
+import org.indp.vdbc.ui.ModuleContentComponent;
 import org.indp.vdbc.util.JdbcUtils;
 
 import java.sql.Connection;
@@ -11,10 +15,9 @@ import java.sql.ResultSet;
 
 /**
  *
- *
  */
-public class DatabaseMetadataView extends CustomComponent {
-
+public class DatabaseMetadataView extends ModuleContentComponent {
+    private final DatabaseSession databaseSession;
     private Connection connection;
 
     public interface BrowserCallback {
@@ -23,15 +26,14 @@ public class DatabaseMetadataView extends CustomComponent {
     }
 
     public DatabaseMetadataView(DatabaseSession databaseSession) {
-        try {
-            connection = databaseSession.getConnection();
-        } catch (Exception ex) {
-            setCompositionRoot(new Label(ex.getMessage()));
-            return;
-        }
+        this.databaseSession = databaseSession;
+    }
+
+    @Override
+    protected Component createContent() throws Exception {
+        connection = databaseSession.getConnection();
 
         final HorizontalSplitPanel sp = new HorizontalSplitPanel();
-        sp.setSizeFull();
 
         BrowserCallback bc = new BrowserCallback() {
 
@@ -42,20 +44,22 @@ public class DatabaseMetadataView extends CustomComponent {
             }
         };
 
+        sp.setSizeFull();
         sp.setFirstComponent(createSectionLinks(bc));
         sp.setSecondComponent(new Label());
         sp.setSplitPosition(200, Unit.PIXELS);
         sp.setStyleName(Reindeer.TABSHEET_SMALL);
-
-        setSizeFull();
-        setCaption("Database Metadata");
-        setCompositionRoot(sp);
+        return sp;
     }
 
     @Override
-    public void detach() {
+    protected String getTitle() {
+        return "Database Metadata";
+    }
+
+    @Override
+    protected void close() {
         JdbcUtils.close(connection);
-        super.detach();
     }
 
     protected Component createSectionLinks(BrowserCallback bc) {

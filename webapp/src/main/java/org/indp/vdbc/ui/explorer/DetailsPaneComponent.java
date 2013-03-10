@@ -1,6 +1,7 @@
 package org.indp.vdbc.ui.explorer;
 
 import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
 
 /**
@@ -8,16 +9,20 @@ import com.vaadin.ui.TabSheet;
  */
 public class DetailsPaneComponent extends CustomComponent {
 
-    private final TabSheet tabSheet;
+    private TabSheet tabSheet;
 
     public DetailsPaneComponent() {
-        tabSheet = new TabSheet();
-        tabSheet.setSizeFull();
-        setCompositionRoot(tabSheet);
+        setCompositionRoot(new Label());
         setSizeFull();
     }
 
     public void showDetails(ObjectDetails objectDetails) {
+        if (tabSheet == null) {
+            tabSheet = new TabSheet();
+            tabSheet.setSizeFull();
+            setCompositionRoot(tabSheet);
+        }
+
         // first we try to replace selected tab
         ObjectDetails selectedTab = getSelectedDetailComponent();
         if (selectedTab != null && selectedTab.isTemporary()) {
@@ -40,7 +45,7 @@ public class DetailsPaneComponent extends CustomComponent {
     }
 
     public ObjectDetails getSelectedDetailComponent() {
-        return (ObjectDetails) tabSheet.getSelectedTab();
+        return tabSheet == null ? null : (ObjectDetails) tabSheet.getSelectedTab();
     }
 
     private void replaceDetailsTab(ObjectDetails oldContent, ObjectDetails newContent) {
