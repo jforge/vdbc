@@ -41,7 +41,7 @@ public class ConnectionSelectorView extends VerticalLayout {
                 new BeanItemContainer<ConnectionProfile>(
                         ConnectionProfile.class, SettingsManager.get().getConfiguration().getProfiles()));
         profiles.setWidth("100%");
-        profiles.setItemCaptionMode(AbstractSelect.ITEM_CAPTION_MODE_PROPERTY);
+        profiles.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
         profiles.setItemCaptionPropertyId("name");
         profiles.setImmediate(true);
         profiles.setNullSelectionAllowed(false);
