@@ -1,4 +1,4 @@
-package org.indp.vdbc.ui;
+package org.indp.vdbc.ui.workspace;
 
 import com.vaadin.ui.*;
 import org.slf4j.Logger;
@@ -26,17 +26,23 @@ public abstract class ModuleContentComponent extends CustomComponent {
         if (getCompositionRoot() == null) {
             try {
                 Component component = createContent();
+
+                HorizontalLayout header = null;
                 String title = getTitle();
+                if (title != null) {
+                    Label titleLabel = new Label(title);
+                    titleLabel.addStyleName("module-title");
+//                    titleLabel.addStyleName(Reindeer.LABEL_H2);
+                    header = new HorizontalLayout(titleLabel);
+                    header.setWidth("100%");
+                    header.addStyleName("module-header");
+                }
 
-                Label titleLabel = new Label(title);
-                titleLabel.addStyleName("module-title");
-//                titleLabel.addStyleName(Reindeer.LABEL_H2);
-
-                HorizontalLayout header = new HorizontalLayout(titleLabel);
-                header.setWidth("100%");
-                header.addStyleName("module-header");
-
-                VerticalLayout layout = new VerticalLayout(header, component);
+                VerticalLayout layout = new VerticalLayout();
+                if (header != null) {
+                    layout.addComponent(header);
+                }
+                layout.addComponent(component);
                 layout.setExpandRatio(component, 1);
                 layout.setSizeFull();
                 setSizeFull();

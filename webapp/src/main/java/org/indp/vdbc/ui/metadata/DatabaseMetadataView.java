@@ -6,7 +6,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.services.DatabaseSession;
-import org.indp.vdbc.ui.ModuleContentComponent;
+import org.indp.vdbc.ui.workspace.ModuleContentComponent;
 import org.indp.vdbc.util.JdbcUtils;
 
 import java.sql.Connection;

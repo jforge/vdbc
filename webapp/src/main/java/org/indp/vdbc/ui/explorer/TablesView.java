@@ -3,7 +3,7 @@ package org.indp.vdbc.ui.explorer;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalSplitPanel;
 import org.indp.vdbc.services.DatabaseSession;
-import org.indp.vdbc.ui.ModuleContentComponent;
+import org.indp.vdbc.ui.workspace.ModuleContentComponent;
 
 /**
  *

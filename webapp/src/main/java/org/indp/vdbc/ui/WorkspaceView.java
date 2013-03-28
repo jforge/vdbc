@@ -8,6 +8,7 @@ import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.TablesView;
 import org.indp.vdbc.ui.metadata.DatabaseMetadataView;
 import org.indp.vdbc.ui.query.QueryExecutorComponent;
+import org.indp.vdbc.ui.workspace.ModuleContentComponent;
 
 /**
  *
@@ -62,10 +63,10 @@ public class WorkspaceView extends VerticalLayout {
 
         setSizeFull();
         addComponents(infoBar, toolbar);
-        addView(new Label());
+        addView(new EmptyView());
     }
 
-    protected void addView(Component component) {
+    protected void addView(ModuleContentComponent component) {
         if (detailsComponent != null) {
             replaceComponent(detailsComponent, component);
         } else {
@@ -73,5 +74,22 @@ public class WorkspaceView extends VerticalLayout {
         }
         detailsComponent = component;
         setExpandRatio(detailsComponent, 1);
+    }
+
+    private static class EmptyView extends ModuleContentComponent {
+
+        @Override
+        protected Component createContent() throws Exception {
+            return new Label();
+        }
+
+        @Override
+        protected String getTitle() {
+            return null;
+        }
+
+        @Override
+        protected void close() {
+        }
     }
 }
