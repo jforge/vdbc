@@ -6,7 +6,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.services.DatabaseSession;
-import org.indp.vdbc.ui.workspace.ModuleContentComponent;
+import org.indp.vdbc.ui.workspace.WorkspacePageComponent;
 import org.indp.vdbc.util.JdbcUtils;
 
 import java.sql.Connection;
@@ -16,7 +16,7 @@ import java.sql.ResultSet;
 /**
  *
  */
-public class DatabaseMetadataView extends ModuleContentComponent {
+public class DatabaseMetadataView extends WorkspacePageComponent {
     private final DatabaseSession databaseSession;
     private Connection connection;
 
@@ -27,6 +27,7 @@ public class DatabaseMetadataView extends ModuleContentComponent {
 
     public DatabaseMetadataView(DatabaseSession databaseSession) {
         this.databaseSession = databaseSession;
+        setCaption("Database Metadata");
     }
 
     @Override
@@ -50,11 +51,6 @@ public class DatabaseMetadataView extends ModuleContentComponent {
         sp.setSplitPosition(200, Unit.PIXELS);
         sp.setStyleName(Reindeer.TABSHEET_SMALL);
         return sp;
-    }
-
-    @Override
-    protected String getTitle() {
-        return "Database Metadata";
     }
 
     @Override

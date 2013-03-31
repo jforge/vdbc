@@ -3,18 +3,19 @@ package org.indp.vdbc.ui.explorer;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalSplitPanel;
 import org.indp.vdbc.services.DatabaseSession;
-import org.indp.vdbc.ui.workspace.ModuleContentComponent;
+import org.indp.vdbc.ui.workspace.WorkspacePageComponent;
 
 /**
  *
  *
  */
-public class TablesView extends ModuleContentComponent {
+public class TablesView extends WorkspacePageComponent {
 
     private final DatabaseSession databaseSession;
 
     public TablesView(DatabaseSession databaseSession) {
         this.databaseSession = databaseSession;
+        setCaption("Tables");
     }
 
     @Override
@@ -41,11 +42,6 @@ public class TablesView extends ModuleContentComponent {
         splitPanel.setSecondComponent(detailsPaneComponent);
         splitPanel.setSplitPosition(300, Unit.PIXELS);
         return splitPanel;
-    }
-
-    @Override
-    protected String getTitle() {
-        return "Tables";
     }
 
     @Override

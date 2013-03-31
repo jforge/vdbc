@@ -8,7 +8,7 @@ import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.ui.UiUtils;
-import org.indp.vdbc.ui.workspace.ModuleContentComponent;
+import org.indp.vdbc.ui.workspace.WorkspacePageComponent;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ import java.util.Arrays;
  *
  *
  */
-public class QueryExecutorComponent extends ModuleContentComponent {
+public class QueryExecutorComponent extends WorkspacePageComponent {
 
     private static final boolean DEFAULT_AUTO_COMMIT = true;
     private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorComponent.class);
@@ -37,6 +37,7 @@ public class QueryExecutorComponent extends ModuleContentComponent {
 
     public QueryExecutorComponent(DatabaseSession databaseSession) {
         this.databaseSession = databaseSession;
+        setCaption("Query");
     }
 
     @Override
@@ -54,11 +55,6 @@ public class QueryExecutorComponent extends ModuleContentComponent {
         vl.setSizeFull();
         vl.setExpandRatio(splitPanel, 1);
         return vl;
-    }
-
-    @Override
-    protected String getTitle() {
-        return "Query";
     }
 
     @Override
