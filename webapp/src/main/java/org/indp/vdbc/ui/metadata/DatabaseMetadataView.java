@@ -6,55 +6,48 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.services.DatabaseSession;
-import org.indp.vdbc.ui.workspace.WorkspacePageComponent;
 import org.indp.vdbc.util.JdbcUtils;
 
+import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
  */
-public class DatabaseMetadataView extends WorkspacePageComponent {
-    private final DatabaseSession databaseSession;
-    private Connection connection;
+public class DatabaseMetadataView extends HorizontalSplitPanel implements Closeable {
+    private final Connection connection;
 
     public interface BrowserCallback {
 
         void showDetails(Component detailsComponent);
     }
 
-    public DatabaseMetadataView(DatabaseSession databaseSession) {
-        this.databaseSession = databaseSession;
-        setCaption("Database Metadata");
-    }
-
-    @Override
-    protected Component createContent() throws Exception {
+    public DatabaseMetadataView(DatabaseSession databaseSession) throws SQLException {
         connection = databaseSession.getConnection();
-
-        final HorizontalSplitPanel sp = new HorizontalSplitPanel();
 
         BrowserCallback bc = new BrowserCallback() {
 
             @Override
             public void showDetails(Component detailsComponent) {
                 detailsComponent.setSizeFull();
-                sp.setSecondComponent(detailsComponent);
+                setSecondComponent(detailsComponent);
             }
         };
 
-        sp.setSizeFull();
-        sp.setFirstComponent(createSectionLinks(bc));
-        sp.setSecondComponent(new Label());
-        sp.setSplitPosition(200, Unit.PIXELS);
-        sp.setStyleName(Reindeer.TABSHEET_SMALL);
-        return sp;
+        setSizeFull();
+        setFirstComponent(createSectionLinks(bc));
+        setSecondComponent(new Label());
+        setSplitPosition(200, Unit.PIXELS);
+        setStyleName(Reindeer.TABSHEET_SMALL);
+        setCaption("Database Metadata");
     }
 
+
     @Override
-    protected void close() {
+    public void close() {
         JdbcUtils.close(connection);
     }
 

@@ -1,25 +1,17 @@
 package org.indp.vdbc.ui.explorer;
 
-import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalSplitPanel;
 import org.indp.vdbc.services.DatabaseSession;
-import org.indp.vdbc.ui.workspace.WorkspacePageComponent;
+
+import java.sql.SQLException;
 
 /**
  *
  *
  */
-public class TablesView extends WorkspacePageComponent {
+public class TablesView extends HorizontalSplitPanel {
 
-    private final DatabaseSession databaseSession;
-
-    public TablesView(DatabaseSession databaseSession) {
-        this.databaseSession = databaseSession;
-        setCaption("Tables");
-    }
-
-    @Override
-    protected Component createContent() throws Exception {
+    public TablesView(DatabaseSession databaseSession) throws SQLException {
         final DetailsPaneComponent detailsPaneComponent = new DetailsPaneComponent();
         TableSelectorComponent tableSelector = new TableSelectorComponent(databaseSession);
         tableSelector.setDetailsListener(new DetailsListener() {
@@ -36,15 +28,10 @@ public class TablesView extends WorkspacePageComponent {
             }
         });
 
-        HorizontalSplitPanel splitPanel = new HorizontalSplitPanel();
-        splitPanel.setSizeFull();
-        splitPanel.setFirstComponent(tableSelector);
-        splitPanel.setSecondComponent(detailsPaneComponent);
-        splitPanel.setSplitPosition(300, Unit.PIXELS);
-        return splitPanel;
-    }
-
-    @Override
-    protected void close() {
+        setSizeFull();
+        setFirstComponent(tableSelector);
+        setSecondComponent(detailsPaneComponent);
+        setSplitPosition(300, Unit.PIXELS);
+        setCaption("Tables");
     }
 }

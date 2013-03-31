@@ -8,11 +8,11 @@ import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.ui.UiUtils;
-import org.indp.vdbc.ui.workspace.WorkspacePageComponent;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -20,28 +20,20 @@ import java.util.Arrays;
 
 /**
  *
- *
  */
-public class QueryExecutorComponent extends WorkspacePageComponent {
+public class QueryExecutorComponent extends VerticalLayout implements Closeable {
 
     private static final boolean DEFAULT_AUTO_COMMIT = true;
     private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorComponent.class);
 
-    private final DatabaseSession databaseSession;
-    private Connection connection;
+    private final Connection connection;
     //
     private VerticalSplitPanel splitPanel;
     private HorizontalLayout queryOptionsLayout;
     private TextArea query;
     private ComboBox maxRowsBox;
 
-    public QueryExecutorComponent(DatabaseSession databaseSession) {
-        this.databaseSession = databaseSession;
-        setCaption("Query");
-    }
-
-    @Override
-    protected Component createContent() throws Exception {
+    public QueryExecutorComponent(DatabaseSession databaseSession) throws SQLException {
         connection = databaseSession.getConnection();
         connection.setAutoCommit(DEFAULT_AUTO_COMMIT);
 
@@ -51,14 +43,15 @@ public class QueryExecutorComponent extends WorkspacePageComponent {
         splitPanel = new VerticalSplitPanel(query, new Label());
         splitPanel.setSizeFull();
 
-        VerticalLayout vl = new VerticalLayout(queryOptionsLayout, splitPanel);
-        vl.setSizeFull();
-        vl.setExpandRatio(splitPanel, 1);
-        return vl;
+        addComponents(queryOptionsLayout, splitPanel);
+        setSizeFull();
+        setExpandRatio(splitPanel, 1);
+
+        setCaption("Query");
     }
 
     @Override
-    protected void close() {
+    public void close() {
         JdbcUtils.close(connection);
     }
 
@@ -178,6 +171,8 @@ public class QueryExecutorComponent extends WorkspacePageComponent {
         setExecutionAllowed(false);
 
         final UI currentUI = UI.getCurrent();
+
+        // todo use ExecutorService
 
         Thread thread = new Thread(new Runnable() {
             @Override
