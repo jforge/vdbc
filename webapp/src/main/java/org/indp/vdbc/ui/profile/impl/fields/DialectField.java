@@ -56,40 +56,45 @@ public class DialectField extends AbstractProfileField {
     }
 
     private void updateDependencies(String dialectName) {
-        ComboBox driverField = (ComboBox) getFormContext().getField("driver");
-        ComboBox urlField = (ComboBox) getFormContext().getField("url");
-        if (driverField != null && urlField != null) {
-            Object oldDriver = driverField.getValue();
-            Object oldUrl = urlField.getValue();
-
-            driverField.removeAllItems();
-            urlField.removeAllItems();
-
-            Dialect dialect = DialectSupport.getDialect(dialectName);
-            if (dialect != null) {
-                List<String> drivers = dialect.getDrivers();
-                if (drivers != null) {
-                    for (String driver : drivers) {
-                        driverField.addItem(driver);
-                    }
-                }
-                List<String> exampleUrls = dialect.getExampleUrls();
-                if (exampleUrls != null) {
-                    for (String url : exampleUrls) {
-                        urlField.addItem(url);
-                    }
-                }
-            }
-
-            if (oldDriver != null && !driverField.containsId(oldDriver)) {
-                driverField.addItem(oldDriver);
-            }
-            if (oldUrl != null && !urlField.containsId(oldUrl)) {
-                urlField.addItem(oldUrl);
-            }
-            driverField.setValue(oldDriver);
-            urlField.setValue(oldUrl);
+        // we know too much here!!
+        AbstractProfileField driverProfileField = getFormContext().getProfileField("driver");
+        AbstractProfileField urlProfileField = getFormContext().getProfileField("url");
+        if (driverProfileField == null || urlProfileField == null) {
+            return;
         }
+
+        ComboBox driverField = (ComboBox) driverProfileField.getFieldComponent();
+        ComboBox urlField = (ComboBox) urlProfileField.getFieldComponent();
+        Object oldDriver = driverField.getValue();
+        Object oldUrl = urlField.getValue();
+
+        driverField.removeAllItems();
+        urlField.removeAllItems();
+
+        Dialect dialect = DialectSupport.getDialect(dialectName);
+        if (dialect != null) {
+            List<String> drivers = dialect.getDrivers();
+            if (drivers != null) {
+                for (String driver : drivers) {
+                    driverField.addItem(driver);
+                }
+            }
+            List<String> exampleUrls = dialect.getExampleUrls();
+            if (exampleUrls != null) {
+                for (String url : exampleUrls) {
+                    urlField.addItem(url);
+                }
+            }
+        }
+
+        if (oldDriver != null && !driverField.containsId(oldDriver)) {
+            driverField.addItem(oldDriver);
+        }
+        if (oldUrl != null && !urlField.containsId(oldUrl)) {
+            urlField.addItem(oldUrl);
+        }
+        driverField.setValue(oldDriver);
+        urlField.setValue(oldUrl);
     }
 
     @Override

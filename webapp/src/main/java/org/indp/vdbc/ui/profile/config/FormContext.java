@@ -1,6 +1,5 @@
 package org.indp.vdbc.ui.profile.config;
 
-import com.vaadin.ui.Field;
 import org.indp.vdbc.model.config.ConnectionProfile;
 
 /**
@@ -8,7 +7,7 @@ import org.indp.vdbc.model.config.ConnectionProfile;
  */
 public interface FormContext {
 
-    Field getField(String id);
+    AbstractProfileField getProfileField(String id);
 
     ConnectionProfile getConnectionProfile();
 }

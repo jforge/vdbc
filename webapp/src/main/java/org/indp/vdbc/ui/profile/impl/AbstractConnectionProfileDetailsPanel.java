@@ -1,7 +1,6 @@
 package org.indp.vdbc.ui.profile.impl;
 
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Field;
 import com.vaadin.ui.FormLayout;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
@@ -21,8 +20,8 @@ public abstract class AbstractConnectionProfileDetailsPanel<T extends Connection
     private Map<String, AbstractProfileField> fields;
     private final FormContext formContext = new FormContext() {
         @Override
-        public Field getField(String id) {
-            return fields.containsKey(id) ? fields.get(id).getFieldComponent() : null;
+        public AbstractProfileField getProfileField(String id) {
+            return fields.containsKey(id) ? fields.get(id) : null;
         }
 
         @Override
@@ -40,7 +39,7 @@ public abstract class AbstractConnectionProfileDetailsPanel<T extends Connection
     @Override
     protected void apply() {
         for (AbstractProfileField profileField : fields.values()) {
-            profileField.getFieldComponent().validate();
+            profileField.validate();
         }
 
         // write values to connection profile if we are still here

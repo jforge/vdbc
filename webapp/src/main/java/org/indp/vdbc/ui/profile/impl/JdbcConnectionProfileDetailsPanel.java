@@ -25,6 +25,7 @@ public class JdbcConnectionProfileDetailsPanel extends AbstractConnectionProfile
                 new UrlField("url", "JDBC URL", true),
                 new SimpleProfileField("user"),
                 new PasswordField("password", "Password", false),
-                new SimpleProfileField("validationQuery", "Validation Query", false));
+                new SimpleProfileField("validationQuery", "Validation Query", false),
+                new ColorField("color", "Color", false));
     }
 }

@@ -19,6 +19,9 @@ public abstract class ConnectionProfile implements Serializable {
     @XmlAttribute
     private String dialect = "generic";
 
+    @XmlAttribute
+    private String color;
+
     public abstract String getConnectionPresentationString();
 
     public abstract DataSourceAdapter createDataSourceAdapter();
@@ -37,5 +40,13 @@ public abstract class ConnectionProfile implements Serializable {
 
     public void setDialect(String dialect) {
         this.dialect = dialect;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

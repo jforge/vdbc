@@ -1,7 +1,6 @@
 package org.indp.vdbc.ui.profile.impl.fields;
 
 import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Field;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JdbcConnectionProfile;
 import org.indp.vdbc.ui.profile.config.AbstractProfileField;
@@ -18,7 +17,7 @@ public class UrlField extends AbstractProfileField {
     }
 
     @Override
-    public Field getFieldComponent() {
+    public ComboBox getFieldComponent() {
         if (comboBox == null) {
             comboBox = new ComboBox(getTitle());
             comboBox.setWidth("100%");
