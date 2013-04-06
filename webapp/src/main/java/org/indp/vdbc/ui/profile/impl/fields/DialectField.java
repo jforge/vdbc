@@ -35,7 +35,7 @@ public class DialectField extends AbstractProfileField {
             for (String code : dialectCodes) {
                 comboBox.setItemCaption(code, DialectSupport.getDialect(code).getName());
             }
-            comboBox.addListener(new Property.ValueChangeListener() {
+            comboBox.addValueChangeListener(new Property.ValueChangeListener() {
                 @Override
                 public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
                     Object value = valueChangeEvent.getProperty().getValue();
