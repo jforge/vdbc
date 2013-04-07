@@ -20,7 +20,7 @@ public class DatabaseSessionTest {
 
     @Before
     public void setup() throws InvalidProfileException {
-        JdbcConnectionProfile profile = new JdbcConnectionProfile("test", "h2", "org.h2.Driver", "jdbc:h2:mem:" + System.currentTimeMillis(), "sa", "1");
+        JdbcConnectionProfile profile = new JdbcConnectionProfile("test", "h2", "org.h2.Driver", "jdbc:h2:mem:" + System.currentTimeMillis(), "sa", "1", null);
 
         sessionManager = new DatabaseSessionManager(new ConnectionListener() {
             @Override

@@ -17,8 +17,8 @@ public class ConfigurationTest {
     @Test
     public void testMarshal() {
         Configuration c = new Configuration();
-        c.addProfile(new JdbcConnectionProfile("1", "h2", "d1", "url1", "u1", "p1"));
-        c.addProfile(new JdbcConnectionProfile("2", "h2", "d2", "url2", "u2", "p2"));
+        c.addProfile(new JdbcConnectionProfile("1", "h2", "d1", "url1", "u1", "p1", null));
+        c.addProfile(new JdbcConnectionProfile("2", "h2", "d2", "url2", "u2", "p2", null));
         c.addProfile(new JndiConnectionProfile("jdbc/DS"));
 
         StringWriter writer = new StringWriter();
