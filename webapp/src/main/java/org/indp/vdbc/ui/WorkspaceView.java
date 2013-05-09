@@ -1,11 +1,11 @@
 package org.indp.vdbc.ui;
 
+import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.BaseTheme;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSession;
-import org.indp.vdbc.ui.cssinject.CssInject;
 import org.indp.vdbc.ui.explorer.TablesView;
 import org.indp.vdbc.ui.metadata.DatabaseMetadataView;
 import org.indp.vdbc.ui.query.QueryExecutorComponent;
@@ -65,9 +65,9 @@ public class WorkspaceView extends VerticalLayout {
 
         String color = databaseSession.getConnectionProfile().getColor();
         if (color != null && !color.isEmpty()) {
-            CssInject cssInject = new CssInject();
-            cssInject.extend(infoBar);
-            cssInject.addStyle("background-color:#" + color + ";");
+            String className = "vdbc-header";
+            Page.getCurrent().getStyles().add("." + className + " {background-color:#" + color + ";}");
+            infoBar.addStyleName(className);
         }
 
         addComponents(infoBar, toolbar);
