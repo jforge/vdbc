@@ -97,11 +97,20 @@ public class WorkspaceView extends VerticalLayout {
                     }
                 }
                 tabsheet.removeComponent(component);
+                if (tabsheet.getComponentCount() == 0) {
+                    removeTabSheet();
+                }
             }
         });
 
         addComponent(tabs);
         setExpandRatio(tabs, 1);
         setSizeFull();
+    }
+
+    private void removeTabSheet() {
+        removeComponent(tabs);
+        setHeight(null);
+        tabs = null;
     }
 }
