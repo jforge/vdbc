@@ -1,6 +1,7 @@
 package org.indp.vdbc;
 
 import com.vaadin.annotations.PreserveOnRefresh;
+import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Component;
@@ -13,12 +14,12 @@ import org.indp.vdbc.ui.WorkspaceView;
 /**
  *
  */
-@PreserveOnRefresh
+@Push
 @Theme("vdbc")
+@PreserveOnRefresh
 public class VdbcUI extends UI implements ConnectionListener {
-
-    public static final String APPLICATION_TITLE = "DB Console";
-//    private static final Logger LOG = LoggerFactory.getLogger(VdbcUI.class);
+    public static final String APPLICATION_TITLE = "VDBC";
+    //    private static final Logger LOG = LoggerFactory.getLogger(VdbcUI.class);
     private DatabaseSessionManager databaseSessionManager;
     private boolean closing = false;
 
