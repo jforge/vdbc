@@ -17,14 +17,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  *
  */
 public class QueryExecutorComponent extends VerticalLayout implements Closeable {
-
     private static final boolean DEFAULT_AUTO_COMMIT = true;
     private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorComponent.class);
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
 
     private final Connection connection;
     //
@@ -138,7 +140,6 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
         query.setSizeFull();
         query.setStyleName("monospace");
         query.addShortcutListener(new ShortcutListener("Run Query", null, ShortcutAction.KeyCode.ENTER, ShortcutAction.ModifierKey.CTRL) {
-
             @Override
             public void handleAction(Object sender, Object target) {
                 String sql = query.getValue();
@@ -156,74 +157,72 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
     }
 
     protected void executeQuery(final String sql) {
-        final long start = System.currentTimeMillis();
-
         // TODO cancelable execution
-
-        ProgressIndicator progressIndicator = new ProgressIndicator();
-        progressIndicator.setIndeterminate(true);
-        progressIndicator.setPollingInterval(500);
+        ProgressBar progressBar = new ProgressBar();
+        progressBar.setIndeterminate(true);
         VerticalLayout vl = new VerticalLayout();
         vl.setSizeFull();
-        vl.addComponent(progressIndicator);
-        vl.setComponentAlignment(progressIndicator, Alignment.MIDDLE_CENTER);
+        vl.addComponent(progressBar);
+        vl.setComponentAlignment(progressBar, Alignment.MIDDLE_CENTER);
         splitPanel.setSecondComponent(vl);
         setExecutionAllowed(false);
 
         final UI currentUI = UI.getCurrent();
-
-        // todo use ExecutorService
-
-        Thread thread = new Thread(new Runnable() {
+        EXECUTOR_SERVICE.submit(new Runnable() {
             @Override
             public void run() {
-                String statMsg = "";
-                Component resultComponent;
-                try {
-                    PreparedStatement stmt = connection.prepareStatement(sql);
-                    try {
-                        stmt.setMaxRows(getMaxRows());
-                        boolean hasResultSet = stmt.execute();
-                        if (hasResultSet) {
-                            ResultSetTable table = new ResultSetTable(stmt.getResultSet());
-                            statMsg = "rows fetched: " + table.getItemIds().size();
-                            resultComponent = table;
-                        } else {
-                            int cnt = stmt.getUpdateCount();
-                            statMsg = "rows updated: " + cnt;
-                            resultComponent = new Label("Updated " + cnt + " row(s)");
-                        }
-                    } finally {
-                        JdbcUtils.close(stmt);
-                    }
-
-                    long end = System.currentTimeMillis();
-
-                    currentUI.getSession().lock();
-                    try {
-                        Notification.show(
-                                "Query Stats",
-                                "exec time: " + (end - start) / 1000.0 + " ms\n" + statMsg,
-                                Notification.Type.TRAY_NOTIFICATION);
-                    } finally {
-                        currentUI.getSession().unlock();
-                    }
-                } catch (SQLException e) {
-                    LOG.debug("failed to execute sql query", e);
-                    resultComponent = new Label(e.getMessage());
-                }
-
-                currentUI.getSession().lock();
-                try {
-                    splitPanel.setSecondComponent(resultComponent);
-                    query.focus();
-                    setExecutionAllowed(true);
-                } finally {
-                    currentUI.getSession().unlock();
-                }
+                handleQueryExecution(currentUI, sql);
             }
-        }, "vdbc-query-" + System.currentTimeMillis());
-        thread.start();
+        });
+    }
+
+    private void handleQueryExecution(UI currentUI, String sql) {
+        final long start = System.currentTimeMillis();
+        String statMsg = "";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            try {
+                stmt.setMaxRows(getMaxRows());
+                boolean hasResultSet = stmt.execute();
+                if (hasResultSet) {
+                    ResultSetTable table = new ResultSetTable(stmt.getResultSet());
+                    statMsg = "rows fetched: " + table.getItemIds().size();
+                    showResult(currentUI, table);
+                } else {
+                    int cnt = stmt.getUpdateCount();
+                    statMsg = "rows updated: " + cnt;
+                    showResult(currentUI, new Label("Updated " + cnt + " row(s)"));
+                }
+            } finally {
+                JdbcUtils.close(stmt);
+            }
+
+            final long end = System.currentTimeMillis();
+            final String finalStatMsg = statMsg;
+            currentUI.access(new Runnable() {
+                @Override
+                public void run() {
+                    Notification.show(
+                            "Query Stats",
+                            "exec time: " + (end - start) / 1000.0 + " ms\n" + finalStatMsg,
+                            Notification.Type.TRAY_NOTIFICATION);
+                }
+            });
+        } catch (SQLException e) {
+            LOG.debug("failed to execute sql query", e);
+            showResult(currentUI, new Label(e.getMessage()));
+        }
+    }
+
+    private void showResult(UI currentUI, final Component resultComponent) {
+        currentUI.access(new Runnable() {
+            @Override
+            public void run() {
+                splitPanel.setSecondComponent(resultComponent);
+                query.focus();
+                setExecutionAllowed(true);
+            }
+        });
     }
 
     private int getMaxRows() {
