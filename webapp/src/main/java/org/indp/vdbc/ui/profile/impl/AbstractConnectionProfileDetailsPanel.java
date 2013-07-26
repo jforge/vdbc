@@ -58,7 +58,7 @@ public abstract class AbstractConnectionProfileDetailsPanel<T extends Connection
 
     private Component createDetailsComponent() {
         List<AbstractProfileField> fields = getFields();
-        this.fields = new LinkedHashMap<String, AbstractProfileField>(fields.size());
+        this.fields = new LinkedHashMap<>(fields.size());
 
         FormLayout formLayout = new FormLayout();
         formLayout.setWidth("100%");

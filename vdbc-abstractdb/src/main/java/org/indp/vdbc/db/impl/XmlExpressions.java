@@ -44,7 +44,7 @@ public class XmlExpressions implements Expressions {
         if (vars == null) {
             map = Collections.emptyMap();
         } else {
-            map = new HashMap<String, Object>(vars.length);
+            map = new HashMap<>(vars.length);
             for (ContextVar var : vars) {
                 map.put(var.name, var.value);
             }
@@ -60,7 +60,7 @@ public class XmlExpressions implements Expressions {
     }
 
     private <T> ContextVar<T> var(String name, T value) {
-        return new ContextVar<T>(name, value);
+        return new ContextVar<>(name, value);
     }
 
     private class ContextVar<T> {

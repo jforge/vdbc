@@ -79,7 +79,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
 
     private ComponentContainer createLeftSide() {
         List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
-        list = new ListSelect(null, new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, profiles));
+        list = new ListSelect(null, new BeanItemContainer<>(ConnectionProfile.class, profiles));
         list.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
         list.setItemCaptionPropertyId("name");
         list.setSizeFull();

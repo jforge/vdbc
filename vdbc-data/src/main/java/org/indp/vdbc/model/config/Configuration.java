@@ -23,7 +23,7 @@ public class Configuration {
 
     public void addProfile(ConnectionProfile profile) {
         if (null == profiles) {
-            profiles = new ArrayList<ConnectionProfile>();
+            profiles = new ArrayList<>();
         }
         profiles.add(profile);
     }

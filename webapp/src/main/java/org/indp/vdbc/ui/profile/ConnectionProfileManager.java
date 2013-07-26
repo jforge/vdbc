@@ -12,7 +12,7 @@ public interface ConnectionProfileManager<T extends ConnectionProfile> {
     Class<T> getProfileClass();
 
     T createConnectionProfile();
-    
+
     ConnectionProfileDetailsPanel<T> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileListFacade profileListFacade);
 
     ConnectionProfileLoginPanel<T> createLoginPanel(ConnectionProfile profile);
@@ -25,7 +25,7 @@ public interface ConnectionProfileManager<T extends ConnectionProfile> {
         private static final Map<Class<? extends ConnectionProfile>, ConnectionProfileManager> FACTORY_MAP;
 
         static {
-            HashMap<Class<? extends ConnectionProfile>, ConnectionProfileManager> map = new HashMap<Class<? extends ConnectionProfile>, ConnectionProfileManager>();
+            Map<Class<? extends ConnectionProfile>, ConnectionProfileManager> map = new HashMap<>();
             ServiceLoader<ConnectionProfileManager> loader = ServiceLoader.load(ConnectionProfileManager.class);
             for (ConnectionProfileManager factory : loader) {
                 map.put(factory.getProfileClass(), factory);

@@ -14,7 +14,7 @@ import java.util.List;
 public final class DatabaseSessionManager implements Serializable {
 
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseSessionManager.class);
-    private List<DatabaseSession> sessions = new LinkedList<DatabaseSession>();
+    private List<DatabaseSession> sessions = new LinkedList<>();
     private final ConnectionListener connectionListener;
 
     public DatabaseSessionManager(ConnectionListener connectionListener) {

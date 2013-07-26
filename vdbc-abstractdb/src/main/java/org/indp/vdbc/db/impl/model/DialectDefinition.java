@@ -85,7 +85,7 @@ public class DialectDefinition {
 
     public Map<String, DialectFeature> getFeatures() {
         if (features == null) {
-            features = new HashMap<String, DialectFeature>();
+            features = new HashMap<>();
         }
         return features;
     }

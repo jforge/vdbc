@@ -10,11 +10,7 @@ import java.util.Collection;
  */
 public class ProfileTypeSelectorDialog extends Window {
 
-    private final SelectionListener selectionListener;
-
     public ProfileTypeSelectorDialog(final SelectionListener selectionListener) {
-        this.selectionListener = selectionListener;
-
         setCaption("Select Profile Type");
         setResizable(false);
         setModal(true);

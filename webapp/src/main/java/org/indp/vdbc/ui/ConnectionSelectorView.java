@@ -34,12 +34,11 @@ public class ConnectionSelectorView extends VerticalLayout {
     public void attach() {
         super.attach();
 
-        final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> profileInfoPanel = new ProfileInfoPanelHolder<ConnectionProfileLoginPanel>();
+        final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> profileInfoPanel = new ProfileInfoPanelHolder<>();
 
         List<ConnectionProfile> profileList = SettingsManager.get().getConfiguration().getProfiles();
         final ComboBox profiles = new ComboBox("Profile:",
-                new BeanItemContainer<ConnectionProfile>(
-                        ConnectionProfile.class, SettingsManager.get().getConfiguration().getProfiles()));
+                new BeanItemContainer<>(ConnectionProfile.class, SettingsManager.get().getConfiguration().getProfiles()));
         profiles.setWidth("100%");
         profiles.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
         profiles.setItemCaptionPropertyId("name");
@@ -109,7 +108,7 @@ public class ConnectionSelectorView extends VerticalLayout {
                         @Override
                         public void windowClose(Window.CloseEvent e) {
                             List<ConnectionProfile> list = SettingsManager.get().getConfiguration().getProfiles();
-                            profiles.setContainerDataSource(new BeanItemContainer<ConnectionProfile>(ConnectionProfile.class, list));
+                            profiles.setContainerDataSource(new BeanItemContainer<>(ConnectionProfile.class, list));
                             if (!list.isEmpty()) {
                                 profiles.select(list.get(0));
                             }

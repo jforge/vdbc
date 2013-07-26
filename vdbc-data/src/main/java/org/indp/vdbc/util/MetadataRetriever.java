@@ -35,7 +35,7 @@ public class MetadataRetriever implements Closeable {
     }
 
     public List<String> getCatalogs() throws SQLException {
-        List<String> rez = new ArrayList<String>();
+        List<String> rez = new ArrayList<>();
         ResultSet catalogs = metaData.getCatalogs();
         while (catalogs.next())
             rez.add(catalogs.getString("TABLE_CAT"));
@@ -48,7 +48,7 @@ public class MetadataRetriever implements Closeable {
     }
 
     public List<String> getSchemas() throws SQLException {
-        List<String> rez = new ArrayList<String>();
+        List<String> rez = new ArrayList<>();
         ResultSet schemas = metaData.getSchemas();
         while (schemas.next())
             rez.add(schemas.getString("TABLE_SCHEM"));
@@ -62,7 +62,7 @@ public class MetadataRetriever implements Closeable {
     }
 
     public List<String> getTableTypes() throws SQLException {
-        List<String> rez = new ArrayList<String>();
+        List<String> rez = new ArrayList<>();
         ResultSet types = metaData.getTableTypes();
         while (types.next())
             rez.add(types.getString("TABLE_TYPE"));
@@ -71,7 +71,7 @@ public class MetadataRetriever implements Closeable {
     }
 
     public List<JdbcTable> getTables(String catalog, String schema, String tableType) throws SQLException {
-        ArrayList<JdbcTable> rez = new ArrayList<JdbcTable>();
+        List<JdbcTable> rez = new ArrayList<>();
         ResultSet tables = metaData.getTables(catalog, schema, null, new String[]{tableType});
         while (tables.next())
             rez.add(new JdbcTable(

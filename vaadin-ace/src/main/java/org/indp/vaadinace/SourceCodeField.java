@@ -18,7 +18,7 @@ import java.util.UUID;
 @JavaScript({"js/ace.js", "js/mode-sql.js", "js/theme-textmate.js", "ace-connector.js"})
 public class SourceCodeField extends AbstractJavaScriptComponent {
     private static final Logger log = LoggerFactory.getLogger(SourceCodeField.class);
-    private Map<String, Runnable> commands = new HashMap<String, Runnable>();
+    private Map<String, Runnable> commands = new HashMap<>();
     private String text;
 
     public SourceCodeField() {

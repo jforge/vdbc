@@ -1,6 +1,6 @@
 package org.indp.vdbc.ui.profile.impl.fields;
 
-import com.vaadin.ui.Field;
+import com.vaadin.ui.AbstractTextField;
 
 /**
  *
@@ -14,7 +14,7 @@ public class PasswordField extends SimpleProfileField {
     }
 
     @Override
-    public Field getFieldComponent() {
+    public AbstractTextField getFieldComponent() {
         if (field == null) {
             field = new com.vaadin.ui.PasswordField(getTitle());
             field.setWidth("100%");

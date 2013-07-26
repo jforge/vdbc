@@ -1,6 +1,6 @@
 package org.indp.vdbc.ui.profile.impl.fields;
 
-import com.vaadin.ui.Field;
+import com.vaadin.ui.AbstractTextField;
 import com.vaadin.ui.TextField;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.ui.profile.config.AbstractProfileField;
@@ -13,7 +13,6 @@ import java.lang.reflect.InvocationTargetException;
  *
  */
 public class SimpleProfileField extends AbstractProfileField {
-
     private TextField textField;
 
     public SimpleProfileField(String id) {
@@ -25,7 +24,7 @@ public class SimpleProfileField extends AbstractProfileField {
     }
 
     @Override
-    public Field getFieldComponent() {
+    public AbstractTextField getFieldComponent() {
         if (textField == null) {
             textField = new TextField(getTitle());
             textField.setWidth("100%");
@@ -43,11 +42,7 @@ public class SimpleProfileField extends AbstractProfileField {
             Object value = propertyDescriptor.getReadMethod().invoke(connectionProfile);
             String s = value == null ? "" : value.toString();
             getFieldComponent().setValue(s);
-        } catch (IntrospectionException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (IntrospectionException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }
@@ -58,11 +53,7 @@ public class SimpleProfileField extends AbstractProfileField {
             ConnectionProfile connectionProfile = getFormContext().getConnectionProfile();
             PropertyDescriptor propertyDescriptor = getPropertyDescriptor(connectionProfile);
             propertyDescriptor.getWriteMethod().invoke(connectionProfile, getFieldComponent().getValue());
-        } catch (IntrospectionException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (IllegalAccessException e) {
+        } catch (IntrospectionException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
     }

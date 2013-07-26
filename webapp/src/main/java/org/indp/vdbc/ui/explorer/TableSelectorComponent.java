@@ -173,8 +173,7 @@ public class TableSelectorComponent extends VerticalLayout {
     }
 
     protected ObjectDetails createDetails(JdbcTable table) {
-        TableDetailsView dv = new TableDetailsView(table, databaseSession);
-        return dv;
+        return new TableDetailsView(table, databaseSession);
     }
 
     public void setDetailsListener(DetailsListener detailsListener) {

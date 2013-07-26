@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -126,7 +127,7 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
     }
 
     private Object[] filterColumns(Object[] visibleColumns) {
-        ArrayList<Object> list = new ArrayList<Object>(visibleColumns.length);
+        List<Object> list = new ArrayList<>(visibleColumns.length);
         for (Object column : visibleColumns) {
             if (!DialectSupport.isServiceColumn(column.toString())) {
                 list.add(column);

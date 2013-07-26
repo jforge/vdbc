@@ -14,7 +14,7 @@ import java.util.Map;
 public class DialectSupport {
     private static final Logger LOG = LoggerFactory.getLogger(DialectSupport.class);
 
-    private static final Map<String, Dialect> DIALECTS = new LinkedHashMap<String, Dialect>();
+    private static final Map<String, Dialect> DIALECTS = new LinkedHashMap<>();
 
     static {
         add(new GenericDialect());
