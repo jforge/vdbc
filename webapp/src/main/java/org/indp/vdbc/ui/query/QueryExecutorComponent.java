@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 public class QueryExecutorComponent extends VerticalLayout implements Closeable {
     private static final boolean DEFAULT_AUTO_COMMIT = true;
     private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorComponent.class);
-    private static final ExecutorService EXECUTOR_SERVICE = Executors.newCachedThreadPool();
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(10);
 
     private final Connection connection;
     //
@@ -142,10 +142,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
         query.addShortcutListener(new ShortcutListener("Run Query", null, ShortcutAction.KeyCode.ENTER, ShortcutAction.ModifierKey.CTRL) {
             @Override
             public void handleAction(Object sender, Object target) {
-                String sql = query.getValue();
-                if (sql != null && !sql.isEmpty()) {
-                    executeQuery(sql);
-                }
+                executeQuery(query.getValue());
             }
         });
     }
@@ -157,6 +154,9 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
     }
 
     protected void executeQuery(final String sql) {
+        if (sql == null || sql.isEmpty()) {
+            return;
+        }
         // TODO cancelable execution
         ProgressBar progressBar = new ProgressBar();
         progressBar.setIndeterminate(true);
@@ -166,17 +166,15 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
         vl.setComponentAlignment(progressBar, Alignment.MIDDLE_CENTER);
         splitPanel.setSecondComponent(vl);
         setExecutionAllowed(false);
-
-        final UI currentUI = UI.getCurrent();
         EXECUTOR_SERVICE.submit(new Runnable() {
             @Override
             public void run() {
-                handleQueryExecution(currentUI, sql);
+                handleQueryExecution(sql);
             }
         });
     }
 
-    private void handleQueryExecution(UI currentUI, String sql) {
+    private void handleQueryExecution(String sql) {
         final long start = System.currentTimeMillis();
         String statMsg = "";
         try {
@@ -187,11 +185,11 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
                 if (hasResultSet) {
                     ResultSetTable table = new ResultSetTable(stmt.getResultSet());
                     statMsg = "rows fetched: " + table.getItemIds().size();
-                    showResult(currentUI, table);
+                    showResult(table);
                 } else {
                     int cnt = stmt.getUpdateCount();
                     statMsg = "rows updated: " + cnt;
-                    showResult(currentUI, new Label("Updated " + cnt + " row(s)"));
+                    showResult(new Label("Updated " + cnt + " row(s)"));
                 }
             } finally {
                 JdbcUtils.close(stmt);
@@ -199,7 +197,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
 
             final long end = System.currentTimeMillis();
             final String finalStatMsg = statMsg;
-            currentUI.access(new Runnable() {
+            getUI().access(new Runnable() {
                 @Override
                 public void run() {
                     Notification.show(
@@ -210,12 +208,12 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
             });
         } catch (SQLException e) {
             LOG.debug("failed to execute sql query", e);
-            showResult(currentUI, new Label(e.getMessage()));
+            showResult(new Label(e.getMessage()));
         }
     }
 
-    private void showResult(UI currentUI, final Component resultComponent) {
-        currentUI.access(new Runnable() {
+    private void showResult(final Component resultComponent) {
+        getUI().access(new Runnable() {
             @Override
             public void run() {
                 splitPanel.setSecondComponent(resultComponent);
