@@ -22,7 +22,6 @@ import java.util.List;
  *
  */
 public class ResultSetTable extends VerticalLayout {
-
     private static final Logger LOG = LoggerFactory.getLogger(ResultSetTable.class);
     private Table table;
 
@@ -72,6 +71,7 @@ public class ResultSetTable extends VerticalLayout {
         t.setColumnReorderingAllowed(true);
         t.setColumnCollapsingAllowed(true);
         t.setSelectable(true);
+        t.setNullSelectionAllowed(false);
         return t;
     }
 

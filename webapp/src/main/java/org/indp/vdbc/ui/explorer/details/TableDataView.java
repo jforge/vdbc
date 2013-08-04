@@ -25,7 +25,6 @@ import java.util.List;
  *
  */
 public class TableDataView extends VerticalLayout implements ToolbarContributor {
-
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
     public static final String TITLE = "Data";
 
@@ -97,6 +96,7 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
             table.setSortEnabled(false);
             table.setColumnReorderingAllowed(true);
             table.setColumnCollapsingAllowed(true);
+            table.setNullSelectionAllowed(false);
             table.setSizeFull();
             table.addActionHandler(new Action.Handler() {
                 private final Action viewSingleRecordAction = new Action("Single record view...");

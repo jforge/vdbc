@@ -24,7 +24,6 @@ import java.util.List;
  *
  */
 public class TableSelectorComponent extends VerticalLayout {
-
     private static final Logger LOG = LoggerFactory.getLogger(TableSelectorComponent.class);
     private static final String VALUE_PROPERTY = "value";
     private IndexedContainer tableListContainer;
@@ -41,6 +40,7 @@ public class TableSelectorComponent extends VerticalLayout {
         objectList.setSizeFull();
         objectList.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
         objectList.setSelectable(true);
+        objectList.setNullSelectionAllowed(false);
         objectList.addItemClickListener(new ItemClickListener() {
 
             @Override

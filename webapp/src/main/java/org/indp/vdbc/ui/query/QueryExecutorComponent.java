@@ -115,6 +115,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
         maxRowsBox.setWidth("100px");
         maxRowsBox.setNewItemsAllowed(false);
         maxRowsBox.setNullSelectionAllowed(false);
+        maxRowsBox.setTextInputAllowed(false);
         maxRowsBox.setValue(100);
 
         queryOptionsLayout = new HorizontalLayout(
