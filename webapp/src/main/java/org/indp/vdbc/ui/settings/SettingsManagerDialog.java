@@ -170,6 +170,6 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
 
     @Override
     public void profileUpdated(ConnectionProfile profile) {
-        profilesTable.setItemCaption(profile, profile.getName());
+        profilesTable.getItem(profile).getItemProperty("name").setValue(profile.getName());
     }
 }
