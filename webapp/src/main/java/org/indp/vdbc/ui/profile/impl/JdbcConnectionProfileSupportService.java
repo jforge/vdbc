@@ -22,8 +22,8 @@ public class JdbcConnectionProfileSupportService implements ConnectionProfileSup
     }
 
     @Override
-    public ConnectionProfileDetailsPanel<JdbcConnectionProfile> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileListFacade profileListFacade) {
-        return new JdbcConnectionProfileDetailsPanel((JdbcConnectionProfile) profile, profileListFacade);
+    public ConnectionProfileDetailsPanel<JdbcConnectionProfile> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileEditorEvents profileEditorEvents) {
+        return new JdbcConnectionProfileDetailsPanel((JdbcConnectionProfile) profile, profileEditorEvents);
     }
 
     @Override

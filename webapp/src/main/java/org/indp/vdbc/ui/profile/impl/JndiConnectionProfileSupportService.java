@@ -22,9 +22,9 @@ public class JndiConnectionProfileSupportService implements ConnectionProfileSup
     }
 
     @Override
-    public ConnectionProfileDetailsPanel<JndiConnectionProfile> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileListFacade profileListFacade) {
+    public ConnectionProfileDetailsPanel<JndiConnectionProfile> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileEditorEvents profileEditorEvents) {
         assert profile instanceof JndiConnectionProfile;
-        return new JndiConnectionProfileDetailsPanel((JndiConnectionProfile) profile, profileListFacade);
+        return new JndiConnectionProfileDetailsPanel((JndiConnectionProfile) profile, profileEditorEvents);
     }
 
     @Override

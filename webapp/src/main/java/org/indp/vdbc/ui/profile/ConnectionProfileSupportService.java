@@ -13,7 +13,7 @@ public interface ConnectionProfileSupportService<T extends ConnectionProfile> {
 
     T createConnectionProfile();
 
-    ConnectionProfileDetailsPanel<T> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileListFacade profileListFacade);
+    ConnectionProfileDetailsPanel<T> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileEditorEvents profileEditorEvents);
 
     ConnectionProfileLoginPanel<T> createLoginPanel(ConnectionProfile profile);
 

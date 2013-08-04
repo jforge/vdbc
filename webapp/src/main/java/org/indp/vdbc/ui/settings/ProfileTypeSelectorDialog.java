@@ -41,11 +41,13 @@ public class ProfileTypeSelectorDialog extends Window {
         }));
 
         content.addComponent(footer);
+        content.setComponentAlignment(footer, Alignment.MIDDLE_CENTER);
     }
 
     private ComboBox createProfileSelector() {
         ComboBox comboBox = new ComboBox("Profile Type");
         comboBox.setNullSelectionAllowed(false);
+        comboBox.setTextInputAllowed(false);
         comboBox.setWidth("100%");
 
         Collection<ConnectionProfileSupportService> factories = ConnectionProfileSupportService.Lookup.getAll();

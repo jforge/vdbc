@@ -1,6 +1,8 @@
 package org.indp.vdbc.ui;
 
+import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.Reindeer;
 
 import java.awt.event.ActionListener;
 
@@ -8,7 +10,6 @@ import java.awt.event.ActionListener;
  *
  */
 public class ConfirmDialog extends Window {
-
     private final HorizontalLayout buttons;
 
     public static void confirmYesNo(String message, ActionListener onYes) {
@@ -18,27 +19,37 @@ public class ConfirmDialog extends Window {
                 show();
     }
 
+    public static void confirmYesNo(String message, String yes, String no, ActionListener onYes) {
+        new ConfirmDialog(message).
+                addYesButton(yes, onYes).
+                addNoButton(no).
+                show();
+    }
+
     private ConfirmDialog(String message) {
-        setCaption("Confirm");
-        setResizable(false);
-        setModal(true);
-
-        VerticalLayout root = new VerticalLayout();
-        root.setSpacing(true);
-        root.setMargin(true);
-        setContent(root);
-
-        root.addComponent(new Label(message));
-
         buttons = new HorizontalLayout();
         buttons.setSpacing(true);
 
-        root.addComponent(buttons);
+        VerticalLayout root = new VerticalLayout(new Label(message), buttons);
+        root.setSpacing(true);
+        root.setMargin(true);
         root.setComponentAlignment(buttons, Alignment.BOTTOM_CENTER);
+
+        setContent(root);
+        setCaption("Confirm");
+        setResizable(false);
+        setDraggable(false);
+        setClosable(false);
+        setModal(true);
+        setStyleName(Reindeer.WINDOW_LIGHT);
     }
 
     private ConfirmDialog addYesButton(final ActionListener listener) {
-        buttons.addComponent(new Button("Yes", new Button.ClickListener() {
+        return addYesButton("Yes", listener);
+    }
+
+    private ConfirmDialog addYesButton(String title, final ActionListener listener) {
+        buttons.addComponent(new Button(title, new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 listener.actionPerformed(null);
@@ -49,16 +60,22 @@ public class ConfirmDialog extends Window {
     }
 
     private ConfirmDialog addNoButton() {
-        buttons.addComponent(new Button("No", new Button.ClickListener() {
+        return addNoButton("No");
+    }
+
+    private ConfirmDialog addNoButton(String title) {
+        buttons.addComponent(new Button(title, new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 close();
             }
         }));
+        setCloseShortcut(ShortcutAction.KeyCode.ESCAPE);
         return this;
     }
 
     private void show() {
         UI.getCurrent().addWindow(this);
+        this.focus();
     }
 }

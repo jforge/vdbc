@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class JdbcConnectionProfileDetailsPanel extends AbstractConnectionProfileDetailsPanel<JdbcConnectionProfile> {
 
-    public JdbcConnectionProfileDetailsPanel(JdbcConnectionProfile profile, ProfileListFacade profileListFacade) {
-        super(profile, profileListFacade);
+    public JdbcConnectionProfileDetailsPanel(JdbcConnectionProfile profile, ProfileEditorEvents profileEditorEvents) {
+        super(profile, profileEditorEvents);
     }
 
     @Override

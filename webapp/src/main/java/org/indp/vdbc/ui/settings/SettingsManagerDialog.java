@@ -6,15 +6,18 @@ import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
+import org.indp.vdbc.ui.ConfirmDialog;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
  *
  */
-public class SettingsManagerDialog extends Window implements ConnectionProfileDetailsPanel.ProfileListFacade {
+public class SettingsManagerDialog extends Window implements ConnectionProfileDetailsPanel.ProfileEditorEvents {
     private Table profilesTable;
     private ComponentContainer detailsContainer;
 
@@ -43,7 +46,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
     private void refreshDetails() {
         detailsContainer.removeAllComponents();
 
-        ConnectionProfile profile = (ConnectionProfile) profilesTable.getValue();
+        ConnectionProfile profile = getSelectedProfile();
         if (profile == null) {
             return;
         }
@@ -61,22 +64,26 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
     }
 
     private ComponentContainer createContent() {
-        ComponentContainer leftSide = createLeftSide();
+        Component leftSide = createLeftSide();
         leftSide.setWidth("170px");
 
         detailsContainer = new VerticalLayout();
         detailsContainer.setSizeFull();
 
-        HorizontalLayout layout = new HorizontalLayout(leftSide, detailsContainer);
-        layout.setSpacing(true);
-        layout.setMargin(true);
-        layout.setSizeFull();
-        layout.setExpandRatio(detailsContainer, 1f);
+        HorizontalLayout mainContent = new HorizontalLayout(leftSide, detailsContainer);
+        mainContent.setSpacing(true);
+        mainContent.setSizeFull();
+        mainContent.setExpandRatio(detailsContainer, 1f);
 
-        return layout;
+        VerticalLayout root = new VerticalLayout(createToolbar(), mainContent);
+        root.setSizeFull();
+        root.setExpandRatio(mainContent, 1);
+        root.setMargin(true);
+        root.setSpacing(true);
+        return root;
     }
 
-    private ComponentContainer createLeftSide() {
+    private Component createLeftSide() {
         List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
         profilesTable = new Table(null, new BeanItemContainer<>(ConnectionProfile.class, profiles));
         profilesTable.setVisibleColumns("name");
@@ -96,7 +103,11 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             }
         });
 
-        Button addButton = new Button("Add", new Button.ClickListener() {
+        return profilesTable;
+    }
+
+    private Component createToolbar() {
+        Button addButton = new Button("Create Profile", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 getUI().addWindow(new ProfileTypeSelectorDialog(new ProfileTypeSelectorDialog.SelectionListener() {
@@ -116,15 +127,22 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             }
         });
 
-        HorizontalLayout listButtons = new HorizontalLayout(addButton, saveProfilesButton);
-        listButtons.setSpacing(true);
+        Button removeButton = new Button("Remove Profile", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                ConnectionProfile value = getSelectedProfile();
+                if (value != null) {
+                    removeProfile(value);
+                } else {
+                    Notification.show("Select some profile to remove it");
+                }
+            }
+        });
 
-        VerticalLayout leftSide = new VerticalLayout(profilesTable, listButtons);
-        leftSide.setSizeFull();
-        leftSide.setSpacing(true);
-        leftSide.setExpandRatio(profilesTable, 1f);
 
-        return leftSide;
+        HorizontalLayout toolbarLayout = new HorizontalLayout(addButton, removeButton, saveProfilesButton);
+        toolbarLayout.setSpacing(true);
+        return toolbarLayout;
     }
 
     private void createProfile(ConnectionProfileSupportService factory) {
@@ -135,15 +153,19 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         profilesTable.select(profile);
     }
 
-    @Override
-    public ConnectionProfile getSelectedProfile() {
+    private ConnectionProfile getSelectedProfile() {
         return (ConnectionProfile) profilesTable.getValue();
     }
 
-    @Override
-    public void removeProfile(ConnectionProfile profile) {
-        profilesTable.getContainerDataSource().removeItem(profile);
-        profilesTable.select(null);
+    private void removeProfile(final ConnectionProfile profile) {
+        ConfirmDialog.confirmYesNo("Remove profile \"" + profile.getName() + "\"?", "Remove", "No", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingsManager.get().getConfiguration().removeProfile(profile);
+                profilesTable.getContainerDataSource().removeItem(profile);
+                profilesTable.select(null);
+            }
+        });
     }
 
     @Override

@@ -14,8 +14,8 @@ import java.util.List;
  */
 public class JndiConnectionProfileDetailsPanel extends AbstractConnectionProfileDetailsPanel<JndiConnectionProfile> {
 
-    public JndiConnectionProfileDetailsPanel(JndiConnectionProfile profile, ProfileListFacade profileListFacade) {
-        super(profile, profileListFacade);
+    public JndiConnectionProfileDetailsPanel(JndiConnectionProfile profile, ProfileEditorEvents profileEditorEvents) {
+        super(profile, profileEditorEvents);
     }
 
     @Override

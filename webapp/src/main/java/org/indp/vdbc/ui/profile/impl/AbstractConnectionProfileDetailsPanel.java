@@ -15,7 +15,6 @@ import java.util.Map;
  *
  */
 public abstract class AbstractConnectionProfileDetailsPanel<T extends ConnectionProfile> extends ConnectionProfileDetailsPanel<T> {
-
     private Component detailsComponent;
     private Map<String, AbstractProfileField> fields;
     private final FormContext formContext = new FormContext() {
@@ -30,8 +29,8 @@ public abstract class AbstractConnectionProfileDetailsPanel<T extends Connection
         }
     };
 
-    public AbstractConnectionProfileDetailsPanel(T profile, ProfileListFacade profileListFacade) {
-        super(profile, profileListFacade);
+    public AbstractConnectionProfileDetailsPanel(T profile, ProfileEditorEvents profileEditorEvents) {
+        super(profile, profileEditorEvents);
     }
 
     protected abstract List<AbstractProfileField> getFields();
