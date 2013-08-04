@@ -11,7 +11,7 @@ import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
-import org.indp.vdbc.ui.profile.ConnectionProfileManager;
+import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 import org.indp.vdbc.ui.settings.SettingsManagerDialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,8 +53,8 @@ public class ConnectionSelectorView extends VerticalLayout {
                 if (cp == null) {
                     return;
                 }
-                ConnectionProfileManager<? extends ConnectionProfile> connectionProfileManager = ConnectionProfileManager.Lookup.find(cp.getClass());
-                ConnectionProfileLoginPanel<? extends ConnectionProfile> loginPanel = connectionProfileManager.createLoginPanel(cp);
+                ConnectionProfileSupportService<? extends ConnectionProfile> connectionProfileSupportService = ConnectionProfileSupportService.Lookup.find(cp.getClass());
+                ConnectionProfileLoginPanel<? extends ConnectionProfile> loginPanel = connectionProfileSupportService.createLoginPanel(cp);
                 profileInfoPanel.setPanel(loginPanel);
                 profileInfoPanel.focus();
             }

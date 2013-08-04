@@ -1,7 +1,7 @@
 package org.indp.vdbc.ui.settings;
 
 import com.vaadin.ui.*;
-import org.indp.vdbc.ui.profile.ConnectionProfileManager;
+import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
 import java.util.Collection;
 
@@ -29,7 +29,7 @@ public class ProfileTypeSelectorDialog extends Window {
         footer.addComponent(new Button("OK", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                selectionListener.onFactorySelected((ConnectionProfileManager) selector.getValue());
+                selectionListener.onFactorySelected((ConnectionProfileSupportService) selector.getValue());
                 close();
             }
         }));
@@ -48,8 +48,8 @@ public class ProfileTypeSelectorDialog extends Window {
         comboBox.setNullSelectionAllowed(false);
         comboBox.setWidth("100%");
 
-        Collection<ConnectionProfileManager> factories = ConnectionProfileManager.Lookup.getAll();
-        for (ConnectionProfileManager factory : factories) {
+        Collection<ConnectionProfileSupportService> factories = ConnectionProfileSupportService.Lookup.getAll();
+        for (ConnectionProfileSupportService factory : factories) {
             comboBox.addItem(factory);
             comboBox.setItemCaption(factory, factory.getName());
         }
@@ -65,6 +65,6 @@ public class ProfileTypeSelectorDialog extends Window {
          *
          * @param factory selected factory
          */
-        void onFactorySelected(ConnectionProfileManager factory);
+        void onFactorySelected(ConnectionProfileSupportService factory);
     }
 }

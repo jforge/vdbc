@@ -7,7 +7,7 @@ import com.vaadin.ui.*;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
-import org.indp.vdbc.ui.profile.ConnectionProfileManager;
+import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
     }
 
     private Component createDetails(ConnectionProfile profile) {
-        ConnectionProfileManager<? extends ConnectionProfile> factory = ConnectionProfileManager.Lookup.find(profile.getClass());
+        ConnectionProfileSupportService<? extends ConnectionProfile> factory = ConnectionProfileSupportService.Lookup.find(profile.getClass());
         if (factory == null) {
             return new Label("Unknown profile type.");
         }
@@ -101,7 +101,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             public void buttonClick(Button.ClickEvent event) {
                 getUI().addWindow(new ProfileTypeSelectorDialog(new ProfileTypeSelectorDialog.SelectionListener() {
                     @Override
-                    public void onFactorySelected(ConnectionProfileManager factory) {
+                    public void onFactorySelected(ConnectionProfileSupportService factory) {
                         createProfile(factory);
                     }
                 }));
@@ -127,7 +127,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         return leftSide;
     }
 
-    private void createProfile(ConnectionProfileManager factory) {
+    private void createProfile(ConnectionProfileSupportService factory) {
         ConnectionProfile profile = factory.createConnectionProfile();
         profile.setName("New Profile");
         SettingsManager.get().getConfiguration().addProfile(profile);

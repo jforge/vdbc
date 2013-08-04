@@ -4,12 +4,12 @@ import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JdbcConnectionProfile;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
-import org.indp.vdbc.ui.profile.ConnectionProfileManager;
+import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
 /**
  *
  */
-public class JdbcConnectionProfileManager implements ConnectionProfileManager<JdbcConnectionProfile> {
+public class JdbcConnectionProfileSupportService implements ConnectionProfileSupportService<JdbcConnectionProfile> {
 
     @Override
     public Class<JdbcConnectionProfile> getProfileClass() {

@@ -1,2 +1,2 @@
-org.indp.vdbc.ui.profile.impl.JdbcConnectionProfileManager
-org.indp.vdbc.ui.profile.impl.JndiConnectionProfileManager
+org.indp.vdbc.ui.profile.impl.JdbcConnectionProfileSupportService
+org.indp.vdbc.ui.profile.impl.JndiConnectionProfileSupportService

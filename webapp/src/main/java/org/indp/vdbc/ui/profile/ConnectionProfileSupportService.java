@@ -7,7 +7,7 @@ import java.util.*;
 /**
  *
  */
-public interface ConnectionProfileManager<T extends ConnectionProfile> {
+public interface ConnectionProfileSupportService<T extends ConnectionProfile> {
 
     Class<T> getProfileClass();
 
@@ -22,22 +22,22 @@ public interface ConnectionProfileManager<T extends ConnectionProfile> {
 
     public static class Lookup {
 
-        private static final Map<Class<? extends ConnectionProfile>, ConnectionProfileManager> FACTORY_MAP;
+        private static final Map<Class<? extends ConnectionProfile>, ConnectionProfileSupportService> FACTORY_MAP;
 
         static {
-            Map<Class<? extends ConnectionProfile>, ConnectionProfileManager> map = new HashMap<>();
-            ServiceLoader<ConnectionProfileManager> loader = ServiceLoader.load(ConnectionProfileManager.class);
-            for (ConnectionProfileManager factory : loader) {
+            Map<Class<? extends ConnectionProfile>, ConnectionProfileSupportService> map = new HashMap<>();
+            ServiceLoader<ConnectionProfileSupportService> loader = ServiceLoader.load(ConnectionProfileSupportService.class);
+            for (ConnectionProfileSupportService factory : loader) {
                 map.put(factory.getProfileClass(), factory);
             }
             FACTORY_MAP = Collections.unmodifiableMap(map);
         }
 
-        public static <T extends ConnectionProfile> ConnectionProfileManager<T> find(Class<T> clazz) {
+        public static <T extends ConnectionProfile> ConnectionProfileSupportService<T> find(Class<T> clazz) {
             return FACTORY_MAP.get(clazz);
         }
 
-        public static Collection<ConnectionProfileManager> getAll() {
+        public static Collection<ConnectionProfileSupportService> getAll() {
             return FACTORY_MAP.values();
         }
 
