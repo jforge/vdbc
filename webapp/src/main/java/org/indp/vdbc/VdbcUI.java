@@ -19,13 +19,13 @@ import org.indp.vdbc.ui.WorkspaceView;
 @PreserveOnRefresh
 public class VdbcUI extends UI implements ConnectionListener {
     public static final String APPLICATION_TITLE = "VDBC";
-    //    private static final Logger LOG = LoggerFactory.getLogger(VdbcUI.class);
     private DatabaseSessionManager databaseSessionManager;
     private boolean closing = false;
 
     @Override
     protected void init(VaadinRequest request) {
         databaseSessionManager = new DatabaseSessionManager(this);
+        getPage().setTitle(APPLICATION_TITLE);
         setContent(createConnectionSelectorView());
     }
 

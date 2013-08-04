@@ -4,6 +4,7 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
+import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import org.indp.vdbc.SettingsManager;
@@ -22,7 +23,6 @@ import java.util.List;
  *
  */
 public class ConnectionSelectorView extends VerticalLayout {
-
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionSelectorView.class);
     private final DatabaseSessionManager databaseSessionManager;
 
@@ -44,6 +44,7 @@ public class ConnectionSelectorView extends VerticalLayout {
         profiles.setItemCaptionPropertyId("name");
         profiles.setImmediate(true);
         profiles.setNullSelectionAllowed(false);
+        profiles.setFilteringMode(FilteringMode.CONTAINS);
         profiles.addValueChangeListener(new ValueChangeListener() {
 
             @Override
@@ -127,7 +128,7 @@ public class ConnectionSelectorView extends VerticalLayout {
         VerticalLayout rootPanelLayout = new VerticalLayout(profiles, profileInfoPanel, hl);
         rootPanelLayout.setMargin(true);
 
-        Panel rootPanel = new Panel("DB Console");
+        Panel rootPanel = new Panel("Connect to...");
         rootPanel.setWidth("300px");
         rootPanel.setContent(rootPanelLayout);
 
@@ -137,7 +138,6 @@ public class ConnectionSelectorView extends VerticalLayout {
     }
 
     protected static class ProfileInfoPanelHolder<T extends Component> extends CustomComponent {
-
         private final VerticalLayout root;
         private T component;
 

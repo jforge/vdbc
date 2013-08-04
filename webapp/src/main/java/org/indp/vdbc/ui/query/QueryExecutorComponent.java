@@ -178,8 +178,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
         final long start = System.currentTimeMillis();
         String statMsg = "";
         try {
-            PreparedStatement stmt = connection.prepareStatement(sql);
-            try {
+            try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setMaxRows(getMaxRows());
                 boolean hasResultSet = stmt.execute();
                 if (hasResultSet) {
@@ -191,8 +190,6 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
                     statMsg = "rows updated: " + cnt;
                     showResult(new Label("Updated " + cnt + " row(s)"));
                 }
-            } finally {
-                JdbcUtils.close(stmt);
             }
 
             final long end = System.currentTimeMillis();
