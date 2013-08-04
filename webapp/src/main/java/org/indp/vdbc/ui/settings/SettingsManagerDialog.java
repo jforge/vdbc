@@ -15,8 +15,7 @@ import java.util.List;
  *
  */
 public class SettingsManagerDialog extends Window implements ConnectionProfileDetailsPanel.ProfileListFacade {
-
-    private ListSelect list;
+    private Table profilesTable;
     private ComponentContainer detailsContainer;
 
     public SettingsManagerDialog() {
@@ -44,7 +43,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
     private void refreshDetails() {
         detailsContainer.removeAllComponents();
 
-        ConnectionProfile profile = (ConnectionProfile) list.getValue();
+        ConnectionProfile profile = (ConnectionProfile) profilesTable.getValue();
         if (profile == null) {
             return;
         }
@@ -79,17 +78,18 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
 
     private ComponentContainer createLeftSide() {
         List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
-        list = new ListSelect(null, new BeanItemContainer<>(ConnectionProfile.class, profiles));
-        list.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
-        list.setItemCaptionPropertyId("name");
-        list.setSizeFull();
-        list.setNullSelectionAllowed(false);
-        list.setImmediate(true);
+        profilesTable = new Table(null, new BeanItemContainer<>(ConnectionProfile.class, profiles));
+        profilesTable.setVisibleColumns("name");
+        profilesTable.setSizeFull();
+        profilesTable.setNullSelectionAllowed(false);
+        profilesTable.setImmediate(true);
+        profilesTable.setSelectable(true);
+        profilesTable.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
         if (!profiles.isEmpty()) {
-            list.select(profiles.get(0));
+            profilesTable.select(profiles.get(0));
         }
 
-        list.addValueChangeListener(new Property.ValueChangeListener() {
+        profilesTable.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 refreshDetails();
@@ -119,10 +119,10 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         HorizontalLayout listButtons = new HorizontalLayout(addButton, saveProfilesButton);
         listButtons.setSpacing(true);
 
-        VerticalLayout leftSide = new VerticalLayout(list, listButtons);
+        VerticalLayout leftSide = new VerticalLayout(profilesTable, listButtons);
         leftSide.setSizeFull();
         leftSide.setSpacing(true);
-        leftSide.setExpandRatio(list, 1f);
+        leftSide.setExpandRatio(profilesTable, 1f);
 
         return leftSide;
     }
@@ -131,23 +131,23 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         ConnectionProfile profile = factory.createConnectionProfile();
         profile.setName("New Profile");
         SettingsManager.get().getConfiguration().addProfile(profile);
-        list.getContainerDataSource().addItem(profile);
-        list.select(profile);
+        profilesTable.getContainerDataSource().addItem(profile);
+        profilesTable.select(profile);
     }
 
     @Override
     public ConnectionProfile getSelectedProfile() {
-        return (ConnectionProfile) list.getValue();
+        return (ConnectionProfile) profilesTable.getValue();
     }
 
     @Override
     public void removeProfile(ConnectionProfile profile) {
-        list.getContainerDataSource().removeItem(profile);
-        list.select(null);
+        profilesTable.getContainerDataSource().removeItem(profile);
+        profilesTable.select(null);
     }
 
     @Override
     public void profileUpdated(ConnectionProfile profile) {
-        list.setItemCaption(profile, profile.getName());
+        profilesTable.setItemCaption(profile, profile.getName());
     }
 }
