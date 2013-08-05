@@ -13,8 +13,16 @@ import org.indp.vdbc.db.DialectSupport;
 public class SingleRecordViewWindow extends Window {
     private final Item item;
 
-    public SingleRecordViewWindow(Item item) {
+    public SingleRecordViewWindow(Item item, final Runnable onClose) {
         this.item = item;
+        if (onClose != null) {
+            addCloseListener(new CloseListener() {
+                @Override
+                public void windowClose(CloseEvent e) {
+                    onClose.run();
+                }
+            });
+        }
     }
 
     @Override

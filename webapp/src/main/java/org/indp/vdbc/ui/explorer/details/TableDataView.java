@@ -6,6 +6,8 @@ import com.vaadin.data.util.sqlcontainer.SQLContainer;
 import com.vaadin.data.util.sqlcontainer.connection.J2EEConnectionPool;
 import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
 import com.vaadin.event.Action;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.db.DialectSupport;
@@ -108,22 +110,45 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
 
                 @Override
                 public void handleAction(Action action, Object sender, Object target) {
-                    if (action == viewSingleRecordAction && table.getValue() != null) {
-                        Item item = table.getContainerDataSource().getItem(target);
-                        if (item != null) {
-                            getUI().addWindow(new SingleRecordViewWindow(item));
-                        }
+                    if (action == viewSingleRecordAction) {
+                        showRecordEditor(table, target);
                     }
                 }
             });
             table.setVisibleColumns(filterColumns(table.getVisibleColumns()));
-            component = table;
+
+            Panel panel = new Panel(table);
+            panel.addStyleName(Reindeer.PANEL_LIGHT);
+            panel.setSizeFull();
+            panel.addShortcutListener(new ShortcutListener("show record", ShortcutAction.KeyCode.F4, null) {
+                @Override
+                public void handleAction(Object sender, Object target) {
+                    Object value = table.getValue();
+                    if (value != null) {
+                        showRecordEditor(table, value);
+                    }
+                }
+            });
+
+            component = panel;
         } catch (SQLException e) {
             LOG.warn("failed to retrieve tableDefinition data", e);
             component = new Label(e.getMessage());
         }
         tableContainer.removeAllComponents();
         tableContainer.addComponent(component);
+    }
+
+    private void showRecordEditor(final Table table, Object targetValue) {
+        Item item = table.getContainerDataSource().getItem(targetValue);
+        if (item != null) {
+            getUI().addWindow(new SingleRecordViewWindow(item, new Runnable() {
+                @Override
+                public void run() {
+                    table.focus();
+                }
+            }));
+        }
     }
 
     private Object[] filterColumns(Object[] visibleColumns) {
