@@ -14,7 +14,6 @@ import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
  *
  */
 public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanel<JdbcConnectionProfile> {
-
     private TextField userName;
     private PasswordField password;
 
@@ -37,7 +36,7 @@ public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
         TextField url = new ReadonlyTextField("URL:", profile.getUrl());
 
         userName = new TextField("Username:", profile.getUser());
-        password = new PasswordField("Password:");
+        password = new PasswordField("Password:", profile.getPassword());
 
         userName.setWidth("100%");
         password.setWidth("100%");
