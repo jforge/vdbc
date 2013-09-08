@@ -74,7 +74,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
                     Notification.show("Commited");
                 } catch (SQLException ex) {
                     LOG.warn("commit failed", ex);
-                    Notification.show("Commit failed", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    Notification.show("Commit failed\n", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -87,7 +87,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
                     Notification.show("Rolled back");
                 } catch (SQLException ex) {
                     LOG.warn("rollback failed", ex);
-                    Notification.show("Rollback failed", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    Notification.show("Rollback failed\n", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });
@@ -105,7 +105,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
                     rollbackButton.setEnabled(!autoCommit);
                 } catch (Exception ex) {
                     autocommitCheckBox.setValue(!autoCommit);
-                    Notification.show("Failed to change autocommit setting", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    Notification.show("Failed to change autocommit setting\n", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
                 }
             }
         });

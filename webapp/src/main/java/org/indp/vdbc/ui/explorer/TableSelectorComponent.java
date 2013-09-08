@@ -163,7 +163,7 @@ public class TableSelectorComponent extends VerticalLayout {
         try {
             tables = databaseSession.getMetadata().getTables(catalog, schema, tableType);
         } catch (Exception ex) {
-            Notification.show("Error", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+            Notification.show("Error\n", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
             return;
         }
 
