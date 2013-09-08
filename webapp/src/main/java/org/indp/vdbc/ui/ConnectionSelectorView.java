@@ -95,10 +95,11 @@ public class ConnectionSelectorView extends VerticalLayout {
         });
 
         Button settingsButton = new Button("Settings...");
-        String settingsEditorEnabled = System.getProperty("vdbc.settings.editor-enabled");
-        if (settingsEditorEnabled != null && !"true".equals(settingsEditorEnabled)) {
+        if (!SettingsManager.get().isSettingsEditorEnabled()) {
             settingsButton.setEnabled(false);
-            settingsButton.setDescription("Settings editor is disabled because 'vdbc.settings.editor-enabled' system property is defined and its value is not 'true'.");
+            settingsButton.setDescription("Settings editor is disabled because '" +
+                    SettingsManager.VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY +
+                    "' system property is defined and its value is not 'true'.");
         } else {
             settingsButton.addClickListener(new Button.ClickListener() {
 
