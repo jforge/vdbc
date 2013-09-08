@@ -17,6 +17,7 @@ import java.io.OutputStream;
  */
 public class SettingsManager {
     public static final String VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY = "vdbc.settings.editor-enabled";
+    public static final String VDBC_EXPERIMENTS_ENABLED_PROPERTY = "vdbc.experiments.enabled";
 
     private static final Logger LOG = LoggerFactory.getLogger(SettingsManager.class);
     private static final String FILE_PATH = ".config" + File.separator + "vdbc";
@@ -61,6 +62,10 @@ public class SettingsManager {
     public boolean isSettingsEditorEnabled() {
         String settingsEditorEnabled = System.getProperty(VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY);
         return settingsEditorEnabled == null || "true".equals(settingsEditorEnabled);
+    }
+
+    public boolean isExperimenting() {
+        return Boolean.getBoolean(VDBC_EXPERIMENTS_ENABLED_PROPERTY);
     }
 
     private Configuration createDefaultConfiguration() {
