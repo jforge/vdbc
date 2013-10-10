@@ -1,0 +1,13 @@
+<dialect extends="generic" name="PostgreSQL">
+    <example-urls>
+        <url>jdbc:postgresql://host:port/db</url>
+        <url>jdbc:postgresql://localhost:5432/db</url>
+    </example-urls>
+    <drivers>
+        <driver>org.postgresql.Driver</driver>
+    </drivers>
+    <features>
+        <feature id="select.all.from.table.limit.offset"
+                 expression="select * from @{tableName} limit @{limit} offset @{offset}"/>
+    </features>
+</dialect>
