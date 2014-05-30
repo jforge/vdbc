@@ -11,13 +11,11 @@ import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.ui.ConnectionSelectorView;
 import org.indp.vdbc.ui.WorkspaceView;
 
-/**
- *
- */
 @Push
 @Theme("vdbc")
 @PreserveOnRefresh
 public class VdbcUI extends UI implements ConnectionListener {
+
     public static final String APPLICATION_TITLE = "VDBC";
     private DatabaseSessionManager databaseSessionManager;
     private boolean closing = false;
