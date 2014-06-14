@@ -1,13 +1,9 @@
 package org.indp.vdbc.ui;
 
-import com.google.common.base.Strings;
-import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.AbstractOrderedLayout;
-import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
@@ -55,10 +51,10 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
         return profiles.isEmpty()
                 ? createProfileEditorInvite(rootPanel)
-                : createConnectionSelectorLayout(rootPanel);
+                : createConnectionSelectorLayout(rootPanel, null);
     }
 
-    private Component createConnectionSelectorLayout(final Panel rootPanel) {
+    private Component createConnectionSelectorLayout(final Panel rootPanel, final ConnectionProfile selectedProfile) {
         final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> profileInfoPanel = new ProfileInfoPanelHolder<>();
         final HorizontalLayout rootLayout = new HorizontalLayout();
 
@@ -104,7 +100,7 @@ public class ConnectionSelectorComponent extends VerticalLayout {
                 @Override
                 public void buttonClick(ClickEvent event) {
                     SettingsManagerDialog settingsManagerDialog = showSettingsManagerDialog(
-                            rootPanel, rootLayout, profileInfoPanel, (ConnectionProfile) profilesTable.getValue());
+                            rootPanel, (ConnectionProfile) profilesTable.getValue());
 
                     ConnectionProfile selectedProfile = (ConnectionProfile) profilesTable.getValue();
                     if (selectedProfile != null) {
@@ -128,27 +124,22 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         rootLayout.setExpandRatio(settingsPanelLayout, 1);
         rootLayout.setSizeFull();
 
+        if (selectedProfile != null) {
+            profilesTable.select(selectedProfile);
+        }
+
         return rootLayout;
     }
 
-    private SettingsManagerDialog showSettingsManagerDialog(final Panel rootPanel, final AbstractOrderedLayout currentRootLayout,
-                                                            final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> currentProfileInfoPanel,
-                                                            final ConnectionProfile selectedProfile) {
+    private SettingsManagerDialog showSettingsManagerDialog(final Panel rootPanel, final ConnectionProfile selectedProfile) {
         SettingsManagerDialog settingsManagerDialog = new SettingsManagerDialog();
         settingsManagerDialog.addCloseListener(new Window.CloseListener() {
             @Override
             public void windowClose(Window.CloseEvent e) {
-                if (currentRootLayout == null) {
-                    rootPanel.setContent(createRootLayout(rootPanel));
-                } else if (SettingsManager.get().getConfiguration().getProfiles().isEmpty()) {
-                    rootPanel.setContent(createProfileEditorInvite(rootPanel));
-                } else {
-                    Table profileSelector = createProfileSelector(currentProfileInfoPanel);
-                    currentRootLayout.replaceComponent(currentRootLayout.getComponent(0), profileSelector);
-                    if (profileSelector.containsId(selectedProfile)) {
-                        profileSelector.select(selectedProfile);
-                    }
-                }
+                rootPanel.setContent(
+                        SettingsManager.get().getConfiguration().getProfiles().isEmpty()
+                                ? createProfileEditorInvite(rootPanel)
+                                : createConnectionSelectorLayout(rootPanel, selectedProfile));
             }
         });
         getUI().addWindow(settingsManagerDialog);
@@ -166,7 +157,7 @@ public class ConnectionSelectorComponent extends VerticalLayout {
             Button settingsEditorLink = new Button("Open settings editor", new Button.ClickListener() {
                 @Override
                 public void buttonClick(ClickEvent event) {
-                    showSettingsManagerDialog(rootPanel, null, null, null);
+                    showSettingsManagerDialog(rootPanel, null);
                 }
             });
             settingsEditorLink.setStyleName(Reindeer.BUTTON_LINK);
@@ -187,37 +178,7 @@ public class ConnectionSelectorComponent extends VerticalLayout {
     }
 
     private Table createProfileSelector(final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> infoPanelHolder) {
-        List<ConnectionProfile> profileList = SettingsManager.get().getConfiguration().getProfiles();
-        Table table = new Table();
-        table.setHeight("100%");
-        table.setWidth("200px");
-        table.setImmediate(true);
-        table.setSelectable(true);
-        table.setNullSelectionAllowed(false);
-        table.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
-
-        table.addGeneratedColumn("color", new Table.ColumnGenerator() {
-            @Override
-            public Object generateCell(Table source, Object itemId, Object columnId) {
-                String color = ((ConnectionProfile) itemId).getColor();
-                return Strings.isNullOrEmpty(color)
-                        ? null
-                        : new Label("<div style=\"width: 10px; height: 10px; background-color: #" + color + "\"></div>", ContentMode.HTML);
-            }
-        });
-
-        table.addContainerProperty("title", String.class, "");
-        table.setItemCaptionPropertyId("title");
-        table.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
-
-        table.setColumnWidth("color", 12);
-
-        for (ConnectionProfile profile : profileList) {
-            Item item = table.addItem(profile);
-            item.getItemProperty("title").setValue(profile.getName());
-        }
-
-        table.addValueChangeListener(new Property.ValueChangeListener() {
+        ProfileListTable table = new ProfileListTable(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 ConnectionProfile cp = (ConnectionProfile) event.getProperty().getValue();
@@ -231,9 +192,7 @@ public class ConnectionSelectorComponent extends VerticalLayout {
             }
         });
 
-        if (!profileList.isEmpty()) {
-            table.select(profileList.get(0));
-        }
+        table.setWidth("200px");
 
         return table;
     }

@@ -1,20 +1,28 @@
 package org.indp.vdbc.ui.settings;
 
 import com.vaadin.data.Property;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.ComponentContainer;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.Window;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.ui.ConfirmDialog;
+import org.indp.vdbc.ui.ProfileListTable;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
 public class SettingsManagerDialog extends Window implements ConnectionProfileDetailsPanel.ProfileEditorEvents {
+
     private Table profilesTable;
     private ComponentContainer detailsContainer;
 
@@ -33,17 +41,16 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
 
         setContent(createContent());
 
-        refreshDetails();
+//        refreshDetails();
 
         addAction(new CloseShortcut(this, ShortcutAction.KeyCode.ESCAPE));
 
         this.focus();
     }
 
-    private void refreshDetails() {
+    private void refreshDetails(ConnectionProfile profile) {
         detailsContainer.removeAllComponents();
 
-        ConnectionProfile profile = getSelectedProfile();
         if (profile == null) {
             return;
         }
@@ -61,11 +68,11 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
     }
 
     private ComponentContainer createContent() {
-        Component leftSide = createLeftSide();
-        leftSide.setWidth("170px");
-
         detailsContainer = new VerticalLayout();
         detailsContainer.setSizeFull();
+
+        Component leftSide = createLeftSide();
+        leftSide.setWidth("170px");
 
         HorizontalLayout mainContent = new HorizontalLayout(leftSide, detailsContainer);
         mainContent.setSpacing(true);
@@ -81,25 +88,12 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
     }
 
     private Component createLeftSide() {
-        List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
-        profilesTable = new Table(null, new BeanItemContainer<>(ConnectionProfile.class, profiles));
-        profilesTable.setVisibleColumns("name");
-        profilesTable.setSizeFull();
-        profilesTable.setNullSelectionAllowed(false);
-        profilesTable.setImmediate(true);
-        profilesTable.setSelectable(true);
-        profilesTable.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
-        if (!profiles.isEmpty()) {
-            profilesTable.select(profiles.get(0));
-        }
-
-        profilesTable.addValueChangeListener(new Property.ValueChangeListener() {
+        profilesTable = new ProfileListTable(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
-                refreshDetails();
+                refreshDetails((ConnectionProfile) event.getProperty().getValue());
             }
         });
-
         return profilesTable;
     }
 
