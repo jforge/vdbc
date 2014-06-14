@@ -18,20 +18,21 @@ public class VdbcUI extends UI implements ConnectionListener {
 
     public static final String APPLICATION_TITLE = "VDBC";
     private DatabaseSessionManager databaseSessionManager;
-    private boolean closing = false;
 
     @Override
     protected void init(VaadinRequest request) {
-        databaseSessionManager = new DatabaseSessionManager(this);
+        getLoadingIndicatorConfiguration().setFirstDelay(50);
+        getLoadingIndicatorConfiguration().setSecondDelay(150);
+        getLoadingIndicatorConfiguration().setThirdDelay(500);
         getPage().setTitle(APPLICATION_TITLE);
+        databaseSessionManager = new DatabaseSessionManager(this);
         setContent(createConnectionSelectorView());
     }
 
     @Override
     public void close() {
-        closing = true;
-        databaseSessionManager.close();
         super.close();
+        databaseSessionManager.close();
     }
 
     @Override
@@ -42,7 +43,7 @@ public class VdbcUI extends UI implements ConnectionListener {
 
     @Override
     public void connectionClosed(DatabaseSession databaseSession) {
-        if (!closing) {
+        if (!isClosing()) {
             setContent(createConnectionSelectorView());
             getPage().setTitle(APPLICATION_TITLE);
         }
