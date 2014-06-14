@@ -2,11 +2,12 @@ package org.indp.vdbc.ui.profile;
 
 import org.indp.vdbc.model.config.ConnectionProfile;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.ServiceLoader;
 
-/**
- *
- */
 public interface ConnectionProfileSupportService<T extends ConnectionProfile> {
 
     Class<T> getProfileClass();
@@ -18,7 +19,6 @@ public interface ConnectionProfileSupportService<T extends ConnectionProfile> {
     ConnectionProfileLoginPanel<T> createLoginPanel(ConnectionProfile profile);
 
     String getName();
-
 
     public static class Lookup {
 

@@ -8,7 +8,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.services.DatabaseSessionManager;
-import org.indp.vdbc.ui.ConnectionSelectorView;
+import org.indp.vdbc.ui.ConnectionSelectorComponent;
 import org.indp.vdbc.ui.WorkspaceView;
 
 @Push
@@ -50,6 +50,6 @@ public class VdbcUI extends UI implements ConnectionListener {
     }
 
     private Component createConnectionSelectorView() {
-        return new ConnectionSelectorView(databaseSessionManager);
+        return new ConnectionSelectorComponent(databaseSessionManager);
     }
 }

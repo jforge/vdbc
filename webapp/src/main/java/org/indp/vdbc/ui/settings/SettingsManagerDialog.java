@@ -14,9 +14,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-/**
- *
- */
 public class SettingsManagerDialog extends Window implements ConnectionProfileDetailsPanel.ProfileEditorEvents {
     private Table profilesTable;
     private ComponentContainer detailsContainer;
@@ -151,6 +148,12 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         SettingsManager.get().getConfiguration().addProfile(profile);
         profilesTable.getContainerDataSource().addItem(profile);
         profilesTable.select(profile);
+    }
+
+    public void selectProfile(ConnectionProfile profile) {
+        if (profilesTable.containsId(profile)) {
+            profilesTable.select(profile);
+        }
     }
 
     private ConnectionProfile getSelectedProfile() {
