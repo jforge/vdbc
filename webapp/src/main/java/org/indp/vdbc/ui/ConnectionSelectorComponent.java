@@ -1,5 +1,6 @@
 package org.indp.vdbc.ui;
 
+import com.google.common.base.Strings;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
@@ -193,10 +194,24 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         table.setImmediate(true);
         table.setSelectable(true);
         table.setNullSelectionAllowed(false);
-        table.addContainerProperty("title", String.class, "");
         table.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
-        table.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
+
+        table.addGeneratedColumn("color", new Table.ColumnGenerator() {
+            @Override
+            public Object generateCell(Table source, Object itemId, Object columnId) {
+                String color = ((ConnectionProfile) itemId).getColor();
+                return Strings.isNullOrEmpty(color)
+                        ? null
+                        : new Label("<div style=\"width: 10px; height: 10px; background-color: #" + color + "\"></div>", ContentMode.HTML);
+            }
+        });
+
+        table.addContainerProperty("title", String.class, "");
         table.setItemCaptionPropertyId("title");
+        table.setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
+
+        table.setColumnWidth("color", 12);
+
         for (ConnectionProfile profile : profileList) {
             Item item = table.addItem(profile);
             item.getItemProperty("title").setValue(profile.getName());
