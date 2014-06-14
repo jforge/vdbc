@@ -8,9 +8,6 @@ import org.indp.vdbc.ui.profile.config.AbstractProfileField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- *
- */
 public class ColorField extends AbstractProfileField {
 
     private static final Logger log = LoggerFactory.getLogger(ColorField.class);
@@ -50,9 +47,7 @@ public class ColorField extends AbstractProfileField {
     }
 
     private String encodeColor(Color color) {
-        return Integer.toHexString(color.getRed()) +
-                Integer.toHexString(color.getGreen()) +
-                Integer.toHexString(color.getBlue());
+        return String.format("%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
     }
 
     private Color decodeColor(String color) {
