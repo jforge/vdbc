@@ -114,7 +114,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 SettingsManager.get().persistConfiguration();
-                Notification.show("Profiles saved.", Notification.Type.TRAY_NOTIFICATION);
+                Notification.show("Profiles saved", Notification.Type.TRAY_NOTIFICATION);
             }
         });
 
@@ -167,6 +167,6 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
 
     @Override
     public void profileUpdated(ConnectionProfile profile) {
-        profilesTable.getItem(profile).getItemProperty("name").setValue(profile.getName());
+        profilesTable.getItem(profile).getItemProperty("title").setValue(profile.getName());
     }
 }

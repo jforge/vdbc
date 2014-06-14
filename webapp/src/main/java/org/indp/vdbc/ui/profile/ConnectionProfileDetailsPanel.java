@@ -1,12 +1,20 @@
 package org.indp.vdbc.ui.profile;
 
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.VerticalLayout;
 import org.indp.vdbc.model.config.ConnectionProfile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- *
- */
 public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile> extends CustomComponent {
+
+    private static final Logger log = LoggerFactory.getLogger(ConnectionProfileDetailsPanel.class);
+
     private final T profile;
     private final ProfileEditorEvents profileEditorEvents;
 
@@ -20,6 +28,7 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
     protected abstract void apply();
 
     public interface ProfileEditorEvents {
+
         void profileUpdated(ConnectionProfile profile);
     }
 
@@ -50,6 +59,7 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
                     profileEditorEvents.profileUpdated(profile);
                     Notification.show("Changes applied", "Save profiles to persist settings for further use.", Notification.Type.TRAY_NOTIFICATION);
                 } catch (Exception e) {
+                    log.debug(e.getMessage(), e);
                     Notification.show("Check required values", Notification.Type.WARNING_MESSAGE);
                 }
             }
