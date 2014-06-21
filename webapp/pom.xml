@@ -9,7 +9,12 @@
     <artifactId>vdbc-webapp</artifactId>
     <packaging>war</packaging>
 
-    <url>http://code.google.com/p/vdbc/</url>
+    <repositories>
+        <repository>
+            <id>ext-lib</id>
+            <url>file://${project.basedir}/../ext-lib</url>
+        </repository>
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -65,7 +70,7 @@
         <dependency>
             <groupId>sqlworkbench</groupId>
             <artifactId>sqlworkbench</artifactId>
-            <systemPath>${basedir}/../ext-lib/sqlworkbench-${sqlworkbench.version}.jar</systemPath>
+            <version>116</version>
         </dependency>
     </dependencies>
 

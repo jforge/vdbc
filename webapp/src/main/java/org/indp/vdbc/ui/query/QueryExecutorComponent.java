@@ -3,7 +3,18 @@ package org.indp.vdbc.ui.query;
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.CheckBox;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.ProgressBar;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.themes.Reindeer;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.ResultSetTable;
@@ -11,6 +22,7 @@ import org.indp.vdbc.ui.UiUtils;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import workbench.sql.formatter.SqlFormatter;
 
 import java.io.Closeable;
 import java.sql.Connection;
@@ -20,10 +32,8 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- *
- */
 public class QueryExecutorComponent extends VerticalLayout implements Closeable {
+
     private static final boolean DEFAULT_AUTO_COMMIT = true;
     private static final Logger LOG = LoggerFactory.getLogger(QueryExecutorComponent.class);
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(10);
@@ -79,6 +89,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
             }
         });
         commitButton.setEnabled(false);
+
         final Button rollbackButton = createToolButton("Rollback", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
@@ -92,6 +103,15 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
             }
         });
         rollbackButton.setEnabled(false);
+
+        final Button formatButton = createToolButton("Format", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                String sql = query.getValue();
+                SqlFormatter formatter = new SqlFormatter(sql, "-");
+                query.setValue(formatter.getFormattedSql());
+            }
+        });
 
         final CheckBox autocommitCheckBox = new CheckBox("Autocommit", DEFAULT_AUTO_COMMIT);
         autocommitCheckBox.setImmediate(true);
@@ -118,10 +138,14 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
         maxRowsBox.setTextInputAllowed(false);
         maxRowsBox.setValue(100);
 
-        queryOptionsLayout = new HorizontalLayout(
+        queryOptionsLayout = new HorizontalLayout();
+        queryOptionsLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+        queryOptionsLayout.addComponents(
                 UiUtils.createHorizontalSpacer(5),
                 executeButton,
                 UiUtils.createHorizontalSpacer(5),
+                formatButton,
+                UiUtils.createHorizontalSpacer(10),
                 commitButton,
                 rollbackButton,
                 UiUtils.createHorizontalSpacer(5),
@@ -129,10 +153,6 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
                 maxRowsBox);
         queryOptionsLayout.setWidth("100%");
         queryOptionsLayout.setExpandRatio(autocommitCheckBox, 1);
-        queryOptionsLayout.setComponentAlignment(executeButton, Alignment.MIDDLE_LEFT);
-        queryOptionsLayout.setComponentAlignment(commitButton, Alignment.MIDDLE_LEFT);
-        queryOptionsLayout.setComponentAlignment(rollbackButton, Alignment.MIDDLE_LEFT);
-        queryOptionsLayout.setComponentAlignment(autocommitCheckBox, Alignment.MIDDLE_LEFT);
         queryOptionsLayout.setComponentAlignment(maxRowsBox, Alignment.MIDDLE_RIGHT);
     }
 
