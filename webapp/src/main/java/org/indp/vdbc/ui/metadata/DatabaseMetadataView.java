@@ -14,9 +14,6 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/**
- *
- */
 public class DatabaseMetadataView extends HorizontalSplitPanel implements Closeable {
     private final Connection connection;
 
@@ -42,7 +39,7 @@ public class DatabaseMetadataView extends HorizontalSplitPanel implements Closea
         setSecondComponent(new Label());
         setSplitPosition(200, Unit.PIXELS);
         setStyleName(Reindeer.TABSHEET_SMALL);
-        setCaption("Database Metadata");
+        setCaption("Database Overview");
     }
 
 

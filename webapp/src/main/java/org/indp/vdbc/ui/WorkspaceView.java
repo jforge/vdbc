@@ -50,7 +50,7 @@ public class WorkspaceView extends VerticalLayout {
                 addPage(new TablesView(databaseSession));
             }
         });
-        toolbar.addLinkButton("Database Metadata", new UnsafeRunnable() {
+        toolbar.addLinkButton("Database Overview", new UnsafeRunnable() {
             @Override
             public void run() throws Exception {
                 addPage(new DatabaseMetadataView(databaseSession));
