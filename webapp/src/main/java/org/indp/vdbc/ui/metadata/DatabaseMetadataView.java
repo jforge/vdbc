@@ -4,7 +4,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.util.JdbcUtils;
 
@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DatabaseMetadataView extends HorizontalSplitPanel implements Closeable {
+
     private final Connection connection;
 
     public interface BrowserCallback {
@@ -38,7 +39,7 @@ public class DatabaseMetadataView extends HorizontalSplitPanel implements Closea
         setFirstComponent(createSectionLinks(bc));
         setSecondComponent(new Label());
         setSplitPosition(200, Unit.PIXELS);
-        setStyleName(Reindeer.TABSHEET_SMALL);
+        setStyleName(ValoTheme.TABSHEET_COMPACT_TABBAR);
         setCaption("Database Overview");
     }
 

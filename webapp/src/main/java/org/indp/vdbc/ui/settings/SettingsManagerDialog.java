@@ -72,7 +72,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         detailsContainer.setSizeFull();
 
         Component leftSide = createLeftSide();
-        leftSide.setWidth("170px");
+        leftSide.setWidth("200px");
 
         HorizontalLayout mainContent = new HorizontalLayout(leftSide, detailsContainer);
         mainContent.setSpacing(true);

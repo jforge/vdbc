@@ -1,20 +1,18 @@
 package org.indp.vdbc.ui.settings;
 
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
 import java.util.Collection;
 
-/**
- *
- */
 public class ProfileTypeSelectorDialog extends Window {
 
     public ProfileTypeSelectorDialog(final SelectionListener selectionListener) {
         setCaption("Select Profile Type");
         setResizable(false);
         setModal(true);
-        setWidth("200px");
+        setWidth("250px");
 
         VerticalLayout content = new VerticalLayout();
         content.setSpacing(true);

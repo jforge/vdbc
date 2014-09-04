@@ -2,7 +2,7 @@ package org.indp.vdbc.ui.explorer.details;
 
 import com.vaadin.data.Property;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.DetailsState;
@@ -45,7 +45,7 @@ public class TableDetailsView extends VerticalLayout implements ObjectDetails {
     private TabSheet createTabSheet(final JdbcTable table, final DatabaseSession databaseSession) {
         final TabSheet tabSheet = new TabSheet();
         tabSheet.setSizeFull();
-        tabSheet.addStyleName(Reindeer.TABSHEET_SMALL);
+        tabSheet.addStyleName(ValoTheme.TABSHEET_COMPACT_TABBAR);
 
         TableStructureView tableStructureView = new TableStructureView(table, databaseSession);
         tableStructureView.setSizeFull();
@@ -105,6 +105,7 @@ public class TableDetailsView extends VerticalLayout implements ObjectDetails {
     }
 
     private static class State implements DetailsState {
+
         int selectedTabIndex;
     }
 

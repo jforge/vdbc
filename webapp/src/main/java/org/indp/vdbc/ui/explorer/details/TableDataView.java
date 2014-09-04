@@ -9,7 +9,7 @@ import com.vaadin.event.Action;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.db.DialectSupport;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.services.DatabaseSession;
@@ -27,6 +27,7 @@ import java.util.List;
  *
  */
 public class TableDataView extends VerticalLayout implements ToolbarContributor {
+
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
     public static final String TITLE = "Data";
 
@@ -44,14 +45,12 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
         toolbar = new HorizontalLayout();
         toolbar.setWidth("100%");
         Button refreshButton = new Button("Refresh", new Button.ClickListener() {
-
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 refreshDataView(table, databaseSession);
             }
-
         });
-        refreshButton.setStyleName(Reindeer.BUTTON_SMALL);
+        refreshButton.setStyleName(ValoTheme.BUTTON_SMALL);
         toolbar.addComponent(refreshButton);
         toolbar.setComponentAlignment(refreshButton, Alignment.MIDDLE_RIGHT);
 
@@ -118,7 +117,7 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
             table.setVisibleColumns(filterColumns(table.getVisibleColumns()));
 
             Panel panel = new Panel(table);
-            panel.addStyleName(Reindeer.PANEL_LIGHT);
+            panel.addStyleName(ValoTheme.PANEL_BORDERLESS);
             panel.setSizeFull();
             panel.addShortcutListener(new ShortcutListener("show record", ShortcutAction.KeyCode.F4, null) {
                 @Override

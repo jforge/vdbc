@@ -2,6 +2,7 @@ package org.indp.vdbc.ui.profile.impl;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
 import org.indp.vdbc.ui.profile.config.AbstractProfileField;
@@ -15,6 +16,7 @@ import java.util.Map;
  *
  */
 public abstract class AbstractConnectionProfileDetailsPanel<T extends ConnectionProfile> extends ConnectionProfileDetailsPanel<T> {
+
     private Component detailsComponent;
     private Map<String, AbstractProfileField> fields;
     private final FormContext formContext = new FormContext() {
@@ -60,7 +62,7 @@ public abstract class AbstractConnectionProfileDetailsPanel<T extends Connection
         this.fields = new LinkedHashMap<>(fields.size());
 
         FormLayout formLayout = new FormLayout();
-        formLayout.setWidth("100%");
+        formLayout.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
         for (AbstractProfileField field : fields) {
             field.setFormContext(formContext);

@@ -16,11 +16,8 @@ import org.slf4j.LoggerFactory;
 import java.io.Closeable;
 import java.io.IOException;
 
-/**
- *
- *
- */
 public class WorkspaceView extends VerticalLayout {
+
     private static final Logger log = LoggerFactory.getLogger(WorkspaceView.class);
     private TabSheet tabs;
 
@@ -34,7 +31,7 @@ public class WorkspaceView extends VerticalLayout {
                 databaseSession.close();
             }
         });
-        disconnectButton.setStyleName(BaseTheme.BUTTON_LINK);
+        disconnectButton.addStyleName(BaseTheme.BUTTON_LINK);
 
         Toolbar toolbar = new Toolbar();
         toolbar.setSpacing(true);
@@ -57,10 +54,10 @@ public class WorkspaceView extends VerticalLayout {
             }
         });
 
-        HorizontalLayout infoBar = new HorizontalLayout(
-                new Label(profile.getConnectionPresentationString()),
-                disconnectButton);
+        Label titleLabel = new Label(profile.getConnectionPresentationString());
+        HorizontalLayout infoBar = new HorizontalLayout(titleLabel, disconnectButton);
         infoBar.setWidth("100%");
+        infoBar.setComponentAlignment(titleLabel, Alignment.MIDDLE_LEFT);
         infoBar.setComponentAlignment(disconnectButton, Alignment.MIDDLE_RIGHT);
 
         String color = databaseSession.getConnectionProfile().getColor();

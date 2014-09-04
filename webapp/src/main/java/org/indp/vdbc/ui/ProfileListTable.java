@@ -7,6 +7,7 @@ import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractSelect;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 
@@ -19,6 +20,11 @@ public class ProfileListTable extends Table {
         setSizeFull();
         setImmediate(true);
         setSelectable(true);
+        addStyleName(ValoTheme.TABLE_COMPACT);
+        addStyleName(ValoTheme.TABLE_BORDERLESS);
+        addStyleName(ValoTheme.TABLE_NO_VERTICAL_LINES);
+        addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
+        addStyleName(ValoTheme.TABLE_NO_STRIPES);
         setNullSelectionAllowed(false);
         setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
 
@@ -36,7 +42,7 @@ public class ProfileListTable extends Table {
         setItemCaptionPropertyId("title");
         setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
 
-        setColumnWidth("color", 12);
+        setColumnWidth("color", 15);
 
         for (ConnectionProfile profile : profileList) {
             Item item = addItem(profile);

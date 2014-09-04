@@ -4,18 +4,9 @@ import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.Window;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSessionManager;
@@ -160,7 +151,7 @@ public class ConnectionSelectorComponent extends VerticalLayout {
                     showSettingsManagerDialog(rootPanel, null);
                 }
             });
-            settingsEditorLink.setStyleName(Reindeer.BUTTON_LINK);
+            settingsEditorLink.setStyleName(ValoTheme.BUTTON_LINK);
 
             Label line1 = new Label("No connection profiles defined.");
             line1.setSizeUndefined();

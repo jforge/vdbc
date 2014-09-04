@@ -7,9 +7,10 @@ import com.vaadin.data.util.IndexedContainer;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.combobox.FilteringMode;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.details.TableDetailsView;
@@ -24,6 +25,7 @@ import java.util.List;
  *
  */
 public class TableSelectorComponent extends VerticalLayout {
+
     private static final Logger LOG = LoggerFactory.getLogger(TableSelectorComponent.class);
     private static final String VALUE_PROPERTY = "value";
     private IndexedContainer tableListContainer;
@@ -38,6 +40,8 @@ public class TableSelectorComponent extends VerticalLayout {
         tableListContainer = createObjectListContainer();
         Table objectList = new Table(null, tableListContainer);
         objectList.setSizeFull();
+        objectList.addStyleName(ValoTheme.TABLE_COMPACT);
+        objectList.addStyleName(ValoTheme.TABLE_BORDERLESS);
         objectList.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
         objectList.setSelectable(true);
         objectList.setNullSelectionAllowed(false);
@@ -59,7 +63,11 @@ public class TableSelectorComponent extends VerticalLayout {
         final TextField filter = new TextField();
         filter.setInputPrompt("filter");
         filter.setWidth("100%");
-        filter.setStyleName(Reindeer.TEXTFIELD_SMALL);
+        filter.setIcon(FontAwesome.SEARCH);
+        filter.addStyleName(ValoTheme.TEXTFIELD_TINY);
+//        filter.addStyleName(ValoTheme.TEXTFIELD_BORDERLESS);
+        filter.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+
 
         filter.addTextChangeListener(new FieldEvents.TextChangeListener() {
             @Override
@@ -76,10 +84,10 @@ public class TableSelectorComponent extends VerticalLayout {
     }
 
     protected Component createSelectors() throws SQLException {
-        FormLayout l = new FormLayout();
-        l.setWidth("100%");
-        l.setSpacing(false);
-        l.setMargin(false);
+        FormLayout form = new FormLayout();
+        form.setSpacing(false);
+        form.setMargin(false);
+        form.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
         MetadataRetriever metadataRetriever = databaseSession.getMetadata();
         String catalogTerm = metadataRetriever.getCatalogTerm();
@@ -104,6 +112,7 @@ public class TableSelectorComponent extends VerticalLayout {
         schemas.setNullSelectionAllowed(false);
         schemas.setImmediate(true);
         schemas.setFilteringMode(FilteringMode.CONTAINS);
+        schemas.setInputPrompt("<none>");
         schemas.setVisible(!schemaNames.isEmpty());
         if (schemaNames.size() == 1) {
             schemas.select(schemaNames.get(0));
@@ -131,10 +140,10 @@ public class TableSelectorComponent extends VerticalLayout {
         schemas.addValueChangeListener(valueChangeListener);
         tableTypes.addValueChangeListener(valueChangeListener);
 
-        l.addComponent(catalogs);
-        l.addComponent(schemas);
-        l.addComponent(tableTypes);
-        return l;
+        form.addComponent(catalogs);
+        form.addComponent(schemas);
+        form.addComponent(tableTypes);
+        return form;
     }
 
     protected IndexedContainer createObjectListContainer() {

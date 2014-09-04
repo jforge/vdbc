@@ -3,19 +3,8 @@ package org.indp.vdbc.ui.query;
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Component;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.ProgressBar;
-import com.vaadin.ui.TextArea;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.VerticalSplitPanel;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.ResultSetTable;
 import org.indp.vdbc.ui.UiUtils;
@@ -170,7 +159,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
 
     protected Button createToolButton(String caption, Button.ClickListener clickListener) {
         final Button button = new Button(caption, clickListener);
-        button.addStyleName(Reindeer.BUTTON_SMALL);
+        button.addStyleName(ValoTheme.BUTTON_SMALL);
         return button;
     }
 
