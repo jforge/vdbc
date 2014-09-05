@@ -34,7 +34,7 @@ public class ProfileListTable extends Table {
                 String color = ((ConnectionProfile) itemId).getColor();
                 return Strings.isNullOrEmpty(color)
                         ? null
-                        : new Label("<div style=\"width: 10px; height: 10px; background-color: #" + color + "\"></div>", ContentMode.HTML);
+                        : new Label("<div style=\"width: 10px; height: 10px; border: 1px solid gray; background-color: #" + color + "\"></div>", ContentMode.HTML);
             }
         });
 
@@ -42,7 +42,7 @@ public class ProfileListTable extends Table {
         setItemCaptionPropertyId("title");
         setItemCaptionMode(AbstractSelect.ItemCaptionMode.PROPERTY);
 
-        setColumnWidth("color", 15);
+        setColumnWidth("color", 20);
 
         for (ConnectionProfile profile : profileList) {
             Item item = addItem(profile);

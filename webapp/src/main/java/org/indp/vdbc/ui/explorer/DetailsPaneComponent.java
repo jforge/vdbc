@@ -3,10 +3,8 @@ package org.indp.vdbc.ui.explorer;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.themes.ValoTheme;
 
-/**
- *
- */
 public class DetailsPaneComponent extends CustomComponent {
 
     private TabSheet tabSheet;
@@ -20,6 +18,7 @@ public class DetailsPaneComponent extends CustomComponent {
         if (tabSheet == null) {
             tabSheet = new TabSheet();
             tabSheet.setSizeFull();
+            tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
             setCompositionRoot(tabSheet);
         }
 

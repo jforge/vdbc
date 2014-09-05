@@ -36,7 +36,7 @@ public class SettingsManagerDialog extends Window implements ConnectionProfileDe
         setModal(true);
         setResizable(false);
         setCaption("Settings");
-        setWidth("600px");
+        setWidth("700px");
         setHeight("420px");
 
         setContent(createContent());

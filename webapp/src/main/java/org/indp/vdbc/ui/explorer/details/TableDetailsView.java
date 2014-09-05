@@ -8,10 +8,6 @@ import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.DetailsState;
 import org.indp.vdbc.ui.explorer.ObjectDetails;
 
-/**
- *
- *
- */
 public class TableDetailsView extends VerticalLayout implements ObjectDetails {
 
     private Property pinned;
@@ -28,6 +24,7 @@ public class TableDetailsView extends VerticalLayout implements ObjectDetails {
 
     private Component createToobar() {
         HorizontalLayout toolbar = new HorizontalLayout();
+        toolbar.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         toolbar.setWidth("100%");
 
         CheckBox checkBox = new CheckBox("Pin Tab", false);

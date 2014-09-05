@@ -7,7 +7,6 @@ import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.ResultSetTable;
-import org.indp.vdbc.ui.UiUtils;
 import org.indp.vdbc.util.JdbcUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -127,17 +126,16 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
         maxRowsBox.setTextInputAllowed(false);
         maxRowsBox.setValue(100);
 
+        CssLayout commitRollbackGroup = new CssLayout(commitButton, rollbackButton);
+        commitRollbackGroup.addStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+
         queryOptionsLayout = new HorizontalLayout();
+        queryOptionsLayout.setSpacing(true);
         queryOptionsLayout.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         queryOptionsLayout.addComponents(
-                UiUtils.createHorizontalSpacer(5),
                 executeButton,
-                UiUtils.createHorizontalSpacer(5),
                 formatButton,
-                UiUtils.createHorizontalSpacer(10),
-                commitButton,
-                rollbackButton,
-                UiUtils.createHorizontalSpacer(5),
+                commitRollbackGroup,
                 autocommitCheckBox,
                 maxRowsBox);
         queryOptionsLayout.setWidth("100%");

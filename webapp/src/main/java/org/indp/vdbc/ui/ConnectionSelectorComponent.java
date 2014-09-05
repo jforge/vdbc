@@ -2,7 +2,6 @@ package org.indp.vdbc.ui;
 
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
@@ -102,13 +101,13 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         }
 
         HorizontalLayout buttonsLayout = new HorizontalLayout(settingsButton, testButton, connectButton);
+        buttonsLayout.setSpacing(true);
         buttonsLayout.setWidth("100%");
-        buttonsLayout.setComponentAlignment(testButton, Alignment.MIDDLE_RIGHT);
+        buttonsLayout.setComponentAlignment(testButton, Alignment.MIDDLE_CENTER);
         buttonsLayout.setComponentAlignment(connectButton, Alignment.MIDDLE_RIGHT);
 
         VerticalLayout settingsPanelLayout = new VerticalLayout(profileInfoPanel, buttonsLayout);
         settingsPanelLayout.setSizeFull();
-        settingsPanelLayout.setMargin(new MarginInfo(false, true, true, true));
         settingsPanelLayout.setExpandRatio(profileInfoPanel, 1);
 
         rootLayout.addComponents(profilesTable, settingsPanelLayout);

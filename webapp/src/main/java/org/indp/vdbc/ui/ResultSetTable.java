@@ -7,6 +7,7 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,10 +18,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-/**
- *
- *
- */
 public class ResultSetTable extends VerticalLayout {
     private static final Logger LOG = LoggerFactory.getLogger(ResultSetTable.class);
     private Table table;
@@ -66,6 +63,7 @@ public class ResultSetTable extends VerticalLayout {
         }
 
         Table t = new Table(null, c);
+        t.addStyleName(ValoTheme.TABLE_COMPACT);
         t.setSizeFull();
         t.setPageLength(50);
         t.setColumnReorderingAllowed(true);

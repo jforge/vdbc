@@ -3,13 +3,10 @@ package org.indp.vdbc.ui.explorer.details;
 import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.shared.ui.MarginInfo;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.db.DialectSupport;
 
-/**
- *
- */
 public class SingleRecordViewWindow extends Window {
     private final Item item;
 
@@ -50,13 +47,12 @@ public class SingleRecordViewWindow extends Window {
 
         HorizontalLayout buttons = new HorizontalLayout(closeButton);
         buttons.setSpacing(true);
-        buttons.setMargin(true);
         buttons.setWidth("100%");
         buttons.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
 
         VerticalLayout layout = new VerticalLayout(fields, buttons);
 //        layout.setSizeFull();
-        layout.setMargin(false);
+        layout.setMargin(true);
         layout.setExpandRatio(fields, 1f);
         layout.setComponentAlignment(buttons, Alignment.MIDDLE_RIGHT);
         return layout;
@@ -64,8 +60,8 @@ public class SingleRecordViewWindow extends Window {
 
     private Component createFields() {
         FormLayout form = new FormLayout();
-        form.setWidth("100%");
-        form.setMargin(new MarginInfo(true, true, false, true));
+        form.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+        form.setMargin(true);
         for (Object propertyId : item.getItemPropertyIds()) {
             if (!DialectSupport.isServiceColumn(propertyId.toString())) {
                 Property property = item.getItemProperty(propertyId);

@@ -23,9 +23,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- */
 public class TableDataView extends VerticalLayout implements ToolbarContributor {
 
     private static final Logger LOG = LoggerFactory.getLogger(TableDataView.class);
@@ -92,6 +89,7 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
 
             SQLContainer container = new SQLContainer(query);
             final Table table = new Table(null, container);
+            table.addStyleName(ValoTheme.TABLE_COMPACT);
             table.setPageLength(100); // todo configure
             table.setSelectable(true);
             table.setSortEnabled(false);

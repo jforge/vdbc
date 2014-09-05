@@ -4,6 +4,7 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.BaseTheme;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.TablesView;
@@ -83,6 +84,7 @@ public class WorkspaceView extends VerticalLayout {
     private void createTabSheet() {
         tabs = new TabSheet();
         tabs.setSizeFull();
+        tabs.addStyleName(ValoTheme.TABSHEET_FRAMED);
         tabs.setCloseHandler(new TabSheet.CloseHandler() {
             @Override
             public void onTabClose(TabSheet tabsheet, Component component) {

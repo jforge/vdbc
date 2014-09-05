@@ -2,26 +2,9 @@ $v-app-loading-text: "";
 
 $v-font-family: sans-serif;
 $v-font-size: 14px;
-//$v-background-color: hsl(0, 0, 99.5%);
-//$v-app-background-color: #fff;
-
-//$v-focus-color: hsl(218, 80%, 60%);
 $v-focus-style: 0 0 0 0 rgba($v-focus-color, .5);
-
-//$v-border: 1px solid (v-shade 0.6);
+$v-animations-enabled: false;
 $v-border-radius: 2px;
-//$v-bevel: inset 0 1px 0 v-tint;
-//
-//$v-textfield-bevel: false;
-//$v-textfield-shadow: false;
-//$v-textfield-border: 1px solid v-shade;
-//$v-disabled-opacity: 0.5;
-//
-//$v-gradient: v-linear 3%;
-//$v-shadow: false;
-//$valo-menu-background-color: hsl(218, 20%, 98%);
-//$v-friendly-color: hsl(163, 61%, 41%);
-//$v-error-indicator-color: hsl(349, 66%, 56%);
 $v-unit-size: 30px;
 
 @import "../valo/valo";

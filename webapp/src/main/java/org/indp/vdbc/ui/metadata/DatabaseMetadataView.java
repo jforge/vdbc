@@ -51,8 +51,6 @@ public class DatabaseMetadataView extends HorizontalSplitPanel implements Closea
 
     protected Component createSectionLinks(BrowserCallback bc) {
         VerticalLayout vl = new VerticalLayout();
-        vl.setSpacing(true);
-        vl.setMargin(true);
         vl.addComponents(
                 new MetadataInfoSection("Catalogs", bc, new ResultSetDetailsProvider() {
 

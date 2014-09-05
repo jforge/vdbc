@@ -5,12 +5,8 @@ import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JndiConnectionProfile;
-import org.indp.vdbc.ui.ReadonlyTextField;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
 
-/**
- *
- */
 public class JndiConnectionProfileLoginPanel extends ConnectionProfileLoginPanel<JndiConnectionProfile> {
 
     public JndiConnectionProfileLoginPanel(JndiConnectionProfile profile) {
@@ -27,7 +23,7 @@ public class JndiConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
         FormLayout root = new FormLayout();
         root.setSizeFull();
 
-        TextField name = new ReadonlyTextField("JNDI Name:", getProfile().getJndiName());
+        TextField name = styleReadOnly(new TextField("JNDI Name:", getProfile().getJndiName()));
         root.addComponent(name);
 
         return root;
