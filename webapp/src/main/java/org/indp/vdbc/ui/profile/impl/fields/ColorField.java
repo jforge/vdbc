@@ -26,7 +26,7 @@ public class ColorField extends AbstractProfileField {
             fieldContainer.setSpacing(false);
             fieldContainer.setMargin(false);
             fieldContainer.setCaption(getTitle());
-            fieldContainer.setWidth("100%");
+            fieldContainer.setWidth("100px");
         }
         return fieldContainer;
     }

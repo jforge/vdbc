@@ -21,23 +21,20 @@ public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
     public ConnectionProfile createConnectionProfile() {
         JdbcConnectionProfile profile = getProfile();
         return new JdbcConnectionProfile(profile.getName(), profile.getDialect(), profile.getDriver(), profile.getUrl(),
-                userName.getValue(), password.getValue(), profile.getColor());
+                                         userName.getValue(), password.getValue(), profile.getColor());
     }
 
     @Override
     protected Component createCompositionRoot() {
         JdbcConnectionProfile profile = getProfile();
 
-        TextField driver = styleReadOnly(new TextField("Driver:", profile.getDriver()));
-        TextField url = styleReadOnly(new TextField("URL:", profile.getUrl()));
-
+//        TextField driver = styleReadOnly(new TextField("Driver:", profile.getDriver()));
+//        TextField url = styleReadOnly(new TextField("URL:", profile.getUrl()));
+//
         userName = styleEditable(new TextField("Username:", profile.getUser()));
         password = styleEditable(new PasswordField("Password:", profile.getPassword()));
 
-        FormLayout root = new FormLayout(driver, url, userName, password);
-        root.setSizeFull();
-//        root.setSpacing(false);
-        return root;
+        return new FormLayout(userName, password);
     }
 
     @Override

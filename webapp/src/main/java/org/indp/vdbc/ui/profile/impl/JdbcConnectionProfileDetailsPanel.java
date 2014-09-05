@@ -1,19 +1,17 @@
 package org.indp.vdbc.ui.profile.impl;
 
 import org.indp.vdbc.model.config.JdbcConnectionProfile;
+import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
 import org.indp.vdbc.ui.profile.config.AbstractProfileField;
 import org.indp.vdbc.ui.profile.impl.fields.*;
 
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- */
-public class JdbcConnectionProfileDetailsPanel extends AbstractConnectionProfileDetailsPanel<JdbcConnectionProfile> {
+public class JdbcConnectionProfileDetailsPanel extends ConnectionProfileDetailsPanel<JdbcConnectionProfile> {
 
-    public JdbcConnectionProfileDetailsPanel(JdbcConnectionProfile profile, ProfileEditorEvents profileEditorEvents) {
-        super(profile, profileEditorEvents);
+    public JdbcConnectionProfileDetailsPanel(JdbcConnectionProfile profile) {
+        super(profile);
     }
 
     @Override

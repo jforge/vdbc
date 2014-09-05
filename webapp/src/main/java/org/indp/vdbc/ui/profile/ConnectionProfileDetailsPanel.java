@@ -1,79 +1,100 @@
 package org.indp.vdbc.ui.profile;
 
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
+import com.vaadin.server.UserError;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.model.config.ConnectionProfile;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.indp.vdbc.ui.profile.config.AbstractProfileField;
+import org.indp.vdbc.ui.profile.config.FormContext;
+import org.indp.vdbc.ui.profile.impl.fields.ColorField;
+import org.indp.vdbc.ui.profile.impl.fields.DialectField;
+import org.indp.vdbc.ui.profile.impl.fields.SimpleProfileField;
+
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile> extends CustomComponent {
 
-    private static final Logger log = LoggerFactory.getLogger(ConnectionProfileDetailsPanel.class);
+    private Map<String, AbstractProfileField> fields;
+    private T profile;
 
-    private final T profile;
-    private final ProfileEditorEvents profileEditorEvents;
+    private final FormContext formContext = new FormContext() {
+        @Override
+        public AbstractProfileField getProfileField(String id) {
+            return fields.containsKey(id) ? fields.get(id) : null;
+        }
 
-    public ConnectionProfileDetailsPanel(T profile, ProfileEditorEvents profileEditorEvents) {
+        @Override
+        public ConnectionProfile getConnectionProfile() {
+            return profile;
+        }
+    };
+
+    protected ConnectionProfileDetailsPanel(T profile) {
         this.profile = profile;
-        this.profileEditorEvents = profileEditorEvents;
-    }
-
-    protected abstract Component getDetailsComponent();
-
-    protected abstract void apply();
-
-    public interface ProfileEditorEvents {
-
-        void profileUpdated(ConnectionProfile profile);
     }
 
     @Override
     public void attach() {
         super.attach();
-        setSizeFull();
-
-        Component panel = getDetailsComponent();
-        Component footer = createFooter();
-
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-
-        layout.addComponent(panel);
-        layout.addComponent(footer);
-        layout.setExpandRatio(panel, 1);
-
-        setCompositionRoot(layout);
+        setCompositionRoot(createContent());
     }
 
-    private Component createFooter() {
-        Button applyButton = new Button("Apply", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                try {
-                    apply();
-                    profileEditorEvents.profileUpdated(profile);
-                    Notification.show("Changes applied", "Save profiles to persist settings for further use.", Notification.Type.TRAY_NOTIFICATION);
-                } catch (Exception e) {
-                    log.debug(e.getMessage(), e);
-                    Notification.show("Check required values", Notification.Type.WARNING_MESSAGE);
-                }
-            }
-        });
-
-        HorizontalLayout footer = new HorizontalLayout();
-        footer.setSpacing(true);
-        footer.setDefaultComponentAlignment(Alignment.MIDDLE_RIGHT);
-        footer.addComponent(applyButton);
-        footer.setWidth("100%");
-        return footer;
+    protected List<AbstractProfileField> getFields() {
+        return Arrays.asList(
+                new SimpleProfileField("name"),
+                new DialectField("dialect", "Dialect", true),
+                new ColorField("color", "Color", false));
     }
 
-    protected final T getProfile() {
-        return profile;
+    public void apply() {
+        for (AbstractProfileField profileField : fields.values()) {
+            profileField.validate();
+        }
+
+        // write values to connection profile if we are still here
+        for (AbstractProfileField profileField : fields.values()) {
+            profileField.writeValue();
+        }
+    }
+
+    public T createTemporaryProfile() {
+        // todo rewrite profile fields, form context and other stuff to avoid such hackish things
+        T originalProfile = profile;
+        ConnectionProfileSupportService<? extends ConnectionProfile> connectionProfileSupportService = ConnectionProfileSupportService.Lookup.find(profile.getClass());
+        try {
+            T tempProfile = (T) connectionProfileSupportService.createConnectionProfile();
+            profile = tempProfile;
+            apply();
+            return tempProfile;
+        } finally {
+            profile = originalProfile;
+        }
+    }
+
+    private Component createContent() {
+        List<AbstractProfileField> formFields = getFields();
+        fields = new LinkedHashMap<>(formFields.size());
+
+        FormLayout formLayout = new FormLayout();
+        formLayout.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
+
+        for (AbstractProfileField field : formFields) {
+            field.setFormContext(formContext);
+            Component vaadinField = field.getFieldComponent();
+            fields.put(field.getId(), field);
+            formLayout.addComponent(vaadinField);
+        }
+
+        for (AbstractProfileField field : fields.values()) {
+            field.readValue();
+        }
+
+        return formLayout;
     }
 }

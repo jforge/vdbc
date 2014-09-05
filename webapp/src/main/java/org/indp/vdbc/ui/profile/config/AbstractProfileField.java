@@ -5,9 +5,6 @@ import com.vaadin.ui.DefaultFieldFactory;
 import com.vaadin.ui.Field;
 import org.indp.vdbc.model.config.ConnectionProfile;
 
-/**
- *
- */
 public abstract class AbstractProfileField {
 
     private final String id;

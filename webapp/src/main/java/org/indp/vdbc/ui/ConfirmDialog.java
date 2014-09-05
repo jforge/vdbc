@@ -2,14 +2,9 @@ package org.indp.vdbc.ui;
 
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.Reindeer;
-import com.vaadin.ui.themes.ValoTheme;
 
 import java.awt.event.ActionListener;
 
-/**
- *
- */
 public class ConfirmDialog extends Window {
     private final HorizontalLayout buttons;
 

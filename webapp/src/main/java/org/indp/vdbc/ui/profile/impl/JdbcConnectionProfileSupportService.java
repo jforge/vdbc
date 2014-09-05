@@ -6,9 +6,6 @@ import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
-/**
- *
- */
 public class JdbcConnectionProfileSupportService implements ConnectionProfileSupportService<JdbcConnectionProfile> {
 
     @Override
@@ -22,8 +19,8 @@ public class JdbcConnectionProfileSupportService implements ConnectionProfileSup
     }
 
     @Override
-    public ConnectionProfileDetailsPanel<JdbcConnectionProfile> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileEditorEvents profileEditorEvents) {
-        return new JdbcConnectionProfileDetailsPanel((JdbcConnectionProfile) profile, profileEditorEvents);
+    public ConnectionProfileDetailsPanel<JdbcConnectionProfile> createPropertiesPanel(ConnectionProfile profile) {
+        return new JdbcConnectionProfileDetailsPanel((JdbcConnectionProfile) profile);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package org.indp.vdbc.ui.settings;
 
 import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
 import java.util.Collection;

@@ -184,7 +184,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
 
     private void handleQueryExecution(String sql) {
         final long start = System.currentTimeMillis();
-        String statMsg = "";
+        String statMsg;
         try {
             try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                 stmt.setMaxRows(getMaxRows());

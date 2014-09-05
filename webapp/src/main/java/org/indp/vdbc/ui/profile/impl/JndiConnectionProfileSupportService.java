@@ -6,9 +6,6 @@ import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
-/**
- *
- */
 public class JndiConnectionProfileSupportService implements ConnectionProfileSupportService<JndiConnectionProfile> {
 
     @Override
@@ -22,9 +19,9 @@ public class JndiConnectionProfileSupportService implements ConnectionProfileSup
     }
 
     @Override
-    public ConnectionProfileDetailsPanel<JndiConnectionProfile> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileEditorEvents profileEditorEvents) {
+    public ConnectionProfileDetailsPanel<JndiConnectionProfile> createPropertiesPanel(ConnectionProfile profile) {
         assert profile instanceof JndiConnectionProfile;
-        return new JndiConnectionProfileDetailsPanel((JndiConnectionProfile) profile, profileEditorEvents);
+        return new JndiConnectionProfileDetailsPanel((JndiConnectionProfile) profile);
     }
 
     @Override

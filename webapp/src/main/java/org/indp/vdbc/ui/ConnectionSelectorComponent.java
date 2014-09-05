@@ -2,22 +2,26 @@ package org.indp.vdbc.ui;
 
 import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
-import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSessionManager;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
-import org.indp.vdbc.ui.settings.SettingsManagerDialog;
+import org.indp.vdbc.ui.settings.ProfileSettingsDialog;
+import org.indp.vdbc.ui.settings.ProfileTypeSelectorDialog;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class ConnectionSelectorComponent extends VerticalLayout {
 
     private final DatabaseSessionManager databaseSessionManager;
+    private Panel rootPanel;
+    private Table profileSelector;
 
     public ConnectionSelectorComponent(DatabaseSessionManager databaseSessionManager) {
         this.databaseSessionManager = databaseSessionManager;
@@ -27,34 +31,97 @@ public class ConnectionSelectorComponent extends VerticalLayout {
     public void attach() {
         super.attach();
 
-        Panel rootPanel = new Panel("Connect to...");
+        rootPanel = new Panel("Connect to...");
+        rootPanel.addStyleName(ValoTheme.PANEL_WELL);
         rootPanel.setWidth("500px");
-        rootPanel.setHeight("250px");
-        rootPanel.setContent(createRootLayout(rootPanel));
+        rootPanel.setHeight("300px");
+        recreateRootLayout();
 
         setSizeFull();
         addComponent(rootPanel);
         setComponentAlignment(rootPanel, Alignment.MIDDLE_CENTER);
     }
 
-    private Component createRootLayout(Panel rootPanel) {
+    private void recreateRootLayout() {
         List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
-        return profiles.isEmpty()
-                ? createProfileEditorInvite(rootPanel)
-                : createConnectionSelectorLayout(rootPanel, null);
+        Component component = profiles.isEmpty()
+                ? createProfileEditorInvite()
+                : createConnectionSelectorLayout();
+        rootPanel.setContent(component);
     }
 
-    private Component createConnectionSelectorLayout(final Panel rootPanel, final ConnectionProfile selectedProfile) {
-        final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> profileInfoPanel = new ProfileInfoPanelHolder<>();
-        final HorizontalLayout rootLayout = new HorizontalLayout();
+    private Component createConnectionSelectorLayout() {
+        final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> infoPanelHolder = new ProfileInfoPanelHolder<>();
+        profileSelector = createProfileSelector(infoPanelHolder);
+        HorizontalLayout content = new HorizontalLayout(profileSelector, infoPanelHolder);
+        content.setSizeFull();
+        content.setExpandRatio(infoPanelHolder, 1);
 
-        final Table profilesTable = createProfileSelector(profileInfoPanel);
+        Component buttons = createConnectionButtons(infoPanelHolder);
+        Component profileManagerToolbar = createProfileManagerToolbar(profileSelector);
 
-        Button connectButton = new Button("Connect", new Button.ClickListener() {
+        HorizontalLayout footer = new HorizontalLayout(profileManagerToolbar, buttons);
+        footer.setWidth("100%");
+        footer.addStyleName(ValoTheme.WINDOW_BOTTOM_TOOLBAR);
+        footer.setComponentAlignment(buttons, Alignment.MIDDLE_RIGHT);
 
+        VerticalLayout layout = new VerticalLayout(content, footer);
+        layout.setSizeFull();
+        layout.setExpandRatio(content, 1);
+
+        return layout;
+    }
+
+    private Component createProfileManagerToolbar(final Table profileSelector) {
+        if (!SettingsManager.get().isSettingsEditorEnabled()) {
+            return new Label();
+        }
+
+        MenuBar toolbar = new MenuBar();
+        toolbar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+
+        createToolbarItem(toolbar, "Create Profile", FontAwesome.PLUS, new MenuBar.Command() {
             @Override
-            public void buttonClick(ClickEvent event) {
-                ConnectionProfileLoginPanel panel = profileInfoPanel.getSettingsComponent();
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                addProfile();
+            }
+        });
+
+        createToolbarItem(toolbar, "Edit Profile", FontAwesome.PENCIL, new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                ConnectionProfile value = (ConnectionProfile) profileSelector.getValue();
+                if (value != null) {
+                    editProfile(value);
+                }
+            }
+        });
+
+        createToolbarItem(toolbar, "Remove Profile", FontAwesome.TRASH_O, new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                ConnectionProfile value = (ConnectionProfile) profileSelector.getValue();
+                if (value != null) {
+                    removeProfile(value);
+                }
+            }
+        });
+
+        return toolbar;
+    }
+
+    private void createToolbarItem(MenuBar toolbar, String hint, FontAwesome icon, MenuBar.Command command) {
+        MenuBar.MenuItem item = toolbar.addItem("", command);
+        item.setIcon(icon);
+        item.setStyleName(ValoTheme.BUTTON_ICON_ONLY);
+        item.setDescription(hint);
+    }
+
+    private Component createConnectionButtons(final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> infoPanelHolder) {
+        Button connectButton = new Button("Connect", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                ConnectionProfileLoginPanel panel = infoPanelHolder.getSettingsComponent();
                 ConnectionProfile profile = panel.createConnectionProfile();
                 try {
                     databaseSessionManager.createSession(profile);
@@ -65,106 +132,9 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         });
         connectButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
-        Button testButton = new Button("Test", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(ClickEvent event) {
-                try {
-                    ConnectionProfile selectedProfile = (ConnectionProfile) profilesTable.getValue();
-                    databaseSessionManager.validateProfile(selectedProfile);
-                    Notification.show("Connection successful");
-                } catch (Exception ex) {
-                    Notification.show("Test failed\n", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
-                }
-            }
-        });
-
-        Button settingsButton = new Button("Settings...");
-        if (!SettingsManager.get().isSettingsEditorEnabled()) {
-            settingsButton.setEnabled(false);
-            settingsButton.setDescription("Settings editor is disabled because '" +
-                                          SettingsManager.VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY +
-                                          "' system property is defined and its value is not 'true'.");
-        } else {
-            settingsButton.addClickListener(new Button.ClickListener() {
-                @Override
-                public void buttonClick(ClickEvent event) {
-                    SettingsManagerDialog settingsManagerDialog = showSettingsManagerDialog(
-                            rootPanel, (ConnectionProfile) profilesTable.getValue());
-
-                    ConnectionProfile selectedProfile = (ConnectionProfile) profilesTable.getValue();
-                    if (selectedProfile != null) {
-                        settingsManagerDialog.selectProfile(selectedProfile);
-                    }
-                }
-            });
-        }
-
-        HorizontalLayout buttonsLayout = new HorizontalLayout(settingsButton, testButton, connectButton);
-        buttonsLayout.setSpacing(true);
-        buttonsLayout.setWidth("100%");
-        buttonsLayout.setComponentAlignment(testButton, Alignment.MIDDLE_CENTER);
-        buttonsLayout.setComponentAlignment(connectButton, Alignment.MIDDLE_RIGHT);
-
-        VerticalLayout settingsPanelLayout = new VerticalLayout(profileInfoPanel, buttonsLayout);
-        settingsPanelLayout.setSizeFull();
-        settingsPanelLayout.setExpandRatio(profileInfoPanel, 1);
-
-        rootLayout.addComponents(profilesTable, settingsPanelLayout);
-        rootLayout.setExpandRatio(settingsPanelLayout, 1);
-        rootLayout.setSizeFull();
-
-        if (selectedProfile != null) {
-            profilesTable.select(selectedProfile);
-        }
-
-        return rootLayout;
-    }
-
-    private SettingsManagerDialog showSettingsManagerDialog(final Panel rootPanel, final ConnectionProfile selectedProfile) {
-        SettingsManagerDialog settingsManagerDialog = new SettingsManagerDialog();
-        settingsManagerDialog.addCloseListener(new Window.CloseListener() {
-            @Override
-            public void windowClose(Window.CloseEvent e) {
-                rootPanel.setContent(
-                        SettingsManager.get().getConfiguration().getProfiles().isEmpty()
-                                ? createProfileEditorInvite(rootPanel)
-                                : createConnectionSelectorLayout(rootPanel, selectedProfile));
-            }
-        });
-        getUI().addWindow(settingsManagerDialog);
-        return settingsManagerDialog;
-    }
-
-    private Component createProfileEditorInvite(final Panel rootPanel) {
-        VerticalLayout layout = new VerticalLayout();
-        layout.setSizeFull();
-        layout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-
-        if (!SettingsManager.get().isSettingsEditorEnabled()) {
-            layout.addComponent(new Label("No connection profiles defined and you are not allowed to create one."));
-        } else {
-            Button settingsEditorLink = new Button("Open settings editor", new Button.ClickListener() {
-                @Override
-                public void buttonClick(ClickEvent event) {
-                    showSettingsManagerDialog(rootPanel, null);
-                }
-            });
-            settingsEditorLink.setStyleName(ValoTheme.BUTTON_LINK);
-
-            Label line1 = new Label("No connection profiles defined.");
-            line1.setSizeUndefined();
-
-            VerticalLayout inner = new VerticalLayout();
-            inner.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
-            inner.addComponents(
-                    line1,
-                    new HorizontalLayout(settingsEditorLink, new Label("&nbsp;to create one.", ContentMode.HTML)));
-
-            layout.addComponents(inner);
-        }
-
-        return layout;
+        HorizontalLayout buttons = new HorizontalLayout(connectButton);
+        buttons.setSpacing(true);
+        return buttons;
     }
 
     private Table createProfileSelector(final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> infoPanelHolder) {
@@ -187,19 +157,101 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         return table;
     }
 
-    protected static class ProfileInfoPanelHolder<T extends Component> extends VerticalLayout {
+    private Component createProfileEditorInvite() {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setSizeFull();
+        layout.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+
+        if (!SettingsManager.get().isSettingsEditorEnabled()) {
+            layout.addComponent(new Label("No connection profiles defined and you are not allowed to create one."));
+        } else {
+            Button createProfileLink = new Button("Create profile", new Button.ClickListener() {
+                @Override
+                public void buttonClick(Button.ClickEvent event) {
+                    addProfile();
+                }
+            });
+            createProfileLink.setStyleName(ValoTheme.BUTTON_LINK);
+
+            Label line1 = new Label("No connection profiles defined.");
+            line1.setSizeUndefined();
+
+            VerticalLayout inner = new VerticalLayout();
+            inner.setDefaultComponentAlignment(Alignment.MIDDLE_CENTER);
+            inner.addComponents(line1, createProfileLink);
+
+            layout.addComponents(inner);
+        }
+
+        return layout;
+    }
+
+    private void selectProfile(ConnectionProfile profile) {
+        if (profileSelector != null && profileSelector.containsId(profile)) {
+            profileSelector.select(profile);
+            profileSelector.setCurrentPageFirstItemId(profile);
+        }
+    }
+
+    private void addProfile() {
+        getUI().addWindow(new ProfileTypeSelectorDialog(new ProfileTypeSelectorDialog.SelectionListener() {
+            @Override
+            public void onFactorySelected(ConnectionProfileSupportService factory) {
+                ConnectionProfile profile = factory.createConnectionProfile();
+                ProfileSettingsDialog.edit(profile, databaseSessionManager, new ProfileSettingsDialog.Callback() {
+                    @Override
+                    public void profileUpdated(ConnectionProfile profile) {
+                        SettingsManager settingsManager = SettingsManager.get();
+                        settingsManager.getConfiguration().addProfile(profile);
+                        settingsManager.persistConfiguration();
+                        recreateRootLayout();
+                        selectProfile(profile);
+                    }
+                });
+            }
+        }));
+
+    }
+
+    private void removeProfile(final ConnectionProfile profile) {
+        ConfirmDialog.confirmYesNo("Remove profile \"" + profile.getName() + "\"?", "Remove", "Cancel", new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                SettingsManager settingsManager = SettingsManager.get();
+                settingsManager.getConfiguration().removeProfile(profile);
+                settingsManager.persistConfiguration();
+                recreateRootLayout();
+            }
+        });
+    }
+
+    private void editProfile(ConnectionProfile profile) {
+        ProfileSettingsDialog.edit(profile, databaseSessionManager, new ProfileSettingsDialog.Callback() {
+            @Override
+            public void profileUpdated(ConnectionProfile profile) {
+                SettingsManager.get().persistConfiguration();
+                recreateRootLayout();
+                selectProfile(profile);
+            }
+        });
+    }
+
+    private static class ProfileInfoPanelHolder<T extends Component> extends Panel {
 
         private T component;
+        private final VerticalLayout content;
 
         public ProfileInfoPanelHolder() {
-            setMargin(false);
-            setWidth("100%");
+            setSizeFull();
+            addStyleName(ValoTheme.PANEL_BORDERLESS);
+            content = new VerticalLayout();
+            setContent(content);
         }
 
         public void setSettingsComponent(T component) {
-            removeAllComponents();
             this.component = component;
-            addComponent(this.component);
+            content.removeAllComponents();
+            content.addComponent(component);
         }
 
         public T getSettingsComponent() {

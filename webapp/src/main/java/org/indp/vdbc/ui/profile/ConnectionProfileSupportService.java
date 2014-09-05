@@ -2,11 +2,7 @@ package org.indp.vdbc.ui.profile;
 
 import org.indp.vdbc.model.config.ConnectionProfile;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 
 public interface ConnectionProfileSupportService<T extends ConnectionProfile> {
 
@@ -14,7 +10,7 @@ public interface ConnectionProfileSupportService<T extends ConnectionProfile> {
 
     T createConnectionProfile();
 
-    ConnectionProfileDetailsPanel<T> createPropertiesPanel(ConnectionProfile profile, ConnectionProfileDetailsPanel.ProfileEditorEvents profileEditorEvents);
+    ConnectionProfileDetailsPanel<T> createPropertiesPanel(ConnectionProfile profile);
 
     ConnectionProfileLoginPanel<T> createLoginPanel(ConnectionProfile profile);
 
