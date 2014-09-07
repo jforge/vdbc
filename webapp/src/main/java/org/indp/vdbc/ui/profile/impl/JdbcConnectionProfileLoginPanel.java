@@ -1,14 +1,14 @@
 package org.indp.vdbc.ui.profile.impl;
 
 import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.PasswordField;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JdbcConnectionProfile;
-import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
+import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanelFactory;
 
-public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanel<JdbcConnectionProfile> {
+public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanelFactory<JdbcConnectionProfile> {
 
     private TextField userName;
     private PasswordField password;
@@ -25,20 +25,45 @@ public class JdbcConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
     }
 
     @Override
-    protected Component createCompositionRoot() {
+    public Component createCompositionRoot() {
         JdbcConnectionProfile profile = getProfile();
 
-//        TextField driver = styleReadOnly(new TextField("Driver:", profile.getDriver()));
-//        TextField url = styleReadOnly(new TextField("URL:", profile.getUrl()));
-//
         userName = styleEditable(new TextField("Username:", profile.getUser()));
         password = styleEditable(new PasswordField("Password:", profile.getPassword()));
 
-        return new FormLayout(userName, password);
+        FocusableVerticalLayout form = new FocusableVerticalLayout(userName, password);
+        form.setSpacing(true);
+        form.setMargin(true);
+        form.setFocusTarget(password);
+        return form;
     }
 
-    @Override
-    public void focus() {
-        password.focus();
+    private static class FocusableVerticalLayout extends VerticalLayout implements Component.Focusable {
+
+        private Focusable focusTarget;
+
+        public FocusableVerticalLayout(Component... children) {
+            super(children);
+        }
+
+        public void setFocusTarget(Focusable focusTarget) {
+            this.focusTarget = focusTarget;
+        }
+
+        @Override
+        public void focus() {
+            if (focusTarget != null) {
+                focusTarget.focus();
+            }
+        }
+
+        @Override
+        public int getTabIndex() {
+            return 0;
+        }
+
+        @Override
+        public void setTabIndex(int tabIndex) {
+        }
     }
 }

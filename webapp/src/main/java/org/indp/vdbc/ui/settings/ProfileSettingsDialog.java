@@ -86,6 +86,8 @@ public class ProfileSettingsDialog extends Window {
         buttons.addStyleName(ValoTheme.WINDOW_BOTTOM_TOOLBAR);
         buttons.setWidth("100%");
 
-        return new VerticalLayout(propertiesPanel, buttons);
+        VerticalLayout layout = new VerticalLayout(propertiesPanel, buttons);
+        layout.setSpacing(true);
+        return layout;
     }
 }

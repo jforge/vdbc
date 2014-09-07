@@ -12,7 +12,7 @@ public interface ConnectionProfileSupportService<T extends ConnectionProfile> {
 
     ConnectionProfileDetailsPanel<T> createPropertiesPanel(ConnectionProfile profile);
 
-    ConnectionProfileLoginPanel<T> createLoginPanel(ConnectionProfile profile);
+    ConnectionProfileLoginPanelFactory<T> createLoginPanel(ConnectionProfile profile);
 
     String getName();
 

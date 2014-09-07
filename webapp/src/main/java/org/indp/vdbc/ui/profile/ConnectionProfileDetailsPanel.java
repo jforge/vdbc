@@ -1,7 +1,5 @@
 package org.indp.vdbc.ui.profile;
 
-import com.vaadin.server.UserError;
-import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
@@ -84,15 +82,24 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
         FormLayout formLayout = new FormLayout();
         formLayout.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
+        Focusable focusedField = null;
+
         for (AbstractProfileField field : formFields) {
             field.setFormContext(formContext);
             Component vaadinField = field.getFieldComponent();
             fields.put(field.getId(), field);
             formLayout.addComponent(vaadinField);
+            if (vaadinField instanceof Focusable && focusedField == null) {
+                focusedField = (Focusable) vaadinField;
+            }
         }
 
         for (AbstractProfileField field : fields.values()) {
             field.readValue();
+        }
+
+        if (focusedField != null) {
+            focusedField.focus();
         }
 
         return formLayout;

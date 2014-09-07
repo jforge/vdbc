@@ -13,7 +13,7 @@ $v-unit-size: 30px;
 
   @include valo;
 
-  textarea.v-textarea-monospace {
+  textarea.v-textarea.v-textarea-monospace {
     font-family: 'Courier New', Courier, monospace;
   }
 

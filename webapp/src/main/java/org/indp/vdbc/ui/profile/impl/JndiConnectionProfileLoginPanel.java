@@ -1,13 +1,13 @@
 package org.indp.vdbc.ui.profile.impl;
 
 import com.vaadin.ui.Component;
-import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JndiConnectionProfile;
-import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
+import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanelFactory;
 
-public class JndiConnectionProfileLoginPanel extends ConnectionProfileLoginPanel<JndiConnectionProfile> {
+public class JndiConnectionProfileLoginPanel extends ConnectionProfileLoginPanelFactory<JndiConnectionProfile> {
 
     public JndiConnectionProfileLoginPanel(JndiConnectionProfile profile) {
         super(profile);
@@ -19,13 +19,10 @@ public class JndiConnectionProfileLoginPanel extends ConnectionProfileLoginPanel
     }
 
     @Override
-    protected Component createCompositionRoot() {
-        FormLayout root = new FormLayout();
-        root.setSizeFull();
-
+    public Component createCompositionRoot() {
         TextField name = styleReadOnly(new TextField("JNDI Name:", getProfile().getJndiName()));
-        root.addComponent(name);
-
+        VerticalLayout root = new VerticalLayout(name);
+        root.setMargin(true);
         return root;
     }
 }

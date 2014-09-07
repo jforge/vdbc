@@ -8,7 +8,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSessionManager;
-import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
+import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanelFactory;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 import org.indp.vdbc.ui.settings.ProfileSettingsDialog;
 import org.indp.vdbc.ui.settings.ProfileTypeSelectorDialog;
@@ -51,7 +51,7 @@ public class ConnectionSelectorComponent extends VerticalLayout {
     }
 
     private Component createConnectionSelectorLayout() {
-        final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> infoPanelHolder = new ProfileInfoPanelHolder<>();
+        final ProfileInfoPanelHolder infoPanelHolder = new ProfileInfoPanelHolder();
         profileSelector = createProfileSelector(infoPanelHolder);
         HorizontalLayout content = new HorizontalLayout(profileSelector, infoPanelHolder);
         content.setSizeFull();
@@ -117,11 +117,11 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         item.setDescription(hint);
     }
 
-    private Component createConnectionButtons(final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> infoPanelHolder) {
+    private Component createConnectionButtons(final ProfileInfoPanelHolder infoPanelHolder) {
         Button connectButton = new Button("Connect", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                ConnectionProfileLoginPanel panel = infoPanelHolder.getSettingsComponent();
+                ConnectionProfileLoginPanelFactory panel = infoPanelHolder.getPanelFactory();
                 ConnectionProfile profile = panel.createConnectionProfile();
                 try {
                     databaseSessionManager.createSession(profile);
@@ -137,7 +137,7 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         return buttons;
     }
 
-    private Table createProfileSelector(final ProfileInfoPanelHolder<ConnectionProfileLoginPanel> infoPanelHolder) {
+    private Table createProfileSelector(final ProfileInfoPanelHolder infoPanelHolder) {
         ProfileListTable table = new ProfileListTable(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
@@ -146,8 +146,8 @@ public class ConnectionSelectorComponent extends VerticalLayout {
                     return;
                 }
                 ConnectionProfileSupportService<? extends ConnectionProfile> connectionProfileSupportService = ConnectionProfileSupportService.Lookup.find(cp.getClass());
-                ConnectionProfileLoginPanel<? extends ConnectionProfile> loginPanel = connectionProfileSupportService.createLoginPanel(cp);
-                infoPanelHolder.setSettingsComponent(loginPanel);
+                ConnectionProfileLoginPanelFactory<? extends ConnectionProfile> loginPanel = connectionProfileSupportService.createLoginPanel(cp);
+                infoPanelHolder.setPanelFactory(loginPanel);
                 infoPanelHolder.focus();
             }
         });
@@ -236,31 +236,27 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         });
     }
 
-    private static class ProfileInfoPanelHolder<T extends Component> extends Panel {
+    private static class ProfileInfoPanelHolder extends Panel {
 
-        private T component;
-        private final VerticalLayout content;
+        private ConnectionProfileLoginPanelFactory panelFactory;
 
         public ProfileInfoPanelHolder() {
             setSizeFull();
             addStyleName(ValoTheme.PANEL_BORDERLESS);
-            content = new VerticalLayout();
-            setContent(content);
         }
 
-        public void setSettingsComponent(T component) {
-            this.component = component;
-            content.removeAllComponents();
-            content.addComponent(component);
+        public void setPanelFactory(ConnectionProfileLoginPanelFactory panelFactory) {
+            this.panelFactory = panelFactory;
+            setContent(panelFactory.createCompositionRoot());
         }
 
-        public T getSettingsComponent() {
-            return component;
+        public ConnectionProfileLoginPanelFactory getPanelFactory() {
+            return panelFactory;
         }
 
         public void focus() {
-            if (component instanceof Focusable) {
-                ((Focusable) component).focus();
+            if (getContent() instanceof Focusable) {
+                ((Focusable) getContent()).focus();
             }
         }
     }

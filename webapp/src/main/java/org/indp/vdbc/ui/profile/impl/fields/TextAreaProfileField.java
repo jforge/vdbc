@@ -1,27 +1,31 @@
 package org.indp.vdbc.ui.profile.impl.fields;
 
 import com.vaadin.ui.AbstractTextField;
-import com.vaadin.ui.TextField;
+import com.vaadin.ui.TextArea;
 
-public class SimpleProfileField extends AbstractTextProfileField {
+public class TextAreaProfileField extends AbstractTextProfileField {
 
-    private TextField textField;
+    private final int rows;
+    private TextArea textField;
 
-    public SimpleProfileField(String id) {
+    public TextAreaProfileField(String id) {
         super(id);
+        rows = 4;
     }
 
-    public SimpleProfileField(String id, String title, boolean required) {
+    public TextAreaProfileField(String id, String title, int rows, boolean required) {
         super(id, title, required);
+        this.rows = rows;
     }
 
     @Override
     public AbstractTextField getFieldComponent() {
         if (textField == null) {
-            textField = new TextField(getTitle());
+            textField = new TextArea(getTitle());
             textField.setWidth("100%");
             textField.setNullRepresentation("");
             textField.setRequired(isRequired());
+            textField.setRows(rows);
         }
         return textField;
     }

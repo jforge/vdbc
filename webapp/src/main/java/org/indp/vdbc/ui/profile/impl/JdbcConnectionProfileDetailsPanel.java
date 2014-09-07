@@ -23,7 +23,7 @@ public class JdbcConnectionProfileDetailsPanel extends ConnectionProfileDetailsP
                 new UrlField("url", "JDBC URL", true),
                 new SimpleProfileField("user"),
                 new PasswordField("password", "Password", false),
-                new SimpleProfileField("validationQuery", "Validation Query", false),
+                new TextAreaProfileField("validationQuery", "Validation Query", 3, false),
                 new ColorField("color", "Color", false));
     }
 }

@@ -2,10 +2,7 @@ package org.indp.vdbc.ui.profile.impl.fields;
 
 import com.vaadin.ui.AbstractTextField;
 
-/**
- *
- */
-public class PasswordField extends SimpleProfileField {
+public class PasswordField extends AbstractTextProfileField {
 
     private com.vaadin.ui.PasswordField field;
 

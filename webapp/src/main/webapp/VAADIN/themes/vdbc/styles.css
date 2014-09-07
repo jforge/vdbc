@@ -11103,6 +11103,6 @@ div.v-layout.v-horizontal.v-widget {
 	overflow: hidden;
 }
 
-.vdbc textarea.v-textarea-monospace {
+.vdbc textarea.v-textarea.v-textarea-monospace {
 	font-family: "Courier New", Courier, monospace;
 }

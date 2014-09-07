@@ -3,7 +3,7 @@ package org.indp.vdbc.ui.profile.impl;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JndiConnectionProfile;
 import org.indp.vdbc.ui.profile.ConnectionProfileDetailsPanel;
-import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanel;
+import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanelFactory;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
 public class JndiConnectionProfileSupportService implements ConnectionProfileSupportService<JndiConnectionProfile> {
@@ -25,7 +25,7 @@ public class JndiConnectionProfileSupportService implements ConnectionProfileSup
     }
 
     @Override
-    public ConnectionProfileLoginPanel<JndiConnectionProfile> createLoginPanel(ConnectionProfile profile) {
+    public ConnectionProfileLoginPanelFactory<JndiConnectionProfile> createLoginPanel(ConnectionProfile profile) {
         assert profile instanceof JndiConnectionProfile;
         return new JndiConnectionProfileLoginPanel((JndiConnectionProfile) profile);
     }
