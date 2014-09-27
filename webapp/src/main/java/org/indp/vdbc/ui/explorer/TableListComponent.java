@@ -15,20 +15,18 @@ import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.details.TableDetailsView;
 import org.indp.vdbc.util.MetadataRetriever;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class TableSelectorComponent extends VerticalLayout {
+public class TableListComponent extends VerticalLayout {
 
     private static final String VALUE_PROPERTY = "value";
     private IndexedContainer tableListContainer;
     private DetailsListener detailsListener;
     private final DatabaseSession databaseSession;
 
-    public TableSelectorComponent(DatabaseSession databaseSession) throws SQLException {
+    public TableListComponent(DatabaseSession databaseSession) throws SQLException {
         this.databaseSession = databaseSession;
 
         Component selectors = createSelectors();
@@ -62,7 +60,6 @@ public class TableSelectorComponent extends VerticalLayout {
         filter.setWidth("100%");
         filter.setIcon(FontAwesome.SEARCH);
         filter.addStyleName(ValoTheme.TEXTFIELD_TINY);
-//        filter.addStyleName(ValoTheme.TEXTFIELD_BORDERLESS);
         filter.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
 
 

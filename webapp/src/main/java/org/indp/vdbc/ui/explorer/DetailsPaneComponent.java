@@ -19,6 +19,14 @@ public class DetailsPaneComponent extends CustomComponent {
             tabSheet = new TabSheet();
             tabSheet.setSizeFull();
             tabSheet.addStyleName(ValoTheme.TABSHEET_FRAMED);
+            tabSheet.addComponentDetachListener(new ComponentDetachListener() {
+                @Override
+                public void componentDetachedFromContainer(ComponentDetachEvent event) {
+                    if (tabSheet.getComponentCount() == 1) {
+                        tabSheet.setVisible(false);
+                    }
+                }
+            });
             setCompositionRoot(tabSheet);
         }
 
@@ -58,5 +66,8 @@ public class DetailsPaneComponent extends CustomComponent {
         tab.setIcon(component.getIcon());
         tab.setClosable(true);
         tabSheet.setSelectedTab(component);
+        if (!tabSheet.isVisible()) {
+            tabSheet.setVisible(true);
+        }
     }
 }

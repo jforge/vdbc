@@ -5,15 +5,11 @@ import org.indp.vdbc.services.DatabaseSession;
 
 import java.sql.SQLException;
 
-/**
- *
- *
- */
 public class TablesView extends HorizontalSplitPanel {
 
     public TablesView(DatabaseSession databaseSession) throws SQLException {
         final DetailsPaneComponent detailsPaneComponent = new DetailsPaneComponent();
-        TableSelectorComponent tableSelector = new TableSelectorComponent(databaseSession);
+        TableListComponent tableSelector = new TableListComponent(databaseSession);
         tableSelector.setDetailsListener(new DetailsListener() {
 
             @Override

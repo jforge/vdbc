@@ -47,7 +47,7 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
                 refreshDataView(table, databaseSession);
             }
         });
-        refreshButton.setStyleName(ValoTheme.BUTTON_SMALL);
+        refreshButton.addStyleName(ValoTheme.BUTTON_TINY);
         toolbar.addComponent(refreshButton);
         toolbar.setComponentAlignment(refreshButton, Alignment.MIDDLE_RIGHT);
 
@@ -90,6 +90,8 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
             SQLContainer container = new SQLContainer(query);
             final Table table = new Table(null, container);
             table.addStyleName(ValoTheme.TABLE_COMPACT);
+            table.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
+            table.addStyleName(ValoTheme.TABLE_NO_VERTICAL_LINES);
             table.setPageLength(100); // todo configure
             table.setSelectable(true);
             table.setSortEnabled(false);

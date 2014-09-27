@@ -64,6 +64,8 @@ public class ResultSetTable extends VerticalLayout {
 
         Table t = new Table(null, c);
         t.addStyleName(ValoTheme.TABLE_COMPACT);
+        t.addStyleName(ValoTheme.TABLE_NO_VERTICAL_LINES);
+        t.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
         t.setSizeFull();
         t.setPageLength(50);
         t.setColumnReorderingAllowed(true);

@@ -1,6 +1,6 @@
 package org.indp.vdbc.ui.explorer.details;
 
-import com.vaadin.data.Property;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.model.jdbc.JdbcTable;
@@ -10,7 +10,7 @@ import org.indp.vdbc.ui.explorer.ObjectDetails;
 
 public class TableDetailsView extends VerticalLayout implements ObjectDetails {
 
-    private Property pinned;
+    private boolean pinned;
     private final HorizontalLayout customToolbar = new HorizontalLayout();
     private final TabSheet tabSheet;
 
@@ -27,12 +27,22 @@ public class TableDetailsView extends VerticalLayout implements ObjectDetails {
         toolbar.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
         toolbar.setWidth("100%");
 
-        CheckBox checkBox = new CheckBox("Pin Tab", false);
-        pinned = checkBox;
+        MenuBar menuBar = new MenuBar();
+        menuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+        menuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
+        MenuBar.MenuItem pinTabItem = menuBar.addItem("Pin Tab", new MenuBar.Command() {
+            @Override
+            public void menuSelected(MenuBar.MenuItem selectedItem) {
+                pinned = selectedItem.isChecked();
+                selectedItem.setIcon(pinned ? FontAwesome.CHECK_SQUARE_O : FontAwesome.SQUARE_O);
+            }
+        });
+        pinTabItem.setIcon(FontAwesome.SQUARE_O);
+        pinTabItem.setCheckable(true);
 
         customToolbar.setWidth("100%");
 
-        toolbar.addComponent(checkBox);
+        toolbar.addComponent(menuBar);
         toolbar.addComponent(customToolbar);
         toolbar.setExpandRatio(customToolbar, 1f);
 
@@ -98,7 +108,7 @@ public class TableDetailsView extends VerticalLayout implements ObjectDetails {
 
     @Override
     public boolean isTemporary() {
-        return Boolean.FALSE.equals(pinned.getValue());
+        return !pinned;
     }
 
     private static class State implements DetailsState {
