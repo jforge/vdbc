@@ -5,5 +5,6 @@
     <features>
         <feature id="select.all.from.table" expression="select * from @{tableName}"/>
         <feature id="count.all" expression="select count(*) from @{tableName}"/>
+        <!--<feature id="build.tableName" expression="@{catalog != null ? catalog + '.' : ''}@{schema != null ? schema + '.' : ''}@{table}"/>-->
     </features>
 </dialect>

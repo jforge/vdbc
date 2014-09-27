@@ -6,9 +6,6 @@ import org.indp.vdbc.db.impl.model.DialectDefinition;
 
 import java.util.List;
 
-/**
- *
- */
 public abstract class AbstractXmlDefinedDialect implements Dialect {
 
     private final DialectDefinition dialectDefinition;
@@ -39,6 +36,11 @@ public abstract class AbstractXmlDefinedDialect implements Dialect {
     @Override
     public boolean supportsLimitedSelects() {
         return dialectDefinition.hasFeature("select.all.from.table.limit.offset");
+    }
+
+    @Override
+    public boolean supportsTableNameBuilder() {
+        return dialectDefinition.hasFeature("build.tableName");
     }
 
     @Override

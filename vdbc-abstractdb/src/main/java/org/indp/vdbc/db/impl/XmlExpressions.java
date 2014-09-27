@@ -10,15 +10,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- */
 public class XmlExpressions implements Expressions {
 
     private final DialectDefinition dialectDefinition;
 
     public XmlExpressions(DialectDefinition dialectDefinition) {
         this.dialectDefinition = dialectDefinition;
+    }
+
+    @Override
+    public String buildTableName(String catalog, String schema, String table) {
+        return eval("build.tableName",
+                    var("catalog", catalog),
+                    var("schema", schema),
+                    var("table", table));
     }
 
     @Override
@@ -29,9 +34,9 @@ public class XmlExpressions implements Expressions {
     @Override
     public String selectAllFromTable(String tableName, int offset, int limit) {
         return eval("select.all.from.table.limit.offset",
-                var("tableName", tableName),
-                var("offset", offset),
-                var("limit", limit));
+                    var("tableName", tableName),
+                    var("offset", offset),
+                    var("limit", limit));
     }
 
     @Override
@@ -64,6 +69,7 @@ public class XmlExpressions implements Expressions {
     }
 
     private class ContextVar<T> {
+
         private String name;
         private T value;
 

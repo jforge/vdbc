@@ -1,10 +1,12 @@
 package org.indp.vdbc.services;
 
+import com.google.common.base.Strings;
 import org.indp.vdbc.ConnectionListener;
 import org.indp.vdbc.db.Dialect;
 import org.indp.vdbc.db.DialectSupport;
 import org.indp.vdbc.model.DataSourceAdapter;
 import org.indp.vdbc.model.config.ConnectionProfile;
+import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.util.MetadataRetriever;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +14,11 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-/**
- *
- */
 public class DatabaseSession {
+
     private static final Logger LOG = LoggerFactory.getLogger(DatabaseSession.class);
 
     private final ConnectionProfile connectionProfile;
@@ -86,6 +87,36 @@ public class DatabaseSession {
 
     public boolean isClosed() {
         return closed;
+    }
+
+    public String buildTableName(JdbcTable table) throws SQLException {
+        return dialect.supportsTableNameBuilder()
+                ? dialect.getExpressions().buildTableName(table.getCatalog(), table.getSchema(), table.getName())
+                : buildGenericTableName(table, this);
+    }
+
+    private String buildGenericTableName(JdbcTable table, DatabaseSession databaseSession) throws SQLException {
+        DatabaseMetaData metaData = databaseSession.getMetadata().getRawMetadata();
+        String catalog = table.getCatalog();
+        String schema = table.getSchema();
+
+        String catalogSeparator = metaData.getCatalogSeparator();
+        String identifierQuoteString = metaData.getIdentifierQuoteString();
+        if (" ".equals(identifierQuoteString)) {
+            identifierQuoteString = "";
+        }
+
+        StringBuilder sb = new StringBuilder();
+        if (!Strings.isNullOrEmpty(catalog) && metaData.supportsCatalogsInTableDefinitions()) {
+            sb.append(identifierQuoteString).append(catalog).append(identifierQuoteString).append(catalogSeparator);
+        }
+        if (!Strings.isNullOrEmpty(schema) && metaData.supportsSchemasInTableDefinitions()) {
+            sb.append(identifierQuoteString).append(schema).append(identifierQuoteString).append(catalogSeparator);
+        }
+
+        sb.append(identifierQuoteString).append(table.getName()).append(identifierQuoteString);
+
+        return sb.toString();
     }
 
     private Dialect createDialect(ConnectionProfile connectionProfile) {

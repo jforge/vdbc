@@ -2,9 +2,6 @@ package org.indp.vdbc.db;
 
 import java.util.List;
 
-/**
- *
- */
 public interface Dialect {
 
     String getId();
@@ -18,4 +15,6 @@ public interface Dialect {
     List<String> getDrivers();
 
     boolean supportsLimitedSelects();
+
+    boolean supportsTableNameBuilder();
 }

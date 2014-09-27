@@ -1,6 +1,5 @@
 package org.indp.vdbc.ui.explorer.details;
 
-import com.google.common.base.Strings;
 import com.vaadin.data.Item;
 import com.vaadin.data.util.sqlcontainer.SQLContainer;
 import com.vaadin.data.util.sqlcontainer.connection.J2EEConnectionPool;
@@ -18,7 +17,6 @@ import org.indp.vdbc.util.ReadonlyFreeformStatementDelegate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +67,7 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
     protected void refreshDataView(JdbcTable tableDefinition, DatabaseSession databaseSession) {
         Component component;
         try {
-            final String tableName = createTableName(tableDefinition, databaseSession);
+            final String tableName = databaseSession.buildTableName(tableDefinition);
             final String queryString = databaseSession.getDialect().getExpressions().selectAllFromTable(tableName);
 
             final FreeformQuery query;
@@ -158,19 +156,6 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
             }
         }
         return list.toArray();
-    }
-
-    protected String createTableName(JdbcTable table, DatabaseSession databaseSession) throws SQLException {
-        DatabaseMetaData metaData = databaseSession.getMetadata().getRawMetadata();
-        StringBuilder sb = new StringBuilder();
-        if (!Strings.isNullOrEmpty(table.getCatalog()) && metaData.supportsCatalogsInTableDefinitions()) {
-            sb.append(table.getCatalog()).append(".");
-        }
-        if (!Strings.isNullOrEmpty(table.getSchema()) && metaData.supportsSchemasInTableDefinitions()) {
-            sb.append(table.getSchema()).append(".");
-        }
-        sb.append(table.getName());
-        return sb.toString();
     }
 
     @Override
