@@ -23,8 +23,6 @@
 //
 // * Read access to the web application's document root directory
 // * Read, write and delete access to the web application's working directory
-//
-// $Id: catalina.policy 1460221 2013-03-23 20:17:29Z kkolinko $
 // ============================================================================
 
 
@@ -84,6 +82,7 @@ grant codeBase "file:${catalina.home}/bin/tomcat-juli.jar" {
 
         permission java.util.PropertyPermission "java.util.logging.config.class", "read";
         permission java.util.PropertyPermission "java.util.logging.config.file", "read";
+        permission java.util.PropertyPermission "org.apache.juli.ClassLoaderLogManager.debug", "read";
         permission java.util.PropertyPermission "catalina.base", "read";
 
         // Note: To enable per context logging configuration, permit read access to
@@ -185,8 +184,12 @@ grant {
     // Applications using Comet need to be able to access this package
     permission java.lang.RuntimePermission "accessClassInPackage.org.apache.catalina.comet";
 
-    // Applications using WebSocket need to be able to access this package
+    // Applications using the legacy WebSocket implementation need to be able to access this package
     permission java.lang.RuntimePermission "accessClassInPackage.org.apache.catalina.websocket";
+
+    // Applications using the JSR-356 WebSocket implementation need to be able to access these packages
+    permission java.lang.RuntimePermission "accessClassInPackage.org.apache.tomcat.websocket";
+    permission java.lang.RuntimePermission "accessClassInPackage.org.apache.tomcat.websocket.server";
 };
 
 
