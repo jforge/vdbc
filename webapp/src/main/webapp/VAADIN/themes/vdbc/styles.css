@@ -416,7 +416,7 @@
  */
 
 .v-vaadin-version:after {
-	content: "@version@";
+	content: "7.3.1";
 }
 
 .v-widget {
@@ -4317,7 +4317,7 @@ div.v-layout.v-horizontal.v-widget {
 	color: #a3a3a3;
 }
 
-.vdbc .v-datefield [class$="button"] {
+.vdbc .v-datefield [class*="button"] {
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 	cursor: pointer;
@@ -4342,16 +4342,16 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 1px 0 0 1px;
 }
 
-.vdbc .v-datefield [class$="button"]:hover {
+.vdbc .v-datefield [class*="button"]:hover {
 	color: #474747;
 }
 
-.vdbc .v-datefield [class$="button"]:before {
+.vdbc .v-datefield [class*="button"]:before {
 	font-family: FontAwesome;
 	content: "\f073";
 }
 
-.vdbc .v-datefield [class$="button"]:active:after {
+.vdbc .v-datefield [class*="button"]:active:after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4367,12 +4367,12 @@ div.v-layout.v-horizontal.v-widget {
 	filter: alpha(opacity=50) ;
 }
 
-.vdbc .v-datefield.v-disabled [class$="button"] {
+.vdbc .v-datefield.v-disabled [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield.v-disabled [class$="button"]:active:after {
+.vdbc .v-datefield.v-disabled [class*="button"]:active:after {
 	display: none;
 }
 
@@ -4388,12 +4388,12 @@ div.v-layout.v-horizontal.v-widget {
 	border-color: #c5c5c5;
 }
 
-.vdbc .v-datefield.v-readonly [class$="button"] {
+.vdbc .v-datefield.v-readonly [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield.v-readonly [class$="button"]:active:after {
+.vdbc .v-datefield.v-readonly [class*="button"]:active:after {
 	display: none;
 }
 
@@ -4881,7 +4881,7 @@ div.v-layout.v-horizontal.v-widget {
 	padding-bottom: 0;
 }
 
-.vdbc .v-datefield-tiny [class$="button"] {
+.vdbc .v-datefield-tiny [class*="button"] {
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 	cursor: pointer;
@@ -4903,12 +4903,12 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 2px 0 0 2px;
 }
 
-.vdbc .v-datefield-tiny [class$="button"]:before {
+.vdbc .v-datefield-tiny [class*="button"]:before {
 	font-family: FontAwesome;
 	content: "\f073";
 }
 
-.vdbc .v-datefield-tiny [class$="button"]:active:after {
+.vdbc .v-datefield-tiny [class*="button"]:active:after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -4923,12 +4923,12 @@ div.v-layout.v-horizontal.v-widget {
 	filter: alpha(opacity=50) ;
 }
 
-.vdbc .v-datefield-tiny.v-disabled [class$="button"] {
+.vdbc .v-datefield-tiny.v-disabled [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield-tiny.v-disabled [class$="button"]:active:after {
+.vdbc .v-datefield-tiny.v-disabled [class*="button"]:active:after {
 	display: none;
 }
 
@@ -4944,12 +4944,12 @@ div.v-layout.v-horizontal.v-widget {
 	border-color: #c5c5c5;
 }
 
-.vdbc .v-datefield-tiny.v-readonly [class$="button"] {
+.vdbc .v-datefield-tiny.v-readonly [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield-tiny.v-readonly [class$="button"]:active:after {
+.vdbc .v-datefield-tiny.v-readonly [class*="button"]:active:after {
 	display: none;
 }
 
@@ -4994,7 +4994,7 @@ div.v-layout.v-horizontal.v-widget {
 	padding-bottom: 0;
 }
 
-.vdbc .v-datefield-compact [class$="button"], .vdbc .v-datefield-small [class$="button"] {
+.vdbc .v-datefield-compact [class*="button"], .vdbc .v-datefield-small [class*="button"] {
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 	cursor: pointer;
@@ -5016,12 +5016,12 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 2px 0 0 2px;
 }
 
-.vdbc .v-datefield-compact [class$="button"]:before, .vdbc .v-datefield-small [class$="button"]:before {
+.vdbc .v-datefield-compact [class*="button"]:before, .vdbc .v-datefield-small [class*="button"]:before {
 	font-family: FontAwesome;
 	content: "\f073";
 }
 
-.vdbc .v-datefield-compact [class$="button"]:active:after, .vdbc .v-datefield-small [class$="button"]:active:after {
+.vdbc .v-datefield-compact [class*="button"]:active:after, .vdbc .v-datefield-small [class*="button"]:active:after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -5036,12 +5036,12 @@ div.v-layout.v-horizontal.v-widget {
 	filter: alpha(opacity=50) ;
 }
 
-.vdbc .v-datefield-compact.v-disabled [class$="button"], .vdbc .v-datefield-small.v-disabled [class$="button"] {
+.vdbc .v-datefield-compact.v-disabled [class*="button"], .vdbc .v-datefield-small.v-disabled [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield-compact.v-disabled [class$="button"]:active:after, .vdbc .v-datefield-small.v-disabled [class$="button"]:active:after {
+.vdbc .v-datefield-compact.v-disabled [class*="button"]:active:after, .vdbc .v-datefield-small.v-disabled [class*="button"]:active:after {
 	display: none;
 }
 
@@ -5057,12 +5057,12 @@ div.v-layout.v-horizontal.v-widget {
 	border-color: #c5c5c5;
 }
 
-.vdbc .v-datefield-compact.v-readonly [class$="button"], .vdbc .v-datefield-small.v-readonly [class$="button"] {
+.vdbc .v-datefield-compact.v-readonly [class*="button"], .vdbc .v-datefield-small.v-readonly [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield-compact.v-readonly [class$="button"]:active:after, .vdbc .v-datefield-small.v-readonly [class$="button"]:active:after {
+.vdbc .v-datefield-compact.v-readonly [class*="button"]:active:after, .vdbc .v-datefield-small.v-readonly [class*="button"]:active:after {
 	display: none;
 }
 
@@ -5112,7 +5112,7 @@ div.v-layout.v-horizontal.v-widget {
 	padding-bottom: 0;
 }
 
-.vdbc .v-datefield-large [class$="button"] {
+.vdbc .v-datefield-large [class*="button"] {
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 	cursor: pointer;
@@ -5134,12 +5134,12 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 2px 0 0 2px;
 }
 
-.vdbc .v-datefield-large [class$="button"]:before {
+.vdbc .v-datefield-large [class*="button"]:before {
 	font-family: FontAwesome;
 	content: "\f073";
 }
 
-.vdbc .v-datefield-large [class$="button"]:active:after {
+.vdbc .v-datefield-large [class*="button"]:active:after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -5154,12 +5154,12 @@ div.v-layout.v-horizontal.v-widget {
 	filter: alpha(opacity=50) ;
 }
 
-.vdbc .v-datefield-large.v-disabled [class$="button"] {
+.vdbc .v-datefield-large.v-disabled [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield-large.v-disabled [class$="button"]:active:after {
+.vdbc .v-datefield-large.v-disabled [class*="button"]:active:after {
 	display: none;
 }
 
@@ -5175,12 +5175,12 @@ div.v-layout.v-horizontal.v-widget {
 	border-color: #c5c5c5;
 }
 
-.vdbc .v-datefield-large.v-readonly [class$="button"] {
+.vdbc .v-datefield-large.v-readonly [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield-large.v-readonly [class$="button"]:active:after {
+.vdbc .v-datefield-large.v-readonly [class*="button"]:active:after {
 	display: none;
 }
 
@@ -5226,7 +5226,7 @@ div.v-layout.v-horizontal.v-widget {
 	padding-bottom: 0;
 }
 
-.vdbc .v-datefield-huge [class$="button"] {
+.vdbc .v-datefield-huge [class*="button"] {
 	-webkit-tap-highlight-color: transparent;
 	-webkit-touch-callout: none;
 	cursor: pointer;
@@ -5248,12 +5248,12 @@ div.v-layout.v-horizontal.v-widget {
 	border-radius: 2px 0 0 2px;
 }
 
-.vdbc .v-datefield-huge [class$="button"]:before {
+.vdbc .v-datefield-huge [class*="button"]:before {
 	font-family: FontAwesome;
 	content: "\f073";
 }
 
-.vdbc .v-datefield-huge [class$="button"]:active:after {
+.vdbc .v-datefield-huge [class*="button"]:active:after {
 	content: "";
 	position: absolute;
 	top: 0;
@@ -5268,12 +5268,12 @@ div.v-layout.v-horizontal.v-widget {
 	filter: alpha(opacity=50) ;
 }
 
-.vdbc .v-datefield-huge.v-disabled [class$="button"] {
+.vdbc .v-datefield-huge.v-disabled [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield-huge.v-disabled [class$="button"]:active:after {
+.vdbc .v-datefield-huge.v-disabled [class*="button"]:active:after {
 	display: none;
 }
 
@@ -5289,12 +5289,12 @@ div.v-layout.v-horizontal.v-widget {
 	border-color: #c5c5c5;
 }
 
-.vdbc .v-datefield-huge.v-readonly [class$="button"] {
+.vdbc .v-datefield-huge.v-readonly [class*="button"] {
 	cursor: default;
 	pointer-events: none;
 }
 
-.vdbc .v-datefield-huge.v-readonly [class$="button"]:active:after {
+.vdbc .v-datefield-huge.v-readonly [class*="button"]:active:after {
 	display: none;
 }
 

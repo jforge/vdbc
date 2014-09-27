@@ -48,6 +48,8 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
         setExpandRatio(splitPanel, 1);
 
         setCaption("Query");
+
+        query.focus();
     }
 
     @Override

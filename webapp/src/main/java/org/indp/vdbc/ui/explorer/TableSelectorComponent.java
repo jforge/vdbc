@@ -21,12 +21,8 @@ import org.slf4j.LoggerFactory;
 import java.sql.SQLException;
 import java.util.List;
 
-/**
- *
- */
 public class TableSelectorComponent extends VerticalLayout {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TableSelectorComponent.class);
     private static final String VALUE_PROPERTY = "value";
     private IndexedContainer tableListContainer;
     private DetailsListener detailsListener;
@@ -42,6 +38,7 @@ public class TableSelectorComponent extends VerticalLayout {
         objectList.setSizeFull();
         objectList.addStyleName(ValoTheme.TABLE_COMPACT);
         objectList.addStyleName(ValoTheme.TABLE_BORDERLESS);
+        objectList.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
         objectList.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
         objectList.setSelectable(true);
         objectList.setNullSelectionAllowed(false);

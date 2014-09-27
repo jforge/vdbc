@@ -1,5 +1,6 @@
 package org.indp.vdbc.ui;
 
+import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
@@ -10,12 +11,13 @@ import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.TablesView;
 import org.indp.vdbc.ui.metadata.DatabaseMetadataView;
 import org.indp.vdbc.ui.query.QueryExecutorComponent;
-import org.indp.vdbc.util.UnsafeRunnable;
+import org.indp.vdbc.util.UnsafeCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class WorkspaceView extends VerticalLayout {
 
@@ -34,42 +36,66 @@ public class WorkspaceView extends VerticalLayout {
         });
         disconnectButton.addStyleName(BaseTheme.BUTTON_LINK);
 
-        Toolbar toolbar = new Toolbar();
-        toolbar.setSpacing(true);
-        toolbar.addLinkButton("Query", new UnsafeRunnable() {
-            @Override
-            public void run() throws Exception {
-                addPage(new QueryExecutorComponent(databaseSession));
-            }
-        });
-        toolbar.addLinkButton("Tables", new UnsafeRunnable() {
-            @Override
-            public void run() throws Exception {
-                addPage(new TablesView(databaseSession));
-            }
-        });
-        toolbar.addLinkButton("Database Overview", new UnsafeRunnable() {
-            @Override
-            public void run() throws Exception {
-                addPage(new DatabaseMetadataView(databaseSession));
-            }
-        });
-
+        MenuBar menuBar = createMenu(databaseSession);
         Label titleLabel = new Label(profile.getConnectionPresentationString());
-        HorizontalLayout infoBar = new HorizontalLayout(titleLabel, disconnectButton);
-        infoBar.setWidth("100%");
-        infoBar.setComponentAlignment(titleLabel, Alignment.MIDDLE_LEFT);
-        infoBar.setComponentAlignment(disconnectButton, Alignment.MIDDLE_RIGHT);
+
+        HorizontalLayout leftSide = new HorizontalLayout();
+        leftSide.setDefaultComponentAlignment(Alignment.MIDDLE_LEFT);
+        leftSide.addComponents(menuBar, titleLabel);
+
+        HorizontalLayout top = new HorizontalLayout();
+
+        top.addComponents(leftSide, disconnectButton);
+        top.setComponentAlignment(leftSide, Alignment.MIDDLE_LEFT);
+        top.setComponentAlignment(disconnectButton, Alignment.MIDDLE_RIGHT);
 
         String color = databaseSession.getConnectionProfile().getColor();
         if (color != null && !color.isEmpty()) {
             String className = "vdbc-header";
             Page.getCurrent().getStyles().add("." + className + " {background-color:#" + color + ";}");
-            infoBar.addStyleName(className);
+            top.addStyleName(className);
         }
 
-        addComponents(infoBar, toolbar);
-        setWidth("100%");
+        top.setWidth("100%");
+
+        addComponent(top);
+
+        addAttachListener(new AttachListener() {
+            @Override
+            public void attach(AttachEvent event) {
+                try {
+                    addPage(new QueryExecutorComponent(databaseSession));
+                } catch (SQLException ignored) {
+                }
+            }
+        });
+    }
+
+    private MenuBar createMenu(final DatabaseSession databaseSession) {
+        MenuBar menuBar = new MenuBar();
+        menuBar.addStyleName(ValoTheme.MENUBAR_BORDERLESS);
+        menuBar.addStyleName(ValoTheme.MENUBAR_SMALL);
+        menuBar.setSizeUndefined();
+        MenuBar.MenuItem rootItem = menuBar.addItem("", FontAwesome.BARS, null);
+        rootItem.addItem("Query", new UnsafeCommand() {
+            @Override
+            public void menuSelectedImpl(MenuBar.MenuItem selectedItem) throws Exception {
+                addPage(new QueryExecutorComponent(databaseSession));
+            }
+        });
+        rootItem.addItem("Tables", new UnsafeCommand() {
+            @Override
+            public void menuSelectedImpl(MenuBar.MenuItem selectedItem) throws Exception {
+                addPage(new TablesView(databaseSession));
+            }
+        });
+        rootItem.addItem("Database Overview", new UnsafeCommand() {
+            @Override
+            public void menuSelectedImpl(MenuBar.MenuItem selectedItem) throws Exception {
+                addPage(new DatabaseMetadataView(databaseSession));
+            }
+        });
+        return menuBar;
     }
 
     private void addPage(Component component) {
