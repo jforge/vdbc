@@ -7,7 +7,6 @@ import com.vaadin.ui.Component;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.ValoTheme;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,17 +61,7 @@ public class ResultSetTable extends VerticalLayout {
             }
         }
 
-        Table t = new Table(null, c);
-        t.addStyleName(ValoTheme.TABLE_COMPACT);
-        t.addStyleName(ValoTheme.TABLE_NO_VERTICAL_LINES);
-        t.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
-        t.setSizeFull();
-        t.setPageLength(50);
-        t.setColumnReorderingAllowed(true);
-        t.setColumnCollapsingAllowed(true);
-        t.setSelectable(true);
-        t.setNullSelectionAllowed(false);
-        return t;
+        return UiUtils.createTable(c);
     }
 
     protected Class<?> getClassForSqlType(String name) {

@@ -12,6 +12,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.db.DialectSupport;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.services.DatabaseSession;
+import org.indp.vdbc.ui.UiUtils;
 import org.indp.vdbc.util.CustomFreeformQuery;
 import org.indp.vdbc.util.ReadonlyFreeformStatementDelegate;
 import org.slf4j.Logger;
@@ -86,17 +87,7 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
             }
 
             SQLContainer container = new SQLContainer(query);
-            final Table table = new Table(null, container);
-            table.addStyleName(ValoTheme.TABLE_COMPACT);
-            table.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
-            table.addStyleName(ValoTheme.TABLE_NO_VERTICAL_LINES);
-            table.setPageLength(100); // todo configure
-            table.setSelectable(true);
-            table.setSortEnabled(false);
-            table.setColumnReorderingAllowed(true);
-            table.setColumnCollapsingAllowed(true);
-            table.setNullSelectionAllowed(false);
-            table.setSizeFull();
+            final Table table = UiUtils.createTable(container);
             table.addActionHandler(new Action.Handler() {
                 private final Action viewSingleRecordAction = new Action("Single record view...");
 

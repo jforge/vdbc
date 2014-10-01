@@ -68,6 +68,10 @@
             <artifactId>h2</artifactId>
         </dependency>
         <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
             <groupId>sqlworkbench</groupId>
             <artifactId>sqlworkbench</artifactId>
             <version>116</version>
