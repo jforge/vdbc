@@ -1,5 +1,6 @@
 package org.indp.vdbc;
 
+import com.google.common.base.Strings;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
@@ -38,7 +39,8 @@ public class VdbcUI extends UI implements ConnectionListener {
     @Override
     public void connectionEstablished(DatabaseSession databaseSession) {
         setContent(new WorkspaceView(databaseSession));
-        getPage().setTitle(databaseSession.getConnectionProfile().getName() + " - " + APPLICATION_TITLE);
+        String profileName = databaseSession.getConnectionProfile().getName();
+        getPage().setTitle(Strings.isNullOrEmpty(profileName) ? APPLICATION_TITLE : profileName);
     }
 
     @Override
