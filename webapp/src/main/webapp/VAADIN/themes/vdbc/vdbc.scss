@@ -9,14 +9,14 @@ $v-unit-size: 30px;
 
 @import "../valo/valo";
 
+@mixin monospace {
+  font-family: 'Courier New', Courier, monospace;
+  color: black;
+}
+
 @mixin vdbc {
 
   @include valo;
-
-  @mixin monospace {
-    font-family: 'Courier New', Courier, monospace;
-    color: black;
-  }
 
   textarea.v-textarea.v-textarea-monospace {
     @include monospace
