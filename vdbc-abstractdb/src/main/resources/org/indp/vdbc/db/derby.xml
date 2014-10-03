@@ -8,7 +8,7 @@
         <driver>org.apache.derby.jdbc.ClientDriver</driver>
     </drivers>
     <features>
-        <feature id="select.all.from.table.limit.offset" expression="select * from @{tableName} offset @{offset} rows fetch next @{limit} rows only"/>
+        <feature id="select.all.from.table.limit.offset" expression="select * from @{tableName} @{filter == null ? '' : 'where ' + filter} offset @{offset} rows fetch next @{limit} rows only"/>
         <feature id="build.tableName" expression="@{schema != null ? '&quot;' + schema + '&quot;.' : ''}&quot;@{table}&quot;"/>
     </features>
 </dialect>

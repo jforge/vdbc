@@ -4,9 +4,9 @@ public interface Expressions {
 
     String buildTableName(String catalog, String schema, String table);
 
-    String selectAllFromTable(String tableName);
+    String selectAllFromTable(String tableName, String filter);
 
-    String selectAllFromTable(String tableName, int offset, int limit);
+    String selectAllFromTable(String tableName, String filter, int offset, int limit);
 
-    String count(String tableName);
+    String count(String tableName, String filter);
 }

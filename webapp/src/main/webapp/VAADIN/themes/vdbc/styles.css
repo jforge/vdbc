@@ -11107,3 +11107,8 @@ div.v-layout.v-horizontal.v-widget {
 	font-family: "Courier New", Courier, monospace;
 	color: black;
 }
+
+.vdbc input.v-textfield.v-textfield-monospace {
+	font-family: "Courier New", Courier, monospace;
+	color: black;
+}

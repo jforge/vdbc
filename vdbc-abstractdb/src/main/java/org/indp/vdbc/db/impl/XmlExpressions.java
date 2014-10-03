@@ -27,21 +27,26 @@ public class XmlExpressions implements Expressions {
     }
 
     @Override
-    public String selectAllFromTable(String tableName) {
-        return eval("select.all.from.table", var("tableName", tableName));
+    public String selectAllFromTable(String tableName, String filter) {
+        return eval("select.all.from.table",
+                var("tableName", tableName),
+                var("filter", filter));
     }
 
     @Override
-    public String selectAllFromTable(String tableName, int offset, int limit) {
+    public String selectAllFromTable(String tableName, String filter, int offset, int limit) {
         return eval("select.all.from.table.limit.offset",
                     var("tableName", tableName),
+                    var("filter", filter),
                     var("offset", offset),
                     var("limit", limit));
     }
 
     @Override
-    public String count(String tableName) {
-        return eval("count.all", var("tableName", tableName));
+    public String count(String tableName, String filter) {
+        return eval("count.all",
+                var("tableName", tableName),
+                var("filter", filter));
     }
 
     private <T> T eval(String featureId, ContextVar... vars) {

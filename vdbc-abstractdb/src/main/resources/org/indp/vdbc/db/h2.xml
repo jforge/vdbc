@@ -9,6 +9,6 @@
         <driver>org.h2.Driver</driver>
     </drivers>
     <features>
-        <feature id="select.all.from.table.limit.offset" expression="select * from @{tableName} limit @{limit} offset @{offset}"/>
+        <feature id="select.all.from.table.limit.offset" expression="select * from @{tableName} @{filter == null ? '' : 'where ' + filter} limit @{limit} offset @{offset}"/>
     </features>
 </dialect>

@@ -48,6 +48,7 @@ public final class UiUtils {
         table.addStyleName(ValoTheme.TABLE_COMPACT);
         table.addStyleName(ValoTheme.TABLE_NO_HORIZONTAL_LINES);
         table.addStyleName(ValoTheme.TABLE_NO_VERTICAL_LINES);
+        table.addStyleName(ValoTheme.TABLE_BORDERLESS);
         table.setPageLength(100); // todo configure
         table.setSelectable(true);
         table.setSortEnabled(false);

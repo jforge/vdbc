@@ -13,9 +13,17 @@ $v-unit-size: 30px;
 
   @include valo;
 
-  textarea.v-textarea.v-textarea-monospace {
+  @mixin monospace {
     font-family: 'Courier New', Courier, monospace;
     color: black;
+  }
+
+  textarea.v-textarea.v-textarea-monospace {
+    @include monospace
+  }
+
+  input.v-textfield.v-textfield-monospace {
+    @include monospace
   }
 
 }

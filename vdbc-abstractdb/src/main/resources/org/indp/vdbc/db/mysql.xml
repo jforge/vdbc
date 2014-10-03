@@ -8,6 +8,6 @@
         <driver>org.gjt.mm.mysql.Driver</driver>
     </drivers>
     <features>
-        <feature id="select.all.from.table.limit.offset" expression="select * from @{tableName} limit @{offset},@{limit}"/>
+        <feature id="select.all.from.table.limit.offset" expression="select * from @{tableName} @{filter == null ? '' : 'where ' + filter} limit @{offset},@{limit}"/>
     </features>
 </dialect>
