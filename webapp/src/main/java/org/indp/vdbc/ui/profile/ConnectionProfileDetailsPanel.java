@@ -80,6 +80,7 @@ public abstract class ConnectionProfileDetailsPanel<T extends ConnectionProfile>
         fields = new LinkedHashMap<>(formFields.size());
 
         FormLayout formLayout = new FormLayout();
+        formLayout.setMargin(false);
         formLayout.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
 
         Focusable focusedField = null;

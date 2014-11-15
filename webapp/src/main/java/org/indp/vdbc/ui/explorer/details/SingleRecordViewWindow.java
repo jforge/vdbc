@@ -51,8 +51,8 @@ public class SingleRecordViewWindow extends Window {
         buttons.setComponentAlignment(closeButton, Alignment.MIDDLE_RIGHT);
 
         VerticalLayout layout = new VerticalLayout(fields, buttons);
-//        layout.setSizeFull();
         layout.setMargin(true);
+        layout.setSpacing(true);
         layout.setExpandRatio(fields, 1f);
         layout.setComponentAlignment(buttons, Alignment.MIDDLE_RIGHT);
         return layout;
@@ -61,7 +61,7 @@ public class SingleRecordViewWindow extends Window {
     private Component createFields() {
         FormLayout form = new FormLayout();
         form.addStyleName(ValoTheme.FORMLAYOUT_LIGHT);
-        form.setMargin(true);
+        form.setMargin(false);
         for (Object propertyId : item.getItemPropertyIds()) {
             if (!DialectSupport.isServiceColumn(propertyId.toString())) {
                 Property property = item.getItemProperty(propertyId);
