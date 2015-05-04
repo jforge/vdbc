@@ -1,3 +1,18 @@
+Fork for dialect enhancements, jetty integration and dependency upgrades.
+
+It's planned to provide support for:
+
+- other servlet containers (as fas as changes make sense)
+- custom containers providing the full vaadin infrastructure (reduced war dependencies)
+- custom containers providing new log4j-2 support with slf4-binding (there seems to be a collision)
+- updated vaadin dependencies
+- maybe a little tool to build a vdbc-deployment for custom environments.
+- maybe an interface for dynamic extraction of the application components to integrate vdbc in a custom Vaadin UI application.
+
+
+======================
+Original Todo:
+
 window per connection
 
 progressbar in query window
