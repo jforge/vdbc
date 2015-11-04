@@ -14,7 +14,7 @@
 
     <properties>
         <maven.build.timestamp.format>yyMMdd</maven.build.timestamp.format>
-        <vaadin.version>7.3.4</vaadin.version>
+        <vaadin.version>7.5.5</vaadin.version>
     </properties>
 
     <modules>
@@ -22,7 +22,6 @@
         <module>vdbc-abstractdb</module>
         <module>webapp</module>
         <module>distrib</module>
-        <module>vaadin-ace</module>
     </modules>
 
     <repositories>
@@ -71,6 +70,11 @@
                 <artifactId>vaadin-lazyquerycontainer</artifactId>
                 <version>2.1.16</version>
             </dependency>
+			<dependency>
+				<groupId>org.vaadin.addons</groupId>
+				<artifactId>aceeditor</artifactId>
+				<version>0.8.14</version>
+			</dependency>            
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>

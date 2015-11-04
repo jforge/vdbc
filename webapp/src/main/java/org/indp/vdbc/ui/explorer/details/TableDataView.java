@@ -40,7 +40,7 @@ public class TableDataView extends VerticalLayout implements ToolbarContributor 
     public TableDataView(final JdbcTable table, final DatabaseSession databaseSession) {
         this.table = table;
         this.databaseSession = databaseSession;
-        connectionPool = new J2EEConnectionPool(databaseSession.getDataSource());
+        this.connectionPool = new J2EEConnectionPool(databaseSession.getDataSource());
 
         final TextField filter = new TextField();
         filter.setWidth("100%");

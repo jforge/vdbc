@@ -8,5 +8,6 @@
     <features>
         <feature id="select.all.from.table.limit.offset"
                  expression="select * from (select t.*, rownum r$vdbcignore from (select * from @{tableName} @{filter == null ? '' : 'where ' + filter}) t) where r$vdbcignore between @{offset+1} and @{offset+limit}"/>
+        <feature id="build.tableName" expression="@{catalog != null ? '&quot;' + catalog + '&quot;' + '.' : ''}@{schema != null ? '&quot;' + schema + '&quot;' + '.' : ''}&quot;@{table}&quot;"/>
     </features>
 </dialect>

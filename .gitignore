@@ -2,3 +2,5 @@
 out
 target
 *.iml
+/.settings/
+/.project
