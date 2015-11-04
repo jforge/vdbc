@@ -11374,3 +11374,15 @@ div.v-layout.v-horizontal.v-widget {
 	font-family: "Courier New", Courier, monospace;
 	color: black;
 }
+
+.vdbc .v-menubar > .v-menubar-menuitem .v-icon {
+	font-size: 14px;
+}
+
+.vdbc div.v-layout.v-horizontallayout-toolbar {
+	height: 33px !important;
+}
+
+.vdbc #result-layout {
+	margin-top: 2px;
+}

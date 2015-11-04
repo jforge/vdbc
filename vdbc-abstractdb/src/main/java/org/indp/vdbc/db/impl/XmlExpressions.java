@@ -49,7 +49,8 @@ public class XmlExpressions implements Expressions {
                 var("filter", filter));
     }
 
-    private <T> T eval(String featureId, ContextVar... vars) {
+    @SuppressWarnings("unchecked")
+	private <T> T eval(String featureId, ContextVar... vars) {
         Map<String, Object> map;
         if (vars == null) {
             map = Collections.emptyMap();

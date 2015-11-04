@@ -26,4 +26,16 @@ $v-unit-size: 30px;
     @include monospace
   }
 
+  .v-menubar > .v-menubar-menuitem .v-icon {
+  	font-size: 14px;
+  }
+  
+  div.v-layout.v-horizontallayout-toolbar {
+  	height: 33px !important;
+  }
+  
+  #result-layout {
+ 	 margin-top: 2px;
+  }
+
 }

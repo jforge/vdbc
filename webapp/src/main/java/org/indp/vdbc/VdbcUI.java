@@ -18,6 +18,8 @@ import org.indp.vdbc.ui.WorkspaceView;
 public class VdbcUI extends UI implements ConnectionListener {
 
     public static final String APPLICATION_TITLE = "VDBC";
+    public static final String ACE_EDITOR_PATH = "/vdbc-webapp/static/ace";
+    
     private DatabaseSessionManager databaseSessionManager;
 
     @Override

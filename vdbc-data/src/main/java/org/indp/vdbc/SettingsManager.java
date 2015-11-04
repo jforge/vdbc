@@ -16,6 +16,7 @@ import java.io.OutputStream;
  *
  */
 public class SettingsManager {
+	
     public static final String VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY = "vdbc.settings.editor-enabled";
     public static final String VDBC_EXPERIMENTS_ENABLED_PROPERTY = "vdbc.experiments.enabled";
 
