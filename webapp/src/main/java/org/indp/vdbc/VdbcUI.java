@@ -1,5 +1,10 @@
 package org.indp.vdbc;
 
+import org.indp.vdbc.services.DatabaseSession;
+import org.indp.vdbc.services.DatabaseSessionManager;
+import org.indp.vdbc.ui.ConnectionSelectorComponent;
+import org.indp.vdbc.ui.WorkspaceView;
+
 import com.google.common.base.Strings;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
@@ -7,10 +12,6 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
-import org.indp.vdbc.services.DatabaseSession;
-import org.indp.vdbc.services.DatabaseSessionManager;
-import org.indp.vdbc.ui.ConnectionSelectorComponent;
-import org.indp.vdbc.ui.WorkspaceView;
 
 @Push
 @Theme("vdbc")
@@ -18,8 +19,6 @@ import org.indp.vdbc.ui.WorkspaceView;
 public class VdbcUI extends UI implements ConnectionListener {
 
     public static final String APPLICATION_TITLE = "VDBC";
-    public static final String ACE_EDITOR_PATH = "/vdbc-webapp/static/ace";
-    
     private DatabaseSessionManager databaseSessionManager;
 
     @Override
