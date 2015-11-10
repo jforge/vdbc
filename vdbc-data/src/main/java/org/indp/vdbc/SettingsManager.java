@@ -1,22 +1,29 @@
 package org.indp.vdbc;
 
-import com.google.common.io.Files;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+
+import javax.xml.bind.JAXB;
+
 import org.indp.vdbc.model.config.Configuration;
 import org.indp.vdbc.model.config.JdbcConnectionProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.bind.JAXB;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import com.google.common.io.Files;
 
 /**
- *
+ * Management of (persistent) JdbcProfiles.
+ * 
+ * <ul>
+ * <li>default profile persistence: vdbc-settings.xml in user.home</li>
+ * <li>
+ * </ul>
  *
  */
 public class SettingsManager {
-	
+
     public static final String VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY = "vdbc.settings.editor-enabled";
     public static final String VDBC_EXPERIMENTS_ENABLED_PROPERTY = "vdbc.experiments.enabled";
 
@@ -75,6 +82,5 @@ public class SettingsManager {
         return conf;
     }
 
-    private SettingsManager() {
-    }
+    private SettingsManager() {}
 }
