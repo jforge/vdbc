@@ -7,6 +7,7 @@ import java.io.OutputStream;
 import javax.xml.bind.JAXB;
 
 import org.indp.vdbc.model.config.Configuration;
+import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JdbcConnectionProfile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +54,13 @@ public class SettingsManager {
                 }
             }
         }
+
+        // additionally provide the injected profile, if available
+        ConnectionProfile injectedProfile = JndiResourceHandler.getJndiVdbcConnectionProfile();
+        if (injectedProfile != null) {
+            configuration.addProfile(injectedProfile);
+        }
+
         return configuration;
     }
 
@@ -82,5 +90,13 @@ public class SettingsManager {
         return conf;
     }
 
-    private SettingsManager() {}
+    private SettingsManager() {
+        if (!JndiResourceHandler.isJndiSettingsEditorEnabled() || !JndiResourceHandler.isJndiAccessGranted()) {
+            // the jndi-injected parameters settingsEditorEnabled and auth
+            // override/ VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY only,
+            // if enabled=false or the auth token is set and contains no granted info
+            // otherwise (default, no or not vdbc-prepared jndi context) the system uses the vm-parameter already set
+            System.setProperty(VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY, "false");
+        }
+    }
 }

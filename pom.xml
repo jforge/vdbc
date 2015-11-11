@@ -22,6 +22,7 @@
         <module>vdbc-abstractdb</module>
         <module>webapp</module>
         <module>distrib</module>
+        <module>vaadin-ace</module>
     </modules>
 
     <repositories>
