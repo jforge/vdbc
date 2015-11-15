@@ -1,10 +1,9 @@
 package org.indp.vdbc.ui;
 
-import com.vaadin.data.Property;
-import com.vaadin.event.ShortcutAction;
-import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.*;
-import com.vaadin.ui.themes.ValoTheme;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSessionManager;
@@ -13,9 +12,22 @@ import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 import org.indp.vdbc.ui.settings.ProfileSettingsDialog;
 import org.indp.vdbc.ui.settings.ProfileTypeSelectorDialog;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
+import com.vaadin.data.Property;
+import com.vaadin.event.ShortcutAction;
+import com.vaadin.server.FontAwesome;
+import com.vaadin.server.Page;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.HorizontalLayout;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.MenuBar;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
+import com.vaadin.ui.Panel;
+import com.vaadin.ui.Table;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.themes.ValoTheme;
 
 public class ConnectionSelectorComponent extends VerticalLayout {
 
@@ -44,9 +56,7 @@ public class ConnectionSelectorComponent extends VerticalLayout {
 
     private void recreateRootLayout() {
         List<ConnectionProfile> profiles = SettingsManager.get().getConfiguration().getProfiles();
-        Component component = profiles.isEmpty()
-                ? createProfileEditorInvite()
-                : createConnectionSelectorLayout();
+        Component component = profiles.isEmpty() ? createProfileEditorInvite() : createConnectionSelectorLayout();
         rootPanel.setContent(component);
     }
 
@@ -121,12 +131,19 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         Button connectButton = new Button("Connect", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                ConnectionProfileLoginPanelFactory panel = infoPanelHolder.getPanelFactory();
-                ConnectionProfile profile = panel.createConnectionProfile();
-                try {
-                    databaseSessionManager.createSession(profile);
-                } catch (Exception ex) {
-                    Notification.show("Failed to connect\n", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+
+                if (!SettingsManager.get().isAccessAuthorized()) {
+                    Notification notification = new Notification("Access denied",
+                            "<br/> This VDBC App is managed by a container restricting access.", Type.ERROR_MESSAGE, true);
+                    notification.show(Page.getCurrent());
+                } else {
+                    ConnectionProfileLoginPanelFactory panel = infoPanelHolder.getPanelFactory();
+                    ConnectionProfile profile = panel.createConnectionProfile();
+                    try {
+                        databaseSessionManager.createSession(profile);
+                    } catch (Exception ex) {
+                        Notification.show("Failed to connect\n", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
+                    }
                 }
             }
         });
@@ -145,8 +162,10 @@ public class ConnectionSelectorComponent extends VerticalLayout {
                 if (cp == null) {
                     return;
                 }
-                ConnectionProfileSupportService<? extends ConnectionProfile> connectionProfileSupportService = ConnectionProfileSupportService.Lookup.find(cp.getClass());
-                ConnectionProfileLoginPanelFactory<? extends ConnectionProfile> loginPanel = connectionProfileSupportService.createLoginPanel(cp);
+                ConnectionProfileSupportService<? extends ConnectionProfile> connectionProfileSupportService = ConnectionProfileSupportService.Lookup
+                        .find(cp.getClass());
+                ConnectionProfileLoginPanelFactory<? extends ConnectionProfile> loginPanel = connectionProfileSupportService
+                        .createLoginPanel(cp);
                 infoPanelHolder.setPanelFactory(loginPanel);
                 infoPanelHolder.focus();
             }
@@ -254,6 +273,7 @@ public class ConnectionSelectorComponent extends VerticalLayout {
             return panelFactory;
         }
 
+        @Override
         public void focus() {
             if (getContent() instanceof Focusable) {
                 ((Focusable) getContent()).focus();

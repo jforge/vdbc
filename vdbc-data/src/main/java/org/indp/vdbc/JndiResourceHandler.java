@@ -53,8 +53,7 @@ import org.slf4j.LoggerFactory;
 public class JndiResourceHandler {
     private static final Logger LOG = LoggerFactory.getLogger(JndiResourceHandler.class);
 
-    public static final String JNDI_DEFAULT_ENV = "java:/comp/env";
-    public static final String JNDI_PREFIX_VDBC = JNDI_DEFAULT_ENV + "/vdbc";
+    public static final String JNDI_PREFIX_VDBC = "vdbc";
 
     static Object getJndiResource(String resourceName) {
         Object resource = null;
@@ -109,17 +108,19 @@ public class JndiResourceHandler {
      * 
      * @return access to vdbc is granted by jndi auth token true/false.
      */
-    static boolean isJndiAccessGranted() {
-        boolean jndiAccessGranted = true;
+    static boolean isVdbcAccessGranted() {
+        boolean accessGranted = true;
         try {
             Context initialContext = new InitialContext();
-            Context webContext = (Context) initialContext.lookup(JNDI_PREFIX_VDBC);
-            String resource = (String) webContext.lookup("/auth");
-            jndiAccessGranted = resource == null || resource.equals("granted");
+            Object obj = initialContext.lookup(JNDI_PREFIX_VDBC + "/auth");
+            if (obj != null) {
+                accessGranted = "granted".equals(obj);
+            }
         } catch (NamingException e) {
             LOG.warn("failed to access jndi context", e);
         }
-        return jndiAccessGranted;
+
+        return accessGranted;
     }
 
     /**
@@ -127,12 +128,11 @@ public class JndiResourceHandler {
      * 
      * @return authorization uri derived from jndi context.
      */
-    static String getJndiAuthorizationUri() {
+    static String getVdbcAuthorizationUri() {
         String resource = null;
         try {
             Context initialContext = new InitialContext();
-            Context webContext = (Context) initialContext.lookup(JNDI_PREFIX_VDBC);
-            resource = (String) webContext.lookup("/authUri");
+            resource = (String) initialContext.lookup(JNDI_PREFIX_VDBC + "/authUri");
         } catch (NamingException e) {
             LOG.warn("failed to access jndi context", e);
         }
@@ -148,12 +148,11 @@ public class JndiResourceHandler {
      * 
      * @return settingsEditorEnabled is set to true/false using jndi.
      */
-    static boolean isJndiSettingsEditorEnabled() {
+    static boolean isSettingsEditorEnabled() {
         boolean settingsEditorEnabled = true;
         try {
             Context initialContext = new InitialContext();
-            Context webContext = (Context) initialContext.lookup(JNDI_PREFIX_VDBC);
-            String resource = (String) webContext.lookup("/settingsEditorEnabled");
+            String resource = (String) initialContext.lookup(JNDI_PREFIX_VDBC + "/settingsEditorEnabled");
             if (resource != null && "false".equalsIgnoreCase(resource.trim())) {
                 settingsEditorEnabled = false;
             }

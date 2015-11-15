@@ -65,7 +65,7 @@ public class SettingsManager {
             Optional<ConnectionProfile> matchingProfile = configuration.getProfiles().stream()
                     .filter(p -> p.getName().equals(injectedProfile.getName())).findFirst();
             if (matchingProfile.isPresent()) {
-                configuration.getProfiles().remove(matchingProfile);
+                configuration.removeProfile(matchingProfile.get());
             }
             configuration.addProfile(injectedProfile);
         }
@@ -90,6 +90,10 @@ public class SettingsManager {
         return settingsEditorEnabled == null || "true".equals(settingsEditorEnabled);
     }
 
+    public boolean isAccessAuthorized() {
+        return JndiResourceHandler.isVdbcAccessGranted();
+    }
+
     public boolean isExperimenting() {
         return Boolean.getBoolean(VDBC_EXPERIMENTS_ENABLED_PROPERTY);
     }
@@ -103,12 +107,14 @@ public class SettingsManager {
     private SettingsManager() {}
 
     private static void checkAuthorization() {
-        if (!JndiResourceHandler.isJndiSettingsEditorEnabled() || !JndiResourceHandler.isJndiAccessGranted()) {
+        if (!JndiResourceHandler.isSettingsEditorEnabled() || !JndiResourceHandler.isVdbcAccessGranted()) {
             // the jndi-injected parameters settingsEditorEnabled and auth
             // override/ VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY only,
             // if enabled=false or the auth token is set and contains no granted info
             // otherwise (default, no or not vdbc-prepared jndi context) the system uses the vm-parameter already set
             System.setProperty(VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY, "false");
+        } else {
+            System.setProperty(VDBC_SETTINGS_EDITOR_ENABLED_PROPERTY, "true");
         }
     }
 }

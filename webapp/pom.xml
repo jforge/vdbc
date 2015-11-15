@@ -103,6 +103,15 @@
                 <version>2.6</version>
                 <configuration>
                     <packagingExcludes>
+                        <!-- in case of provided libs in container exclude the following
+                        WEB-INF/lib/slf4j*.jar,
+                        %regex[WEB-INF/lib/vaadin-(?!ace).*.jar],
+                        WEB-INF/lib/ace*.jar,
+                        WEB-INF/lib/atmosphere*.jar,
+                        WEB-INF/lib/flute*.jar,
+                        WEB-INF/lib/guava*.jar,
+                        WEB-INF/lib/streamhtmlparser*.jar,
+                        -->
                         VAADIN/.gitignore,
                         VAADIN/gwt-unitCache/**,
                   </packagingExcludes>

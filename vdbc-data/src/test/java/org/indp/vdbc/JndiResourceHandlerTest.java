@@ -14,7 +14,6 @@ import java.util.List;
 import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.InitialContext;
-import javax.naming.NameAlreadyBoundException;
 import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 
@@ -66,27 +65,19 @@ public class JndiResourceHandlerTest {
 
     @Before
     public void setUp() throws Exception {
-        try {
-            InitialContext ic = new InitialContext();
-            ic.createSubcontext(JndiResourceHandler.JNDI_DEFAULT_ENV);
-            ic.createSubcontext(JndiResourceHandler.JNDI_PREFIX_VDBC);
-            ic.createSubcontext(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc");
+        InitialContext ic = new InitialContext();
+        ic.createSubcontext(JndiResourceHandler.JNDI_PREFIX_VDBC);
+        ic.createSubcontext(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc");
 
-            ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/auth", "granted");
-            ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/authUri", "");
-            ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/settingsEditorEnabled", "false");
-            ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/url", dbTestUrl);
-            ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/driverClassname", dbTestDriver);
-            ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/dialect", dbTestDialect);
-            ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/user", dbTestUser);
-            ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/password", dbTestPassword);
-            ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/name", String.format("Local FAS DB (%s)", dbTestDialect));
-
-        } catch (NameAlreadyBoundException ex) {
-            // ignore bind exception during tearDown
-        } catch (NamingException ex) {
-            LOG.error("", ex);
-        }
+        ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/auth", "granted");
+        ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/authUri", "");
+        ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/settingsEditorEnabled", "false");
+        ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/url", dbTestUrl);
+        ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/driverClassname", dbTestDriver);
+        ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/dialect", dbTestDialect);
+        ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/user", dbTestUser);
+        ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/password", dbTestPassword);
+        ic.bind(JndiResourceHandler.JNDI_PREFIX_VDBC + "/jdbc/name", String.format("Local FAS DB (%s)", dbTestDialect));
     }
 
     @After
@@ -114,12 +105,6 @@ public class JndiResourceHandlerTest {
         } catch (NamingException e) {
             // ignore unbind exception during tearDown
         }
-
-        try {
-            context.unbind(JndiResourceHandler.JNDI_DEFAULT_ENV);
-        } catch (NamingException e) {
-            // ignore unbind exception during tearDown
-        }
     }
 
     @Test
@@ -130,15 +115,15 @@ public class JndiResourceHandlerTest {
     }
 
     @Test
-    public void testJndiAuthToken() throws SQLException {
-        boolean authorized = JndiResourceHandler.isJndiAccessGranted();
+    public void testJndiVdbcAuthToken() throws SQLException {
+        boolean authorized = JndiResourceHandler.isVdbcAccessGranted();
         LOG.info("authorized = " + authorized);
         assertTrue(authorized);
     }
 
     @Test
-    public void testJndiAuthUri() throws SQLException {
-        String resource = JndiResourceHandler.getJndiAuthorizationUri();
+    public void testJndiVdbcAuthUri() throws SQLException {
+        String resource = JndiResourceHandler.getVdbcAuthorizationUri();
         assertNotNull(resource);
         LOG.info(resource.toString());
         assertEquals("", resource);
@@ -146,7 +131,7 @@ public class JndiResourceHandlerTest {
 
     @Test
     public void testJndiSettingsEditorEnabled() throws SQLException {
-        boolean settingsEditorEnabled = JndiResourceHandler.isJndiSettingsEditorEnabled();
+        boolean settingsEditorEnabled = JndiResourceHandler.isSettingsEditorEnabled();
         LOG.info("settingsEditorEnabled = " + settingsEditorEnabled);
         assertFalse(settingsEditorEnabled);
     }
