@@ -1,7 +1,7 @@
 package org.indp.vdbc.ui.profile.impl.fields;
 
-import com.vaadin.ui.AbstractTextField;
-import com.vaadin.ui.TextArea;
+import com.vaadin.v7.ui.AbstractTextField;
+import com.vaadin.v7.ui.TextArea;
 
 public class TextAreaProfileField extends AbstractTextProfileField {
 

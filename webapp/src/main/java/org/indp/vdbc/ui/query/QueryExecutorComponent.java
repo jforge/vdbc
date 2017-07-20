@@ -23,24 +23,24 @@ import workbench.db.DbMetadata;
 import workbench.sql.formatter.SqlFormatter;
 import workbench.sql.formatter.SqlFormatterFactory;
 
-import com.vaadin.data.Property;
+import com.vaadin.v7.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.event.ShortcutListener;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.ui.AbstractTextField.TextChangeEventMode;
+import com.vaadin.v7.ui.AbstractTextField.TextChangeEventMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CheckBox;
-import com.vaadin.ui.ComboBox;
+import com.vaadin.v7.ui.CheckBox;
+import com.vaadin.v7.ui.ComboBox;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.CssLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
+import com.vaadin.v7.ui.HorizontalLayout;
+import com.vaadin.v7.ui.Label;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.ProgressBar;
+import com.vaadin.v7.ui.ProgressBar;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.TabSheet.Tab;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.v7.ui.VerticalLayout;
 import com.vaadin.ui.VerticalSplitPanel;
 import com.vaadin.ui.themes.ValoTheme;
 
@@ -198,7 +198,7 @@ public class QueryExecutorComponent extends VerticalLayout implements Closeable 
 		editor.setFontSize("12px");
 		editor.setShowPrintMargin(false);
 		editor.setSizeFull();
-		editor.setTextChangeEventMode(TextChangeEventMode.LAZY);
+		//editor.setTextChangeEventMode(TextChangeEventMode.LAZY);
 		editor.addSelectionChangeListener(new SelectionChangeListener() {
 		    @Override
 		    public void selectionChanged(SelectionChangeEvent e) {

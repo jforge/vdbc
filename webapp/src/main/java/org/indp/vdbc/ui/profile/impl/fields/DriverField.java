@@ -1,7 +1,7 @@
 package org.indp.vdbc.ui.profile.impl.fields;
 
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Field;
+import com.vaadin.v7.ui.ComboBox;
+import com.vaadin.v7.ui.Field;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JdbcConnectionProfile;
 import org.indp.vdbc.ui.profile.config.AbstractProfileField;

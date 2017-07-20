@@ -1,10 +1,10 @@
 package org.indp.vdbc.ui.metadata;
 
-import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.v7.data.Item;
+import com.vaadin.v7.data.util.IndexedContainer;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
+import com.vaadin.v7.ui.Label;
+import com.vaadin.v7.ui.Table;
 import org.indp.vdbc.ui.UiUtils;
 
 public abstract class SeparatedValuesStringDetailsProvider implements DetailsProvider {

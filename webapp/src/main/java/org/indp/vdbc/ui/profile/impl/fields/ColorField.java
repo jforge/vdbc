@@ -1,15 +1,15 @@
 package org.indp.vdbc.ui.profile.impl.fields;
 
 import com.vaadin.event.LayoutEvents;
-import com.vaadin.shared.ui.colorpicker.Color;
-import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.components.colorpicker.ColorChangeEvent;
-import com.vaadin.ui.components.colorpicker.ColorChangeListener;
-import com.vaadin.ui.components.colorpicker.ColorPickerPopup;
+import com.vaadin.v7.shared.ui.colorpicker.Color;
+import com.vaadin.v7.shared.ui.label.ContentMode;
+import com.vaadin.v7.ui.HorizontalLayout;
+import com.vaadin.v7.ui.Label;
+import com.vaadin.v7.ui.components.colorpicker.ColorChangeEvent;
+import com.vaadin.v7.ui.components.colorpicker.ColorChangeListener;
+import com.vaadin.v7.ui.components.colorpicker.ColorPickerPopup;
 import org.indp.vdbc.ui.profile.config.AbstractProfileField;
 
 public class ColorField extends AbstractProfileField {
@@ -32,20 +32,17 @@ public class ColorField extends AbstractProfileField {
             fieldContainer = new HorizontalLayout(colorLabel);
             fieldContainer.setCaption(getTitle());
             fieldContainer.setComponentAlignment(colorLabel, Alignment.MIDDLE_LEFT);
-            fieldContainer.addLayoutClickListener(new LayoutEvents.LayoutClickListener() {
-                @Override
-                public void layoutClick(LayoutEvents.LayoutClickEvent event) {
-                    ColorPickerPopup popup = new ColorPickerPopup(color == null ? Color.WHITE : color);
-                    popup.setModal(true);
-                    popup.addColorChangeListener(new ColorChangeListener() {
-                        @Override
-                        public void colorChanged(ColorChangeEvent event) {
-                            color = event.getColor();
-                            refreshLabel();
-                        }
-                    });
-                    UI.getCurrent().addWindow(popup);
-                }
+            fieldContainer.addLayoutClickListener((LayoutEvents.LayoutClickEvent event) -> {
+                ColorPickerPopup popup = new ColorPickerPopup(color == null ? Color.WHITE : color);
+                popup.setModal(true);
+                popup.addColorChangeListener(new ColorChangeListener() {
+                    @Override
+                    public void colorChanged(ColorChangeEvent event) {
+                        color = event.getColor();
+                        refreshLabel();
+                    }
+                });
+                UI.getCurrent().addWindow(popup);
             });
         }
         return fieldContainer;

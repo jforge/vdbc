@@ -41,6 +41,11 @@
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-compatibility-server</artifactId>
+            <version>[8.0.7,)</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
             <artifactId>vaadin-push</artifactId>
         </dependency>
         <dependency>
@@ -50,6 +55,11 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-client-compiled</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-compatibility-client-compiled</artifactId>
+            <version>[8.0.7,)</version>
         </dependency>
 <!--
         <dependency>
@@ -163,7 +173,7 @@
         									vaadin-maven-plugin
         								</artifactId>
         								<versionRange>
-        									[7.6.0.alpha2,)
+        									[8.0.7,)
         								</versionRange>
         								<goals>
 											<goal>clean</goal>

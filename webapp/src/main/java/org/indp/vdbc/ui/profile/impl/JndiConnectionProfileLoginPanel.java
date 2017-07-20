@@ -1,8 +1,8 @@
 package org.indp.vdbc.ui.profile.impl;
 
 import com.vaadin.ui.Component;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.v7.ui.TextField;
+import com.vaadin.v7.ui.VerticalLayout;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.model.config.JndiConnectionProfile;
 import org.indp.vdbc.ui.profile.ConnectionProfileLoginPanelFactory;

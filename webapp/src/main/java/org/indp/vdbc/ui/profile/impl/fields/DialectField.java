@@ -1,8 +1,8 @@
 package org.indp.vdbc.ui.profile.impl.fields;
 
-import com.vaadin.data.Property;
-import com.vaadin.ui.ComboBox;
-import com.vaadin.ui.Field;
+import com.vaadin.v7.data.Property;
+import com.vaadin.v7.ui.ComboBox;
+import com.vaadin.v7.ui.Field;
 import org.indp.vdbc.db.Dialect;
 import org.indp.vdbc.db.DialectSupport;
 import org.indp.vdbc.model.config.ConnectionProfile;
@@ -35,12 +35,9 @@ public class DialectField extends AbstractProfileField {
             for (String code : dialectCodes) {
                 comboBox.setItemCaption(code, DialectSupport.getDialect(code).getName());
             }
-            comboBox.addValueChangeListener(new Property.ValueChangeListener() {
-                @Override
-                public void valueChange(Property.ValueChangeEvent valueChangeEvent) {
-                    Object value = valueChangeEvent.getProperty().getValue();
-                    updateDependencies(value.toString());
-                }
+            comboBox.addValueChangeListener((Property.ValueChangeEvent valueChangeEvent) -> {
+                Object value = valueChangeEvent.getProperty().getValue();
+                updateDependencies(value.toString());
             });
         }
         return comboBox;

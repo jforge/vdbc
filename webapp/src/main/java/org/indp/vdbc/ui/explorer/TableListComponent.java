@@ -1,16 +1,21 @@
 package org.indp.vdbc.ui.explorer;
 
-import com.vaadin.data.Property;
-import com.vaadin.data.Property.ValueChangeEvent;
-import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.data.util.IndexedContainer;
-import com.vaadin.event.FieldEvents;
-import com.vaadin.event.ItemClickEvent;
-import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.server.FontAwesome;
-import com.vaadin.shared.ui.combobox.FilteringMode;
-import com.vaadin.ui.*;
+import com.vaadin.ui.Component;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.Property;
+import com.vaadin.v7.data.Property.ValueChangeEvent;
+import com.vaadin.v7.data.Property.ValueChangeListener;
+import com.vaadin.v7.data.util.IndexedContainer;
+import com.vaadin.v7.event.FieldEvents;
+import com.vaadin.v7.event.ItemClickEvent;
+import com.vaadin.v7.shared.ui.combobox.FilteringMode;
+import com.vaadin.v7.ui.ComboBox;
+import com.vaadin.v7.ui.Table;
+import com.vaadin.v7.ui.TextField;
+import com.vaadin.v7.ui.VerticalLayout;
 import org.indp.vdbc.model.jdbc.JdbcTable;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.ui.explorer.details.TableDetailsView;
@@ -40,19 +45,15 @@ public class TableListComponent extends VerticalLayout {
         objectList.setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
         objectList.setSelectable(true);
         objectList.setNullSelectionAllowed(false);
-        objectList.addItemClickListener(new ItemClickListener() {
-
-            @Override
-            public void itemClick(ItemClickEvent event) {
-                if (null == detailsListener) {
-                    return;
-                }
-                JdbcTable item = (JdbcTable) event.getItemId();
-                if (null == item) {
-                    return;
-                }
-                detailsListener.showDetails(createDetails(item));
+        objectList.addItemClickListener((ItemClickEvent event) -> {
+            if (null == detailsListener) {
+                return;
             }
+            JdbcTable item = (JdbcTable) event.getItemId();
+            if (null == item) {
+                return;
+            }
+            detailsListener.showDetails(createDetails(item));
         });
 
         final TextField filter = new TextField();
@@ -122,12 +123,8 @@ public class TableListComponent extends VerticalLayout {
         tableTypes.setImmediate(true);
         tableTypes.setFilteringMode(FilteringMode.CONTAINS);
 
-        ValueChangeListener valueChangeListener = new ValueChangeListener() {
-
-            @Override
-            public void valueChange(ValueChangeEvent event) {
-                updateTableList(catalogs, schemas, tableTypes);
-            }
+        ValueChangeListener valueChangeListener = (ValueChangeEvent event) -> {
+            updateTableList(catalogs, schemas, tableTypes);
         };
 
         catalogs.addValueChangeListener(valueChangeListener);

@@ -1,10 +1,10 @@
 package org.indp.vdbc.ui.profile.impl.fields;
 
-import com.vaadin.ui.AbstractTextField;
+import com.vaadin.v7.ui.AbstractTextField;
 
 public class PasswordField extends AbstractTextProfileField {
 
-    private com.vaadin.ui.PasswordField field;
+    private com.vaadin.v7.ui.PasswordField field;
 
     public PasswordField(String id, String title, boolean required) {
         super(id, title, required);
@@ -13,7 +13,7 @@ public class PasswordField extends AbstractTextProfileField {
     @Override
     public AbstractTextField getFieldComponent() {
         if (field == null) {
-            field = new com.vaadin.ui.PasswordField(getTitle());
+            field = new com.vaadin.v7.ui.PasswordField(getTitle());
             field.setWidth("100%");
             field.setNullRepresentation("");
             field.setRequired(isRequired());
