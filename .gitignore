@@ -5,3 +5,6 @@ target
 /.settings/
 /.project
 .classpath
+distrib/tomcat/logs
+distrib/tomcat/webapps
+distrib/tomcat/work
