@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.vaadin.annotations.PreserveOnRefresh;
 import com.vaadin.annotations.Push;
 import com.vaadin.annotations.Theme;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.UI;
@@ -14,6 +15,7 @@ import org.indp.vdbc.ui.WorkspaceView;
 
 @Push
 @Theme("vdbc")
+@Widgetset("com.vaadin.v7.Vaadin7WidgetSet")
 @PreserveOnRefresh
 public class VdbcUI extends UI implements ConnectionListener {
 
