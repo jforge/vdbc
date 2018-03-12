@@ -1,10 +1,10 @@
 package org.indp.vdbc.util;
 
-import com.vaadin.data.Container;
-import com.vaadin.data.util.sqlcontainer.RowItem;
-import com.vaadin.data.util.sqlcontainer.query.FreeformStatementDelegate;
-import com.vaadin.data.util.sqlcontainer.query.OrderBy;
-import com.vaadin.data.util.sqlcontainer.query.generator.StatementHelper;
+import com.vaadin.v7.data.Container;
+import com.vaadin.v7.data.util.sqlcontainer.RowItem;
+import com.vaadin.v7.data.util.sqlcontainer.query.FreeformStatementDelegate;
+import com.vaadin.v7.data.util.sqlcontainer.query.OrderBy;
+import com.vaadin.v7.data.util.sqlcontainer.query.generator.StatementHelper;
 import org.indp.vdbc.db.Dialect;
 import org.indp.vdbc.services.DatabaseSession;
 

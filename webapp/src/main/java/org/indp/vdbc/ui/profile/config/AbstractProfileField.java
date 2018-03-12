@@ -1,8 +1,8 @@
 package org.indp.vdbc.ui.profile.config;
 
 import com.vaadin.ui.Component;
-import com.vaadin.ui.DefaultFieldFactory;
-import com.vaadin.ui.Field;
+import com.vaadin.v7.ui.DefaultFieldFactory;
+import com.vaadin.v7.ui.Field;
 import org.indp.vdbc.model.config.ConnectionProfile;
 
 public abstract class AbstractProfileField {

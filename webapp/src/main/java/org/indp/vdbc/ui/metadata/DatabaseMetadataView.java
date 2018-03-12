@@ -2,9 +2,9 @@ package org.indp.vdbc.ui.metadata;
 
 import com.vaadin.ui.Component;
 import com.vaadin.ui.HorizontalSplitPanel;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.ui.Label;
+import com.vaadin.v7.ui.VerticalLayout;
 import org.indp.vdbc.services.DatabaseSession;
 import org.indp.vdbc.util.JdbcUtils;
 
@@ -26,13 +26,9 @@ public class DatabaseMetadataView extends HorizontalSplitPanel implements Closea
     public DatabaseMetadataView(DatabaseSession databaseSession) throws SQLException {
         connection = databaseSession.getConnection();
 
-        BrowserCallback bc = new BrowserCallback() {
-
-            @Override
-            public void showDetails(Component detailsComponent) {
-                detailsComponent.setSizeFull();
-                setSecondComponent(detailsComponent);
-            }
+        BrowserCallback bc = (Component detailsComponent) -> {
+            detailsComponent.setSizeFull();
+            setSecondComponent(detailsComponent);
         };
 
         setSizeFull();

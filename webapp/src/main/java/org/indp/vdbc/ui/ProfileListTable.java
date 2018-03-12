@@ -1,13 +1,13 @@
 package org.indp.vdbc.ui;
 
 import com.google.common.base.Strings;
-import com.vaadin.data.Item;
-import com.vaadin.data.Property;
-import com.vaadin.shared.ui.label.ContentMode;
-import com.vaadin.ui.AbstractSelect;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.Item;
+import com.vaadin.v7.data.Property;
+import com.vaadin.v7.shared.ui.label.ContentMode;
+import com.vaadin.v7.ui.AbstractSelect;
+import com.vaadin.v7.ui.Label;
+import com.vaadin.v7.ui.Table;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 
@@ -28,14 +28,11 @@ public class ProfileListTable extends Table {
         setNullSelectionAllowed(false);
         setColumnHeaderMode(Table.ColumnHeaderMode.HIDDEN);
 
-        addGeneratedColumn("color", new Table.ColumnGenerator() {
-            @Override
-            public Object generateCell(Table source, Object itemId, Object columnId) {
-                String color = ((ConnectionProfile) itemId).getColor();
-                return Strings.isNullOrEmpty(color)
-                        ? null
-                        : new Label("<div style=\"width: 10px; height: 10px; border: 1px solid gray; background-color: #" + color + "\"></div>", ContentMode.HTML);
-            }
+        addGeneratedColumn("color", (Table source, Object itemId, Object columnId) -> {
+            String color = ((ConnectionProfile) itemId).getColor();
+            return Strings.isNullOrEmpty(color)
+                    ? null
+                    : new Label("<div style=\"width: 10px; height: 10px; border: 1px solid gray; background-color: #" + color + "\"></div>", ContentMode.HTML);
         });
 
         addContainerProperty("title", String.class, "");

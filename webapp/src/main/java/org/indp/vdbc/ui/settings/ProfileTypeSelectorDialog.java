@@ -1,6 +1,11 @@
 package org.indp.vdbc.ui.settings;
 
-import com.vaadin.ui.*;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Window;
+import com.vaadin.v7.ui.ComboBox;
+import com.vaadin.v7.ui.HorizontalLayout;
+import com.vaadin.v7.ui.VerticalLayout;
 import org.indp.vdbc.ui.profile.ConnectionProfileSupportService;
 
 import java.util.Collection;
@@ -23,19 +28,14 @@ public class ProfileTypeSelectorDialog extends Window {
 
         HorizontalLayout footer = new HorizontalLayout();
         footer.setSpacing(true);
-        footer.addComponent(new Button("OK", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                selectionListener.onFactorySelected((ConnectionProfileSupportService) selector.getValue());
-                close();
-            }
+        footer.addComponent(new Button("OK", (Button.ClickEvent event) -> {
+            selectionListener.onFactorySelected((ConnectionProfileSupportService) selector.getValue());
+            close();
         }));
-        footer.addComponent(new Button("Cancel", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                close();
-            }
-        }));
+        footer.addComponent(new Button("Cancel",
+                (Button.ClickEvent event) -> {
+                    close();
+                }));
 
         content.addComponent(footer);
         content.setComponentAlignment(footer, Alignment.MIDDLE_CENTER);

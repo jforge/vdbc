@@ -1,10 +1,14 @@
 package org.indp.vdbc.ui;
 
-import com.vaadin.data.Property;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.Property;
+import com.vaadin.v7.ui.HorizontalLayout;
+import com.vaadin.v7.ui.Label;
+import com.vaadin.v7.ui.Table;
+import com.vaadin.v7.ui.VerticalLayout;
 import org.indp.vdbc.SettingsManager;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSessionManager;
@@ -118,16 +122,13 @@ public class ConnectionSelectorComponent extends VerticalLayout {
     }
 
     private Component createConnectionButtons(final ProfileInfoPanelHolder infoPanelHolder) {
-        Button connectButton = new Button("Connect", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                ConnectionProfileLoginPanelFactory panel = infoPanelHolder.getPanelFactory();
-                ConnectionProfile profile = panel.createConnectionProfile();
-                try {
-                    databaseSessionManager.createSession(profile);
-                } catch (Exception ex) {
-                    Notification.show("Failed to connect\n", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
-                }
+        Button connectButton = new Button("Connect", (Button.ClickEvent event) -> {
+            ConnectionProfileLoginPanelFactory panel = infoPanelHolder.getPanelFactory();
+            ConnectionProfile profile = panel.createConnectionProfile();
+            try {
+                databaseSessionManager.createSession(profile);
+            } catch (Exception ex) {
+                Notification.show("Failed to connect\n", ex.getMessage(), Notification.Type.ERROR_MESSAGE);
             }
         });
         connectButton.setClickShortcut(ShortcutAction.KeyCode.ENTER);
@@ -138,18 +139,15 @@ public class ConnectionSelectorComponent extends VerticalLayout {
     }
 
     private Table createProfileSelector(final ProfileInfoPanelHolder infoPanelHolder) {
-        ProfileListTable table = new ProfileListTable(new Property.ValueChangeListener() {
-            @Override
-            public void valueChange(Property.ValueChangeEvent event) {
-                ConnectionProfile cp = (ConnectionProfile) event.getProperty().getValue();
-                if (cp == null) {
-                    return;
-                }
-                ConnectionProfileSupportService<? extends ConnectionProfile> connectionProfileSupportService = ConnectionProfileSupportService.Lookup.find(cp.getClass());
-                ConnectionProfileLoginPanelFactory<? extends ConnectionProfile> loginPanel = connectionProfileSupportService.createLoginPanel(cp);
-                infoPanelHolder.setPanelFactory(loginPanel);
-                infoPanelHolder.focus();
+        ProfileListTable table = new ProfileListTable((Property.ValueChangeEvent event) -> {
+            ConnectionProfile cp = (ConnectionProfile) event.getProperty().getValue();
+            if (cp == null) {
+                return;
             }
+            ConnectionProfileSupportService<? extends ConnectionProfile> connectionProfileSupportService = ConnectionProfileSupportService.Lookup.find(cp.getClass());
+            ConnectionProfileLoginPanelFactory<? extends ConnectionProfile> loginPanel = connectionProfileSupportService.createLoginPanel(cp);
+            infoPanelHolder.setPanelFactory(loginPanel);
+            infoPanelHolder.focus();
         });
 
         table.setWidth("200px");
@@ -165,11 +163,8 @@ public class ConnectionSelectorComponent extends VerticalLayout {
         if (!SettingsManager.get().isSettingsEditorEnabled()) {
             layout.addComponent(new Label("No connection profiles defined and you are not allowed to create one."));
         } else {
-            Button createProfileLink = new Button("Create profile", new Button.ClickListener() {
-                @Override
-                public void buttonClick(Button.ClickEvent event) {
-                    addProfile();
-                }
+            Button createProfileLink = new Button("Create profile", (Button.ClickEvent event) -> {
+                addProfile();
             });
             createProfileLink.setStyleName(ValoTheme.BUTTON_LINK);
 
@@ -194,21 +189,18 @@ public class ConnectionSelectorComponent extends VerticalLayout {
     }
 
     private void addProfile() {
-        getUI().addWindow(new ProfileTypeSelectorDialog(new ProfileTypeSelectorDialog.SelectionListener() {
-            @Override
-            public void onFactorySelected(ConnectionProfileSupportService factory) {
-                ConnectionProfile profile = factory.createConnectionProfile();
-                ProfileSettingsDialog.edit(profile, databaseSessionManager, new ProfileSettingsDialog.Callback() {
-                    @Override
-                    public void profileUpdated(ConnectionProfile profile) {
-                        SettingsManager settingsManager = SettingsManager.get();
-                        settingsManager.getConfiguration().addProfile(profile);
-                        settingsManager.persistConfiguration();
-                        recreateRootLayout();
-                        selectProfile(profile);
-                    }
-                });
-            }
+        getUI().addWindow(new ProfileTypeSelectorDialog((ConnectionProfileSupportService factory) -> {
+            ConnectionProfile profile = factory.createConnectionProfile();
+            ProfileSettingsDialog.edit(profile, databaseSessionManager, new ProfileSettingsDialog.Callback() {
+                @Override
+                public void profileUpdated(ConnectionProfile profile) {
+                    SettingsManager settingsManager = SettingsManager.get();
+                    settingsManager.getConfiguration().addProfile(profile);
+                    settingsManager.persistConfiguration();
+                    recreateRootLayout();
+                    selectProfile(profile);
+                }
+            });
         }));
 
     }

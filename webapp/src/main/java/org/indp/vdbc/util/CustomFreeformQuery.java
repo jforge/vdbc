@@ -1,9 +1,9 @@
 package org.indp.vdbc.util;
 
-import com.vaadin.data.util.sqlcontainer.connection.JDBCConnectionPool;
-import com.vaadin.data.util.sqlcontainer.query.FreeformQuery;
-import com.vaadin.data.util.sqlcontainer.query.FreeformStatementDelegate;
-import com.vaadin.data.util.sqlcontainer.query.generator.StatementHelper;
+import com.vaadin.v7.data.util.sqlcontainer.connection.JDBCConnectionPool;
+import com.vaadin.v7.data.util.sqlcontainer.query.FreeformQuery;
+import com.vaadin.v7.data.util.sqlcontainer.query.FreeformStatementDelegate;
+import com.vaadin.v7.data.util.sqlcontainer.query.generator.StatementHelper;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

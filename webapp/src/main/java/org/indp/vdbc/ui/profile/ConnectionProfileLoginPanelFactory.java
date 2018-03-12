@@ -1,6 +1,6 @@
 package org.indp.vdbc.ui.profile;
 
-import com.vaadin.ui.AbstractTextField;
+import com.vaadin.v7.ui.AbstractTextField;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.model.config.ConnectionProfile;

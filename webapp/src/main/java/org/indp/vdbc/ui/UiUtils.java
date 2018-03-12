@@ -1,11 +1,11 @@
 package org.indp.vdbc.ui;
 
-import com.vaadin.data.Container;
-import com.vaadin.data.Property;
+import com.vaadin.v7.data.Container;
+import com.vaadin.v7.data.Property;
 import com.vaadin.server.Sizeable;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
+import com.vaadin.v7.ui.Label;
+import com.vaadin.v7.ui.Table;
 import com.vaadin.ui.themes.ValoTheme;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;

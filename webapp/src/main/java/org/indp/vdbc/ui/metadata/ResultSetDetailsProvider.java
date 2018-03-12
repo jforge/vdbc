@@ -1,7 +1,7 @@
 package org.indp.vdbc.ui.metadata;
 
 import com.vaadin.ui.Component;
-import com.vaadin.ui.Label;
+import com.vaadin.v7.ui.Label;
 import org.indp.vdbc.ui.ResultSetTable;
 
 import java.sql.ResultSet;

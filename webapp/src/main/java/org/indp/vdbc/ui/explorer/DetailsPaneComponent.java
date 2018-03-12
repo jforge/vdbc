@@ -1,7 +1,7 @@
 package org.indp.vdbc.ui.explorer;
 
 import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.Label;
+import com.vaadin.v7.ui.Label;
 import com.vaadin.ui.TabSheet;
 import com.vaadin.ui.themes.ValoTheme;
 

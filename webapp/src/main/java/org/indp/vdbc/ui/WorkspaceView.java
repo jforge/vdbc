@@ -4,7 +4,6 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.themes.BaseTheme;
 import com.vaadin.ui.themes.ValoTheme;
 import org.indp.vdbc.model.config.ConnectionProfile;
 import org.indp.vdbc.services.DatabaseSession;
@@ -34,7 +33,7 @@ public class WorkspaceView extends VerticalLayout {
                 databaseSession.close();
             }
         });
-        disconnectButton.addStyleName(BaseTheme.BUTTON_LINK);
+        disconnectButton.addStyleName(ValoTheme.BUTTON_LINK);
 
         MenuBar menuBar = createMenu(databaseSession);
         Label titleLabel = new Label(profile.getConnectionPresentationString());
@@ -60,13 +59,10 @@ public class WorkspaceView extends VerticalLayout {
 
         addComponent(top);
 
-        addAttachListener(new AttachListener() {
-            @Override
-            public void attach(AttachEvent event) {
-                try {
-                    addPage(new QueryExecutorComponent(databaseSession));
-                } catch (SQLException ignored) {
-                }
+        addAttachListener((AttachEvent event) -> {
+            try {
+                addPage(new QueryExecutorComponent(databaseSession));
+            } catch (SQLException ignored) {
             }
         });
     }
@@ -111,20 +107,17 @@ public class WorkspaceView extends VerticalLayout {
         tabs = new TabSheet();
         tabs.setSizeFull();
         tabs.addStyleName(ValoTheme.TABSHEET_FRAMED);
-        tabs.setCloseHandler(new TabSheet.CloseHandler() {
-            @Override
-            public void onTabClose(TabSheet tabsheet, Component component) {
-                if (component instanceof Closeable) {
-                    try {
-                        ((Closeable) component).close();
-                    } catch (IOException e) {
-                        log.warn("failed to call close()", e);
-                    }
+        tabs.setCloseHandler((TabSheet tabsheet, Component component) -> {
+            if (component instanceof Closeable) {
+                try {
+                    ((Closeable) component).close();
+                } catch (IOException e) {
+                    log.warn("failed to call close()", e);
                 }
-                tabsheet.removeComponent(component);
-                if (tabsheet.getComponentCount() == 0) {
-                    removeTabSheet();
-                }
+            }
+            tabsheet.removeComponent(component);
+            if (tabsheet.getComponentCount() == 0) {
+                removeTabSheet();
             }
         });
 
